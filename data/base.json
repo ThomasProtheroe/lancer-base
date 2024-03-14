@@ -1,0 +1,39 @@
+{
+    "name": "Blue Haven",
+    "defense": 0,
+    "eDefense": 0,
+    "sensors": 0,
+    "condition": 0,
+    "conditionMax": 10,
+    "morale": 5,
+    "moraleMax": 10,
+    "resources": {
+        "materials": {
+            "name": "Materials",
+            "quantity": 2000
+        },
+        "refinedMaterials": {
+            "name": "Refined Materials",
+            "quantity": 100
+        },
+        "manna": {
+            "name": "Manna",
+            "quantity": 10000
+        }
+    },
+    "facilities": [
+        {
+            "name": "Mech Printer (damaged)",
+            "description": "A very old printer that still functions, albeit with some quirks.",
+            "notes": [
+                "All mechs printed with this printer gain 1 Flaw at random."
+            ]
+        }
+    ],
+    "personnel": [
+        {}
+    ],
+    "defenses": [
+        {}
+    ]
+}
