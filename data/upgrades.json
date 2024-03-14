@@ -1,0 +1,68 @@
+{
+    "facilities": [
+        {
+            "type": "printer",
+            "time": 6,
+            "flaws": 0,
+            "qualities": 0,
+            "name": "Mech Printer (fixed)",
+            "description": "A very old printer that has been repaired and now functions normally.",
+            "notes": "Allows the printing of mechs.",
+            "available": 0
+        },
+        {
+            "type": "reclaimer",
+            "time": 4,
+            "name": "Materials Reclaimer",
+            "description": "An array of machinery used to deconstruct waste materials into component parts for reuse.",
+            "notes": "Allows destroyed or damaged mechs, weapons and other machines to be recyclyed for materials.",
+            "available": 0
+        },
+        {
+            "type": "munitions",
+            "time": 4,
+            "name": "Munitions Fabricator",
+            "description": "A specialized printer used to produce mech-sized ammunition.",
+            "notes": "Allows the printing of special ammunition.",
+            "available": 0
+        }
+    ],
+    "defenses": [
+        {
+            "type": "gun_emplacements",
+            "time": 5,
+            "defense": 2,
+            "name": "Stationary Cannons",
+            "description": "A variety of mech scale weapons that have been mounted onto stationary emplacements at the edge of Blue Haven.",
+            "notes": "Provides +2 defense. Provides light covering fire when fighting near the settlement. Must be manned.",
+            "available": 0
+        },
+        {
+            "type": "sensors",
+            "time": 3,
+            "sensors": 1,
+            "name": "Motion Sensors",
+            "description": "A relay of bog-standard motion sensors placed several kilometers out. Prone to false positives from wildlife.",
+            "notes": "Provides +1 sensors.",
+            "available": 0
+        }
+    ],
+    "personnel": [
+        {
+            "type": "engineer",
+            "cost": 5000,
+            "name": "Laura Stahl",
+            "description": "A talented mechanical engineer who grew up on New Samona. She has a particular hatred for house Harken.",
+            "notes": "Provides the settlement with 2 blocks of construction or production time each downtime.",
+            "available": 0
+        },
+        {
+            "type": "soldier",
+            "cost": 10000,
+            "name": "Boris Stelov",
+            "description": "A grey bearded ex-soldier. He spent most of his life as part of a rebel organization fighting for independance, and as such is adept at training soldiers to fight mechs.",
+            "notes": "Provides +1 defense. Allows training of higher tier militia.",
+            "available": 0
+        }
+    ]
+}

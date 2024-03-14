@@ -28,7 +28,7 @@
             "qualities": 0,
             "name": "Mech Printer (damaged)",
             "description": "A very old printer that still functions, albeit with some quirks.",
-            "notes": "All mechs printed with this printer gain 1 Flaw at random."
+            "notes": "Allows the printing of mechs. All mechs printed with this printer gain 1 Flaw at random."
         }
     ],
     "defenses": [
