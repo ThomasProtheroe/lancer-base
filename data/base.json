@@ -3,7 +3,7 @@
     "defense": 0,
     "eDefense": 0,
     "sensors": 0,
-    "condition": 0,
+    "condition": 10,
     "conditionMax": 10,
     "morale": 5,
     "moraleMax": 10,
@@ -23,17 +23,23 @@
     },
     "facilities": [
         {
+            "type": "printer",
+            "flaws": 1,
+            "qualities": 0,
             "name": "Mech Printer (damaged)",
             "description": "A very old printer that still functions, albeit with some quirks.",
-            "notes": [
-                "All mechs printed with this printer gain 1 Flaw at random."
-            ]
+            "notes": "All mechs printed with this printer gain 1 Flaw at random."
+        }
+    ],
+    "defenses": [
+        {
+            "type": "defenders",
+            "name": "Local Militia",
+            "description": "Local civilians who will take up arms to defend their homes. Untrained and poorly equipped.",
+            "notes": "Provides no defensive bonuses."
         }
     ],
     "personnel": [
-        {}
-    ],
-    "defenses": [
-        {}
+
     ]
 }

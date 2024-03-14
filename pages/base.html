@@ -31,6 +31,7 @@
       background-size: cover;
       background-image: url("/images/base_banner.jpg");
       min-height: 50%;
+      margin-top: 40px;
     }
 
     .bgfullimg {
@@ -47,6 +48,17 @@
       /* max-width: 1400px; */
     }
 
+    #resources-bar {
+      background-color: lightgray;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 9999;
+      font-size: 24px;
+      font-weight: bold;
+      min-height: 40px;
+    }
+
     .info-container {
       color: #000;
       background-color: #f1f1f1;
@@ -54,14 +66,56 @@
       margin-top: 20px;
     }
 
+    .condition-text {
+      font-size: 32px;
+      font-weight: bold;
+    }
+    .stats-text {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
     .info-readout {
       color: black;
       margin-top: 16px;
     }
 
+    .addon-header {
+      font-size: 42px;
+      font-weight: bold;
+    }
+    .addon-header-button {
+      font-size: 32px;
+    }
+    .addon-item {
+      border: darkgray 4px solid;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    .addon-name {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+
     </style>
   </head>
   <body>
+
+    <!-- Sticky top bar for resources -->
+    <div id="resources-bar">
+      <div class="row">
+        <div class="offset-md-2 col-md-3">
+          <span>Materials: <span id="resources-materials"></span></span>
+        </div>
+        <div class="col-md-3">
+          <span>Refined Materials: <span id="resources-r-materials"></span></span>
+        </div>
+        <div class="col-md-3">
+          <span>Manna: <span id="resources-manna"></span></span>
+        </div>
+      </div>
+    </div>
 
     <!-- Header -->
     <header class="bannerimg" id="home">
@@ -74,12 +128,76 @@
     <div class="bgfullimg">
       <div class="container">
         <div class="row">
-          <div class="col-md-6 info-readout">
-            Text readouts, resource counts and other various display only info looks like this
-          <div class="col-md-6 info-container">
-            <p>Controls that can be selected go in boxes like this.</p>
+          <div class="col-md-5">
+            <span class="condition-text">Condition: <span id="stats-condition"></span></span>
+          </div>
+          <div class="col-md-offset-2 col-md-5">
+            <span class="condition-text">Morale: <span id="stats-morale"></span></span>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-4">
+            <span class="stats-text">Defense: <span id="stats-defense"></span></span>
+          </div>
+          <div class="col-md-4">
+            <span class="stats-text">E-Defense: <span id="stats-edefense"></span></span>
+          </div>
+          <div class="col-md-4">
+            <span class="stats-text">Sensors: <span id="stats-sensors"></span></span>
+          </div>
+        </div>
+
+        <!-- Facilities -->
+        <div class="row">
+          <div class="col-md-12 info-container">
+            <div class="row">
+              <div class="col-md-4">
+                <span class="addon-header">Facilities</span>
+              </div>
+              <div class="col-md-2 offset-md-6" style="margin-top: 8px;">
+                <button class="addon-header-button">Build</button>
+              </div>
+            </div>
+            <div id="facilities-container" class="row">
+              
+            </div>
+          </div>
+        </div>
+        
+        <!-- Defenses -->
+        <div class="row">
+          <div class="col-md-12 info-container">
+            <div class="row">
+              <div class="col-md-4">
+                <span class="addon-header">Defenses</span>
+              </div>
+              <div class="col-md-2 offset-md-6" style="margin-top: 8px;">
+                <button class="addon-header-button">Build</button>
+              </div>
+              <div id="defenses-container" class="row">
+              
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personnel -->
+        <div class="row">
+          <div class="col-md-12 info-container">
+            <div class="row">
+              <div class="col-md-4">
+                <span class="addon-header">Personnel</span>
+              </div>
+              <div class="col-md-2 offset-md-6" style="margin-top: 8px;">
+                <button class="addon-header-button">Recruit</button>
+              </div>
+              <div id="personnel-container" class="row">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -89,7 +207,38 @@
       fetch('./data/base.json')
       .then((response) => response.json())
       .then((json) => {
-        //Update page values
+        //Update resources bar
+        $('#resources-materials').text(json['resources']['materials']['quantity']);
+        $('#resources-r-materials').text(json['resources']['refinedMaterials']['quantity']);
+        $('#resources-manna').text(json['resources']['manna']['quantity']);
+
+        //Update stats values
+        $('#stats-condition').text(json['condition'] + "/" + json['conditionMax']);
+        $('#stats-morale').text(json['morale'] + "/" + json['moraleMax']);
+        $('#stats-defense').text(json['defense']);
+        $('#stats-edefense').text(json['eDefense']);
+        $('#stats-sensors').text(json['sensors']);
+
+        //Add facilities
+        json['facilities'].forEach((facility) => {
+          $('#facilities-container').append(
+            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + facility['name'] + '</div><div>' + facility['description'] + '</div><div>' + facility['notes'] + '</div></div></div>'
+          );
+        });
+
+        //Add personnel
+        json['personnel'].forEach((person) => {
+          $('#personnel-container').append(
+            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + person['name'] + '</div><div>' + person['description'] + '</div><div>' + person['notes'] + '</div></div></div>'
+          );
+        });
+
+        //Add defenses
+        json['defenses'].forEach((defense) => {
+          $('#defenses-container').append(
+            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + defense['name'] + '</div><div>' + defense['description'] + '</div><div>' + defense['notes'] + '</div></div></div>'
+          );
+        });
         
       });
     </script>
