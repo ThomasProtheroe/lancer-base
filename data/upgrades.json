@@ -8,7 +8,7 @@
             "name": "Mech Printer (fixed)",
             "description": "A very old printer that has been repaired and now functions normally.",
             "notes": "Allows the printing of mechs.",
-            "available": 0
+            "available": 1
         },
         {
             "type": "reclaimer",
@@ -16,7 +16,7 @@
             "name": "Materials Reclaimer",
             "description": "An array of machinery used to deconstruct waste materials into component parts for reuse.",
             "notes": "Allows destroyed or damaged mechs, weapons and other machines to be recyclyed for materials.",
-            "available": 0
+            "available": 1
         },
         {
             "type": "munitions",
@@ -35,7 +35,7 @@
             "name": "Stationary Cannons",
             "description": "A variety of mech scale weapons that have been mounted onto stationary emplacements at the edge of Blue Haven.",
             "notes": "Provides +2 defense. Provides light covering fire when fighting near the settlement. Must be manned.",
-            "available": 0
+            "available": 1
         },
         {
             "type": "sensors",
@@ -44,7 +44,7 @@
             "name": "Motion Sensors",
             "description": "A relay of bog-standard motion sensors placed several kilometers out. Prone to false positives from wildlife.",
             "notes": "Provides +1 sensors.",
-            "available": 0
+            "available": 1
         }
     ],
     "personnel": [
@@ -54,7 +54,7 @@
             "name": "Laura Stahl",
             "description": "A talented mechanical engineer who grew up on New Samona. She has a particular hatred for house Harken.",
             "notes": "Provides the settlement with 2 blocks of construction or production time each downtime.",
-            "available": 0
+            "available": 1
         },
         {
             "type": "soldier",
