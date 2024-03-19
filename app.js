@@ -31,11 +31,9 @@ app.get('/data/:filename', function (req, res) {
 });
 
 
-
 app.listen(9000, function () {
     console.log('LancerBase listening on port 9000');
 });
-
 
 
 const updateBase = () => {

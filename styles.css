@@ -91,8 +91,14 @@
   .addon-header-button {
     font-size: 32px;
   }
+  .base-btn:disabled {
+    cursor: not-allowed;
+  }
   .base-btn:hover {
     background-color: gray;
+  }
+  .base-btn:disabled:hover {
+    background-color: lightgray;
   }
   .addon-item {
     border: darkgray 4px solid;
@@ -118,4 +124,13 @@
     background-color: lightblue;
     box-shadow: gray;
     border: black 4px solid;
+  }
+  .addon-body {
+    
+  }
+  .addon-footer {
+    border: darkgray 4px solid;
+  }
+  .addon-cost-item {
+    margin-right: 7px;
   }
