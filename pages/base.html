@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
     
     <style>
     body, html {
@@ -117,6 +118,17 @@
     .modal {
       margin-top: 50px;
     }
+    .addon-item.selectable {
+      cursor: pointer;
+    }
+    .addon-item.selectable:hover {
+      background-color: lightgrey;
+    }
+    .addon-item.addon-item.selectable.selected {
+      background-color: lightblue;
+      box-shadow: gray;
+      border: black 4px solid;
+    }
 
     </style>
   </head>
@@ -126,12 +138,15 @@
     <div id="resources-bar">
       <div class="row">
         <div class="offset-md-2 col-md-3">
+          <i class="bi bi-boxes"></i>
           <span>Materials: <span id="resources-materials"></span></span>
         </div>
         <div class="col-md-3">
+          <i class="bi bi-device-ssd"></i>
           <span>Refined Materials: <span id="resources-r-materials"></span></span>
         </div>
         <div class="col-md-3">
+          <i class="bi bi-currency-bitcoin"></i>
           <span>Manna: <span id="resources-manna"></span></span>
         </div>
       </div>
@@ -199,7 +214,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Build</button>
+                <button type="button" class="btn btn-modal-confirm btn-primary" disabled>Build</button>
               </div>
             </div>
           </div>
@@ -237,7 +252,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Build</button>
+                <button type="button" class="btn btn-modal-confirm btn-primary" disabled>Build</button>
               </div>
             </div>
           </div>
@@ -276,7 +291,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Recruit</button>
+                <button type="button" class="btn btn-modal-confirm btn-primary" disabled>Recruit</button>
               </div>
             </div>
           </div>
@@ -288,6 +303,10 @@
 
     <script>
       const dataUrl = window.location.origin + "/data/base.json";
+
+      const deselectAll = () => {
+        $('.selectable.selected').removeClass('selected');
+      }
 
       fetch('./data/base.json')
       .then((response) => response.json())
@@ -331,21 +350,30 @@
         //Add facilities
         baseJson['facilities'].forEach((facility) => {
           $('#facilities-container').append(
-            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + facility['name'] + '</div><div>' + facility['description'] + '</div><div>' + facility['notes'] + '</div></div></div>'
+            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + facility['name'] +
+            '</div><div>' + facility['description'] +
+            '</div><div>' + facility['notes'] +
+            '</div></div></div>'
           );
         });
 
         //Add personnel
         baseJson['personnel'].forEach((person) => {
           $('#personnel-container').append(
-            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + person['name'] + '</div><div>' + person['description'] + '</div><div>' + person['notes'] + '</div></div></div>'
+            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + person['name'] +
+            '</div><div>' + person['description'] +
+            '</div><div>' + person['notes'] +
+            '</div></div></div>'
           );
         });
 
         //Add defenses
         baseJson['defenses'].forEach((defense) => {
           $('#defenses-container').append(
-            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + defense['name'] + '</div><div>' + defense['description'] + '</div><div>' + defense['notes'] + '</div></div></div>'
+            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + defense['name'] +
+            '</div><div>' + defense['description'] +
+            '</div><div>' + defense['notes'] +
+            '</div></div></div>'
           );
         });
         
@@ -360,7 +388,11 @@
             return;
           }
           $('#personnel-recruit-container').append(
-            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + recruit['name'] + '</div><div>' + recruit['description'] + '</div><div>' + recruit['notes'] + '</div></div></div>'
+            '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + recruit['name'] +
+            '</div><div>' + recruit['description'] +
+            '</div><div>' + recruit['notes'] +
+            '</div><div class="addon-footer">' + '<span>' + recruit['cost']['manna'] + '</span>' +
+            '</div></div></div>'
           );
         });
 
@@ -369,7 +401,11 @@
             return;
           }
           $('#defenses-build-container').append(
-            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + defense['name'] + '</div><div>' + defense['description'] + '</div><div>' + defense['notes'] + '</div></div></div>'
+            '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + defense['name'] + 
+            '</div><div>' + defense['description'] +
+            '</div><div>' + defense['notes'] +
+            '</div><div class="addon-footer">' + '<span>' + defense['cost']['materials'] + '</span>' + '<span>' + defense['cost']['refinedMaterials'] + '</span>' + '<span>' + defense['cost']['manna'] + '</span>' +
+            '</div></div></div>'
           );
         });
 
@@ -378,9 +414,22 @@
             return;
           }
           $('#facilities-build-container').append(
-            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + facility['name'] + '</div><div>' + facility['description'] + '</div><div>' + facility['notes'] + '</div></div></div>'
+            '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + facility['name'] +
+            '</div><div>' + facility['description'] +
+            '</div><div>' + facility['notes'] +
+            '</div></div></div>'
           );
         });
+
+        $('.selectable').click(function() {
+          deselectAll();
+          $(this).addClass('selected');
+          $(this).closest('.modal-content').find('.btn-modal-confirm').prop('disabled', false);
+        });
+
+        $('.btn-close'.click(function() {
+          deselectAll();
+        }));
       });
     </script>
 
