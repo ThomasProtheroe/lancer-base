@@ -6,12 +6,12 @@
             "qualities": 0,
             "name": "Mech Printer (fixed)",
             "description": "A very old printer that has been repaired and now functions normally.",
-            "notes": "Allows the printing of mechs.",
+            "notes": "Allows the printing of mechs, weapons and systems.",
             "available": 1,
             "time": 6,
             "cost": {
                 "materials": 4000,
-                "refinedMaterials": 150,
+                "refinedMaterials": 100,
                 "manna": 0
             }
         },
@@ -37,22 +37,50 @@
             "time": 4,
             "cost": {
                 "materials": 2000,
-                "refinedMaterials": 250,
+                "refinedMaterials": 200,
                 "manna": 5000
             }
         }
     ],
     "defenses": [
         {
+            "type": "machine_guns",
+            "defense": 2,
+            "name": "Machine Gun Nests",
+            "description": "A anti-infantry machine guns stationed in a series of makeshift dugouts made from sandbags at the edge of Blue Haven.",
+            "notes": "Provides +1 defense. Provides light covering fire when fighting near the settlement. Must be manned.",
+            "available": 1,
+            "time": 5,
+            "cost": {
+                "materials": 1000,
+                "refinedMaterials": 0,
+                "manna": 0
+            }
+        },
+        {
             "type": "gun_emplacements",
             "defense": 2,
             "name": "Stationary Cannons",
             "description": "A variety of mech scale weapons that have been mounted onto stationary emplacements at the edge of Blue Haven.",
-            "notes": "Provides +2 defense. Provides light covering fire when fighting near the settlement. Must be manned.",
-            "available": 1,
-            "time": 5,
+            "notes": "Provides +2 defense. Provides covering fire when fighting near the settlement. Must be manned.",
+            "available": 0,
+            "time": 6,
             "cost": {
-                "materials": 1500,
+                "materials": 2000,
+                "refinedMaterials": 0,
+                "manna": 0
+            }
+        },
+        {
+            "type": "gun_turrets",
+            "defense": 3,
+            "name": "Automated Cannons",
+            "description": "A variety of mech scale weapons that have been fitted with simple FoF and target acquisition systems.",
+            "notes": "Provides +3 defense. Provides covering fire with +1 Accurracy when fighting near the settlement.",
+            "available": 0,
+            "time": 7,
+            "cost": {
+                "materials": 2000,
                 "refinedMaterials": 0,
                 "manna": 0
             }

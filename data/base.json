@@ -28,7 +28,7 @@
             "qualities": 0,
             "name": "Mech Printer (damaged)",
             "description": "A very old printer that still functions, albeit with some quirks.",
-            "notes": "Allows the printing of mechs. All mechs printed with this printer gain 1 Flaw at random."
+            "notes": "Allows the printing of mechs, weapons and systems. All mechs printed with this printer gain 1 Flaw at random."
         }
     ],
     "defenses": [
@@ -37,6 +37,13 @@
             "name": "Local Militia",
             "description": "Local civilians who will take up arms to defend their homes. Untrained and poorly equipped.",
             "notes": "Provides no defensive bonuses."
+        },
+        {
+            "type": "sensors",
+            "sensors": 0,
+            "name": "Simple Radar",
+            "description": "A somewhat aging radar system designed to pick up vehicle sized targets at ranges of roughly 30 km.",
+            "notes": "Gives a short notice of approaching threats. Will not detect infantry or small vehicles."
         }
     ],
     "personnel": [

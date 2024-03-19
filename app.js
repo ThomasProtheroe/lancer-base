@@ -19,13 +19,17 @@ app.post('/update/base', function (req, res) {
     });
 });
 
-//Resource routes (images, data objects etc)
+//Resource routes (styles, images, data objects etc)
+app.get('/styles.css', function (req, res) {
+    res.sendFile(path.join(__dirname,"/styles.css"));
+});
 app.get('/images/:filename', function (req, res) {
     res.sendFile(path.join(__dirname,"/images/" + req.params['filename']));
 });
 app.get('/data/:filename', function (req, res) {
     res.sendFile(path.join(__dirname,"/data/" + req.params['filename']));
 });
+
 
 
 app.listen(9000, function () {
