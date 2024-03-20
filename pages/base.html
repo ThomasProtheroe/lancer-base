@@ -94,7 +94,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn-modal-confirm base-btn" disabled>Build</button>
+                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" disabled>Build</button>
               </div>
             </div>
           </div>
@@ -132,7 +132,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn-modal-confirm base-btn" disabled>Build</button>
+                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" disabled>Build</button>
               </div>
             </div>
           </div>
@@ -170,7 +170,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn-modal-confirm base-btn" disabled>Recruit</button>
+                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" disabled>Recruit</button>
               </div>
             </div>
           </div>
@@ -181,14 +181,14 @@
 
 
     <script>
-      const dataUrl = window.location.origin + "/data/base.json";
+      const dataUrl = window.location.origin + "/data/baseData";
 
       const deselectAll = () => {
         $('.selectable.selected').closest('.modal-content').find('.btn-modal-confirm').prop('disabled', true);
         $('.selectable.selected').removeClass('selected');
       }
 
-      fetch('./data/base.json')
+      fetch('./data/baseData')
       .then((response) => response.json())
       .then((baseJson) => {
         //Update resources bar
@@ -339,6 +339,14 @@
           deselectAll();
         });
       });
+
+      $('.buy-addon-btn').click((e) => {
+        if ($(this).attr('disabled')) {
+          return;
+        }
+        
+
+      })
     </script>
 
   </body>
