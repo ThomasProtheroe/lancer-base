@@ -26,7 +26,7 @@ app.get('/styles.css', function (req, res) {
 app.get('/images/:filename', function (req, res) {
     res.sendFile(path.join(__dirname,"/images/" + req.params['filename']));
 });
-app.get('/data/:filename', function (req, res) {
+app.get('/data/:filename', function (req, res) { //TODO: cache the contents of the data files and send from cache
     res.sendFile(path.join(__dirname,"/data/" + req.params['filename']));
 });
 

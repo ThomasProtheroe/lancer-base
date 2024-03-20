@@ -131,8 +131,8 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-modal-confirm btn-primary" disabled>Build</button>
+                <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn-modal-confirm base-btn" disabled>Build</button>
               </div>
             </div>
           </div>
@@ -169,8 +169,8 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-modal-confirm btn-primary" disabled>Recruit</button>
+                <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn-modal-confirm base-btn" disabled>Recruit</button>
               </div>
             </div>
           </div>
@@ -269,11 +269,13 @@
           }
           $('#personnel-recruit-container').append(
             '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + recruit['name'] +
+            '</div><div class="addon-costs"><span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + recruit['cost']['manna'] + '</span>' +
             '</div><div>' + recruit['description'] +
             '</div><div>' + recruit['notes'] +
-            '</div><div class="addon-footer"><span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + recruit['cost']['manna'] + '</span>' +
             '</div></div></div>'
           );
+          //Add resource costs as data attributes
+          $('#personnel-recruit-container').find('.addon-item').last().data('cost', recruit['cost']);
         });
 
         addonJson['defenses'].forEach((defense) => {
@@ -282,11 +284,13 @@
           }
           $('#defenses-build-container').append(
             '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + defense['name'] + 
+            '</div><div class="addon-costs">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + defense['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + defense['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + defense['cost']['manna'] + '</span>' +
             '</div><div>' + defense['description'] +
             '</div><div>' + defense['notes'] +
-            '</div><div class="addon-footer">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + defense['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + defense['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + defense['cost']['manna'] + '</span>' +
             '</div></div></div>'
-          ).data('materials', );
+          );
+          //Add resource costs as data attributes
+          $('#defenses-build-container').find('.addon-item').last().data('cost', defense['cost']);
         });
 
         addonJson['facilities'].forEach((facility) => {
@@ -295,17 +299,21 @@
           }
           $('#facilities-build-container').append(
             '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + facility['name'] +
+            '</div><div class="addon-costs">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + facility['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + facility['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + facility['cost']['manna'] + '</span>' +
             '</div><div>' + facility['description'] +
             '</div><div>' + facility['notes'] +
-            '</div><div class="addon-footer">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + facility['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + facility['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + facility['cost']['manna'] + '</span>' +
             '</div></div></div>'
           );
+          //Add resource costs as data attributes
+          $('#facilities-build-container').find('.addon-item').last().data('cost', facility['cost']);
         });
 
 
         /*** Addon interation code ***/
-        $('.selectable').click(function() {
+        $('.addon-item.selectable').click(function() {
           deselectAll();
+
+          var costs = $(this).data('cost');
 
           var resources = {
             "materials": $('#resources-materials').data('quantity'),
@@ -315,13 +323,16 @@
 
           $(this).addClass('selected');
           var affordable = true;
-          for (const [key, value] of Object.entries(resources)) {
-            console.log(`resource: ${key}, amount: ${value}`);
+          for (const [name, value] of Object.entries(resources)) {
+            if(value < costs[name]) {
+              affordable = false;
+              break;
+            }
           }
-          // if ()
-          // {
-          //   $(this).closest('.modal-content').find('.btn-modal-confirm').prop('disabled', false);
-          // }
+
+          if (affordable) {
+            $(this).closest('.modal-content').find('.btn-modal-confirm').prop('disabled', false);
+          }
         });
 
         $('.btn-close').click(function() {

@@ -128,8 +128,9 @@
   .addon-body {
     
   }
-  .addon-footer {
-    border: darkgray 4px solid;
+  .addon-costs {
+    margin: 0px 4px;
+    font-weight: bold;
   }
   .addon-cost-item {
     margin-right: 7px;
