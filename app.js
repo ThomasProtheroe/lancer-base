@@ -6,6 +6,10 @@ var fs = require('fs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+var logger = fs.createWriteStream('logs/activity.log', {
+    flags: 'a'
+});
+
 let baseData = {};
 baseData = require('./data/base.json');
 
@@ -22,6 +26,7 @@ app.post('/update/base', function (req, res) {
 
     updateBase(params);
 
+    logger.write('User purchased a new addon: ' + req.body.addon['name']);
     res.send({
         'newBase': baseData,
         'status': 'success',
