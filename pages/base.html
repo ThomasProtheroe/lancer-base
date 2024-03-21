@@ -240,13 +240,17 @@
 
       const addAddon = (addon, containerSelector) => {
         let extraClasses = '';
+        let timeRemaining = 0;
         if ('timeRemaining' in addon && addon['timeRemaining'] > 0) {
           extraClasses += 'under-construction ';
+          timeRemaining = addon['timeRemaining'];
         }
         $(containerSelector).append(
           '<div class="col-md-3"><div class="addon-item ' + extraClasses + '"><div class="addon-name">' + addon['name'] +
-          '</div><div>' + addon['description'] +
-          '</div><div>' + addon['notes'] +
+          '</div><div class="addon-description">' + addon['description'] +
+          '</div><div class="addon-notes">' + addon['notes'] +
+          '</div><div class="addon-construction-sign">UNDER CONSTRUCTION' +
+          '</div><div class="addon-construction-time">Work Remaining: ' + timeRemaining +
           '</div></div></div>'
         );
         $(containerSelector).find('.addon-item').last().data('stats', addon);

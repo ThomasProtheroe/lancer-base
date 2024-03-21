@@ -107,6 +107,32 @@
     height: 225px;
     overflow-y: scroll;
   }
+  .addon-item.under-construction {
+    background: repeating-linear-gradient(
+      45deg,
+      #fce101,
+      #fce101 30px,
+      #5b5b5b 30px,
+      #5b5b5b 60px
+    );
+    
+  }
+  .addon-item .addon-construction-sign,
+  .addon-item .addon-construction-time {
+    display: none;
+  }
+  .addon-item.under-construction .addon-construction-sign,
+  .addon-item.under-construction .addon-construction-time {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    color: #e4362a;
+  }
+  .addon-item.under-construction .addon-description,
+  .addon-item.under-construction .addon-notes
+  {
+    display: none;
+  }
   .addon-name {
     font-size: 22px;
     font-weight: bold;
