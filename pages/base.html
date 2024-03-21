@@ -181,8 +181,6 @@
 
 
     <script>
-      const dataUrl = window.location.origin + "/data/baseData";
-
       const deselectAll = () => {
         $('.selectable.selected').closest('.modal-content').find('.btn-modal-confirm').prop('disabled', true);
         $('.selectable.selected').removeClass('selected');
@@ -323,7 +321,6 @@
         
         updateAddons(baseJson);
 
-
         //Add purchasable addons
         fetch('./data/upgrades.json')
         .then((response) => response.json())
@@ -438,8 +435,7 @@
         });
       });
 
-      
-
+      /**************** Event handlers ***************/
       $('.buy-addon-btn').click((e) => {
         if ($(this).attr('disabled')) {
           return;

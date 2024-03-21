@@ -12,13 +12,14 @@ var logger = fs.createWriteStream('logs/activity.log', {
 
 let baseData = {};
 baseData = require('./data/base.json');
+const pilotData = require("./data/characters");
 
 //Main application routes
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname,"/pages/base.html"));
 });
 app.post('/update/base', function (req, res) {
-    console.log('update request');
+    console.log('update base request');
     const params = {
         "resources": req.body.resources,
         "addon": req.body.addon
@@ -26,9 +27,23 @@ app.post('/update/base', function (req, res) {
 
     updateBase(params);
 
-    logger.write('User purchased a new addon: ' + req.body.addon['name']);
+    logger.write('Pilot purchased a new addon: ' + req.body.addon['name']);
     res.send({
         'newBase': baseData,
+        'status': 'success',
+    });
+});
+app.post('/update/pilot', function (req, res) {
+    console.log('update pilot request');
+    const params = {
+        "pilot": req.body.pilot
+    }
+
+    updatePilot(params);
+
+    logger.write('Pilot was updated');
+    res.send({
+        'newPilot': pilotData[params['pilot']],
         'status': 'success',
     });
 });
@@ -36,6 +51,9 @@ app.post('/update/base', function (req, res) {
 //Resource routes (styles, images, data objects etc)
 app.get('/data/baseData', function(req, res) {
     res.send(baseData);
+});
+app.get('/data/pilotData', function(req, res) {
+    res.send(pilotData);
 });
 app.get('/styles.css', function (req, res) {
     res.sendFile(path.join(__dirname,"/styles.css"));
@@ -47,11 +65,9 @@ app.get('/data/:filename', function (req, res) {
     res.sendFile(path.join(__dirname,"/data/" + req.params['filename']));
 });
 
-
 app.listen(9000, function () {
     console.log('LancerBase listening on port 9000');
 });
-
 
 const updateBase = (params) => {
     baseData['resources'] = params['resources'];
@@ -59,4 +75,11 @@ const updateBase = (params) => {
 
     // Yeah no validation callback right now, get over it
     fs.writeFile('data/base.json', JSON.stringify(baseData), 'utf8', () => {});
+}
+
+const updatePilot = (params) => {
+    pilotData[params['pilot']['callsign']] = params['pilot'];
+
+    // Yeah no validation callback right now, get over it
+    fs.writeFile('data/characters/' + params['pilot']['callsign'] + '.json', JSON.stringify(pilotData[params['pilot']['callsign']]), 'utf8', () => {});
 }
