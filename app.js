@@ -22,12 +22,13 @@ app.post('/update/base', function (req, res) {
     console.log('update base request');
     const params = {
         "resources": req.body.resources,
-        "addon": req.body.addon
+        "addon": req.body.addon,
+        "pilot": req.body.pilot
     }
 
     updateBase(params);
 
-    logger.write('Pilot purchased a new addon: ' + req.body.addon['name']);
+    logger.write(params['pilot'] + ' purchased a new addon: ' + req.body.addon['name'] + '\n');
     res.send({
         'newBase': baseData,
         'status': 'success',

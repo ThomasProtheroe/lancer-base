@@ -43,11 +43,17 @@
     <div class="bgfullimg">
       <div class="container">
         <div class="row">
-          <div class="col-md-5">
+          <div class="col-md-4">
             <span class="condition-text">Condition: </span><div class="status-bar"><div id="condition-fill" class="status-bar-fill"><span id="stats-condition"></span></div></div>
           </div>
-          <div class="col-md-offset-2 col-md-5">
+          <div class="col-md-4">
             <span class="condition-text">Morale: </span><div class="status-bar"><div id="morale-fill" class="status-bar-fill"><span id="stats-morale"></span></div></div>
+          </div>
+          <div class="col-md-4">
+            <span class="condition-text">Pilot: </span>
+            <select id="pilot-select" class="base-select">
+              
+            </select>
           </div>
         </div>
         <div class="row">
@@ -244,12 +250,16 @@
           timeRemaining = addon['timeRemaining'];
         }
         $(containerSelector).append(
-          '<div class="col-md-3"><div class="addon-item ' + extraClasses + '"><div class="addon-name">' + addon['name'] +
-          '</div><div class="addon-description">' + addon['description'] +
-          '</div><div class="addon-notes">' + addon['notes'] +
-          '</div><div class="addon-construction-sign">UNDER CONSTRUCTION' +
-          '</div><div class="addon-construction-time">Work Remaining: ' + timeRemaining +
-          '</div></div></div>'
+          '<div class="col-md-3"><div class="addon-item ' + extraClasses + '">' +
+          '<div class="addon-name">' + addon['name'] + '</div>' +
+          '<div class="addon-description">' + addon['description'] + '</div>' +
+          '<div class="addon-notes">' + addon['notes'] + '</div>' +
+          '<div class="addon-construction-controls">' +
+          '<div class="addon-construction-sign">UNDER CONSTRUCTION' + '</div>' +
+          '<div class="addon-construction-time">Work Remaining: ' + timeRemaining + '</div>' +
+          '<button class="base-btn">Add Work</button>' +
+          '</div>' +
+          '</div></div>'
         );
         $(containerSelector).find('.addon-item').last().data('stats', addon);
 
@@ -284,6 +294,18 @@
         });
       }
 
+      //Populate pilot dropdown
+      fetch('./data/pilotData')
+      .then((response) => response.json())
+      .then((pilotJson) => {
+        Object.keys(pilotJson).forEach(key => {
+          console.log(pilotJson[key]);
+          $('#pilot-select').append(`<option value="${key}">${key}</option>`);
+        });
+        
+      });
+
+      //Populate base data and addons
       fetch('./data/baseData')
       .then((response) => response.json())
       .then((baseJson) => {
@@ -475,7 +497,8 @@
           method: "POST",
           body: JSON.stringify({
             resources: newResources,
-            addon: addon
+            addon: addon,
+            pilot: $('#pilot-select').val()
           }),
           headers: {
             "Content-type": "application/json; charset=UTF-8"

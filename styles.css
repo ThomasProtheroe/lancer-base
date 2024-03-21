@@ -100,6 +100,11 @@
   .base-btn:disabled:hover {
     background-color: lightgray;
   }
+  .base-select {
+    min-width: 150px;
+    font-size: 24px;
+    margin-top: 3px;
+  }
   .addon-item {
     border: darkgray 4px solid;
     padding: 10px;
@@ -117,12 +122,10 @@
     );
     
   }
-  .addon-item .addon-construction-sign,
-  .addon-item .addon-construction-time {
+  .addon-item .addon-construction-controls {
     display: none;
   }
-  .addon-item.under-construction .addon-construction-sign,
-  .addon-item.under-construction .addon-construction-time {
+  .addon-item.under-construction .addon-construction-controls {
     display: block;
     font-size: 24px;
     font-weight: bold;
