@@ -15,7 +15,12 @@ app.get('/', function (req, res) {
 });
 app.post('/update/base', function (req, res) {
     console.log('update request');
-    updateBase();
+    const params = {
+        "resources": req.body.resources,
+        "addon": req.body.addon
+    }
+
+    updateBase(params);
 
     res.send({
         'status': 'success',
@@ -24,7 +29,6 @@ app.post('/update/base', function (req, res) {
 
 //Resource routes (styles, images, data objects etc)
 app.get('/data/baseData', function(req, res) {
-    console.log(baseData);
     res.send(baseData);
 });
 app.get('/styles.css', function (req, res) {
@@ -33,7 +37,7 @@ app.get('/styles.css', function (req, res) {
 app.get('/images/:filename', function (req, res) {
     res.sendFile(path.join(__dirname,"/images/" + req.params['filename']));
 });
-app.get('/data/:filename', function (req, res) { //TODO: cache the contents of the data files and send from cache
+app.get('/data/:filename', function (req, res) {
     res.sendFile(path.join(__dirname,"/data/" + req.params['filename']));
 });
 
@@ -43,6 +47,10 @@ app.listen(9000, function () {
 });
 
 
-const updateBase = () => {
-    return;
+const updateBase = (params) => {
+    baseData['resources'] = params['resources'];
+    baseData[params['addon']['family']].push(params['addon']);
+
+    // Yeah no validation callback right now, get over it
+    fs.writeFile('data/base.json', JSON.stringify(baseData), 'utf8', () => {});
 }

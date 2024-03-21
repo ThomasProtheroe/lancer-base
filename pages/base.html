@@ -94,7 +94,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" disabled>Build</button>
+                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" data-bs-dismiss="modal" disabled>Build</button>
               </div>
             </div>
           </div>
@@ -132,7 +132,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" disabled>Build</button>
+                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" data-bs-dismiss="modal" disabled>Build</button>
               </div>
             </div>
           </div>
@@ -170,7 +170,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" disabled>Recruit</button>
+                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" data-bs-dismiss="modal" disabled>Recruit</button>
               </div>
             </div>
           </div>
@@ -188,18 +188,70 @@
         $('.selectable.selected').removeClass('selected');
       }
 
+      const updateResources = (resourcesJson) => {
+        $('#resources-materials').text(resourcesJson['materials']['quantity']).data('quantity', resourcesJson['materials']['quantity']);
+        $('#resources-r-materials').text(resourcesJson['refinedMaterials']['quantity']).data('quantity', resourcesJson['refinedMaterials']['quantity']);
+        $('#resources-manna').text(resourcesJson['manna']['quantity']).data('quantity', resourcesJson['manna']['quantity']);
+      }
+
+      const updateBaseStats = (statsJson) => {
+        $('#stats-defense').text(statsJson['defense']);
+        $('#stats-edefense').text(statsJson['eDefense']);
+        $('#stats-sensors').text(statsJson['sensors']);
+      }
+
+      const addFacility = (facility) => {
+        $('#facilities-container').append(
+          '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + facility['name'] +
+          '</div><div>' + facility['description'] +
+          '</div><div>' + facility['notes'] +
+          '</div></div></div>'
+        );
+      }
+
+      const addPersonnel = (person) => {
+        $('#personnel-container').append(
+          '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + person['name'] +
+          '</div><div>' + person['description'] +
+          '</div><div>' + person['notes'] +
+          '</div></div></div>'
+        );
+      }
+
+      const addDefense = (defense) => {
+        $('#defenses-container').append(
+          '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + defense['name'] +
+          '</div><div>' + defense['description'] +
+          '</div><div>' + defense['notes'] +
+          '</div></div></div>'
+        );
+      }
+
+      const updateAddons = (addonsJson) => {
+        //Add facilities
+        addonsJson['facilities'].forEach((facility) => {
+          addFacility(facility);
+        });
+
+        //Add personnel
+        addonsJson['personnel'].forEach((person) => {
+          addPersonnel(person);
+        });
+
+        //Add defenses
+        addonsJson['defenses'].forEach((defense) => {
+          addDefense(defense);
+        });
+      }
+
       fetch('./data/baseData')
       .then((response) => response.json())
       .then((baseJson) => {
         //Update resources bar
-        $('#resources-materials').text(baseJson['resources']['materials']['quantity']).data('quantity', baseJson['resources']['materials']['quantity']);
-        $('#resources-r-materials').text(baseJson['resources']['refinedMaterials']['quantity']).data('quantity', baseJson['resources']['refinedMaterials']['quantity']);
-        $('#resources-manna').text(baseJson['resources']['manna']['quantity']).data('quantity', baseJson['resources']['manna']['quantity']);
+        updateResources(baseJson['resources']);
 
         //Update stats values
-        $('#stats-defense').text(baseJson['defense']);
-        $('#stats-edefense').text(baseJson['eDefense']);
-        $('#stats-sensors').text(baseJson['sensors']);
+        updateBaseStats(baseJson);
 
         const conditionPercent = (baseJson['condition'] / baseJson['conditionMax']) * 100;
         const moralePercent = (baseJson['morale'] / baseJson['moraleMax']) * 100;
@@ -227,36 +279,7 @@
         $('#morale-fill').css("width", moralePercent + "%");
         $('#morale-fill').css("background-color", moraleColor);
         
-        //Add facilities
-        baseJson['facilities'].forEach((facility) => {
-          $('#facilities-container').append(
-            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + facility['name'] +
-            '</div><div>' + facility['description'] +
-            '</div><div>' + facility['notes'] +
-            '</div></div></div>'
-          );
-        });
-
-        //Add personnel
-        baseJson['personnel'].forEach((person) => {
-          $('#personnel-container').append(
-            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + person['name'] +
-            '</div><div>' + person['description'] +
-            '</div><div>' + person['notes'] +
-            '</div></div></div>'
-          );
-        });
-
-        //Add defenses
-        baseJson['defenses'].forEach((defense) => {
-          $('#defenses-container').append(
-            '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + defense['name'] +
-            '</div><div>' + defense['description'] +
-            '</div><div>' + defense['notes'] +
-            '</div></div></div>'
-          );
-        });
-        
+        updateAddons(baseJson);
       });
 
       //Add purchasable addons
@@ -275,7 +298,8 @@
             '</div></div></div>'
           );
           //Add resource costs as data attributes
-          $('#personnel-recruit-container').find('.addon-item').last().data('cost', recruit['cost']);
+          $('#personnel-recruit-container').find('.addon-item').last()
+          .data('addon', recruit);
         });
 
         addonJson['defenses'].forEach((defense) => {
@@ -290,7 +314,8 @@
             '</div></div></div>'
           );
           //Add resource costs as data attributes
-          $('#defenses-build-container').find('.addon-item').last().data('cost', defense['cost']);
+          $('#defenses-build-container').find('.addon-item').last()
+          .data('addon', defense);
         });
 
         addonJson['facilities'].forEach((facility) => {
@@ -305,15 +330,15 @@
             '</div></div></div>'
           );
           //Add resource costs as data attributes
-          $('#facilities-build-container').find('.addon-item').last().data('cost', facility['cost']);
+          $('#facilities-build-container').find('.addon-item').last()
+          .data('addon', facility);
         });
-
 
         /*** Addon interation code ***/
         $('.addon-item.selectable').click(function() {
           deselectAll();
 
-          var costs = $(this).data('cost');
+          var costs = $(this).data('addon')['cost'];
 
           var resources = {
             "materials": $('#resources-materials').data('quantity'),
@@ -344,10 +369,54 @@
         if ($(this).attr('disabled')) {
           return;
         }
-        
 
+        //Update addon
+        let addon = $('.addon-item.selected').data('addon');
+
+        // Update resources
+        var currentResources = {
+          "materials": $('#resources-materials').data('quantity'),
+          "refinedMaterials": $('#resources-r-materials').data('quantity'),
+          "manna": $('#resources-manna').data('quantity')
+        };
+        let addonCosts = addon['cost'];
+        let newResources = {
+          "materials": {
+            "name": "Materials",
+            "quantity": currentResources['materials'] - addonCosts['materials']
+          },
+          "refinedMaterials": {
+              "name": "Refined Materials",
+              "quantity": currentResources['refinedMaterials'] - addonCosts['refinedMaterials']
+          },
+          "manna": {
+              "name": "Manna",
+              "quantity": currentResources['manna'] - addonCosts['manna']
+          }
+        };
+
+        fetch('/update/base', {
+          method: "POST",
+          body: JSON.stringify({
+            resources: newResources,
+            addon: addon
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        updateResources(newResources);
+        if (addon['family'] == 'facilities') {
+          addFacility(addon);
+        } else if (addon['family'] == 'defenses') {
+          addDefense(addon);
+        } else if (addon['family'] == 'personnel') {
+          addPersonnel(addon);
+        }
+
+        //Remove the addon from the build menu
+        $('.addon-item.selected').remove();
       })
     </script>
-
   </body>
 </html>

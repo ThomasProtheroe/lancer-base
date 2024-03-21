@@ -1,6 +1,7 @@
 {
     "facilities": [
         {
+            "family": "facilities",
             "type": "printer",
             "flaws": 0,
             "qualities": 0,
@@ -16,6 +17,7 @@
             }
         },
         {
+            "family": "facilities",
             "type": "reclaimer",
             "name": "Materials Reclaimer",
             "description": "An array of machinery used to deconstruct waste materials into component parts for reuse.",
@@ -29,6 +31,7 @@
             }
         },
         {
+            "family": "facilities",
             "type": "munitions",
             "name": "Munitions Fabricator",
             "description": "A specialized printer used to produce mech-sized ammunition.",
@@ -44,6 +47,7 @@
     ],
     "defenses": [
         {
+            "family": "defenses",
             "type": "machine_guns",
             "defense": 2,
             "name": "Machine Gun Nests",
@@ -58,6 +62,7 @@
             }
         },
         {
+            "family": "defenses",
             "type": "gun_emplacements",
             "defense": 2,
             "name": "Stationary Cannons",
@@ -72,6 +77,7 @@
             }
         },
         {
+            "family": "defenses",
             "type": "gun_turrets",
             "defense": 3,
             "name": "Automated Cannons",
@@ -86,6 +92,7 @@
             }
         },
         {
+            "family": "defenses",
             "type": "sensors",
             "sensors": 1,
             "name": "Motion Sensors",
@@ -102,6 +109,7 @@
     ],
     "personnel": [
         {
+            "family": "personnel",
             "type": "engineer",
             "name": "Laura Stahl",
             "description": "A talented mechanical engineer who grew up on New Samona. She has a particular hatred for house Harken.",
@@ -115,6 +123,7 @@
             }
         },
         {
+            "family": "personnel",
             "type": "soldier",
             "name": "Boris Stelov",
             "description": "A grey bearded ex-soldier. He spent most of his life as part of a rebel organization fighting for independance, and as such is adept at training soldiers to fight mechs.",
