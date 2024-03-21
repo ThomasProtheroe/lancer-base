@@ -10,6 +10,7 @@
             "notes": "Allows the printing of mechs, weapons and systems.",
             "available": 1,
             "time": 6,
+            "timeRemaining": 6,
             "cost": {
                 "materials": 4000,
                 "refinedMaterials": 100,
@@ -24,6 +25,7 @@
             "notes": "Allows destroyed or damaged mechs, weapons and other machines to be recyclyed for materials.",
             "available": 1,
             "time": 4,
+            "timeRemaining": 4,
             "cost": {
                 "materials": 1500,
                 "refinedMaterials": 50,
@@ -38,6 +40,7 @@
             "notes": "Allows the printing of special ammunition.",
             "available": 0,
             "time": 4,
+            "timeRemaining": 4,
             "cost": {
                 "materials": 2000,
                 "refinedMaterials": 200,
@@ -55,6 +58,7 @@
             "notes": "Provides +1 defense. Provides light covering fire when fighting near the settlement. Must be manned.",
             "available": 1,
             "time": 4,
+            "timeRemaining": 4,
             "cost": {
                 "materials": 1000,
                 "refinedMaterials": 0,
@@ -70,6 +74,7 @@
             "notes": "Provides +2 defense. Provides covering fire when fighting near the settlement. Must be manned.",
             "available": 0,
             "time": 6,
+            "timeRemaining": 6,
             "cost": {
                 "materials": 2000,
                 "refinedMaterials": 0,
@@ -85,6 +90,7 @@
             "notes": "Provides +3 defense. Provides covering fire with +1 Accurracy when fighting near the settlement.",
             "available": 0,
             "time": 8,
+            "timeRemaining": 8,
             "cost": {
                 "materials": 4000,
                 "refinedMaterials": 50,
@@ -100,6 +106,7 @@
             "notes": "Provides +1 sensors.",
             "available": 1,
             "time": 3,
+            "timeRemaining": 3,
             "cost": {
                 "materials": 500,
                 "refinedMaterials": 0,
@@ -116,6 +123,7 @@
             "notes": "Provides the settlement with 2 blocks of construction or production time each downtime.",
             "available": 1,
             "time": 0,
+            "timeRemaining": 0,
             "cost": {
                 "materials": 0,
                 "refinedMaterials": 0,
@@ -130,6 +138,7 @@
             "notes": "Provides +1 defense. Allows training of higher tier militia.",
             "available": 0,
             "time": 0,
+            "timeRemaining": 0,
             "cost": {
                 "materials": 0,
                 "refinedMaterials": 0,

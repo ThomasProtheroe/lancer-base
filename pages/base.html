@@ -238,34 +238,31 @@
         $('#stats-sensors').text(sensors);
       }
 
-      const addFacility = (facility) => {
-        $('#facilities-container').append(
-          '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + facility['name'] +
-          '</div><div>' + facility['description'] +
-          '</div><div>' + facility['notes'] +
+      const addAddon = (addon, containerSelector) => {
+        let extraClasses = '';
+        if ('timeRemaining' in addon && addon['timeRemaining'] > 0) {
+          extraClasses += 'under-construction ';
+        }
+        $(containerSelector).append(
+          '<div class="col-md-3"><div class="addon-item ' + extraClasses + '"><div class="addon-name">' + addon['name'] +
+          '</div><div>' + addon['description'] +
+          '</div><div>' + addon['notes'] +
           '</div></div></div>'
         );
-        $('#facilities-container').find('.addon-item').last().data('stats', facility);
+        $(containerSelector).find('.addon-item').last().data('stats', addon);
+
+      };
+
+      const addFacility = (facility) => {
+        addAddon(facility, '#facilities-container');
       }
 
       const addPersonnel = (person) => {
-        $('#personnel-container').append(
-          '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + person['name'] +
-          '</div><div>' + person['description'] +
-          '</div><div>' + person['notes'] +
-          '</div></div></div>'
-        );
-        $('#personnel-container').find('.addon-item').last().data('stats', person);
+        addAddon(person, '#personnel-container');
       }
 
       const addDefense = (defense) => {
-        $('#defenses-container').append(
-          '<div class="col-md-3"><div class="addon-item"><div class="addon-name">' + defense['name'] +
-          '</div><div>' + defense['description'] +
-          '</div><div>' + defense['notes'] +
-          '</div></div></div>'
-        );
-        $('#defenses-container').find('.addon-item').last().data('stats', defense);
+        addAddon(defense, '#defenses-container');
       }
 
       const updateAddons = (addonsJson) => {
