@@ -49,12 +49,12 @@
         {
             "family": "defenses",
             "type": "machine_guns",
-            "defense": 2,
+            "defense": 1,
             "name": "Machine Gun Nests",
-            "description": "A anti-infantry machine guns stationed in a series of makeshift dugouts made from sandbags at the edge of Blue Haven.",
+            "description": "A number of man-portable machine guns stationed in a series of makeshift dugouts made from sandbags at the edge of Blue Haven.",
             "notes": "Provides +1 defense. Provides light covering fire when fighting near the settlement. Must be manned.",
             "available": 1,
-            "time": 5,
+            "time": 4,
             "cost": {
                 "materials": 1000,
                 "refinedMaterials": 0,
@@ -84,10 +84,10 @@
             "description": "A variety of mech scale weapons that have been fitted with simple FoF and target acquisition systems.",
             "notes": "Provides +3 defense. Provides covering fire with +1 Accurracy when fighting near the settlement.",
             "available": 0,
-            "time": 7,
+            "time": 8,
             "cost": {
-                "materials": 2000,
-                "refinedMaterials": 0,
+                "materials": 4000,
+                "refinedMaterials": 50,
                 "manna": 0
             }
         },

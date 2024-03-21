@@ -195,9 +195,47 @@
       }
 
       const updateBaseStats = (statsJson) => {
-        $('#stats-defense').text(statsJson['defense']);
-        $('#stats-edefense').text(statsJson['eDefense']);
-        $('#stats-sensors').text(statsJson['sensors']);
+        let defense = statsJson['defense'];
+        let eDefense = statsJson['eDefense'];
+        let sensors = statsJson['sensors'];
+
+        statsJson['facilities'].forEach((facility) => {
+          if ("defense" in facility) {
+            defense += facility['defense'];
+          }
+          if ("eDefense" in facility) {
+            eDefense += facility['eDefense'];
+          }
+          if ("sensors" in facility) {
+            sensors += facility['sensors'];
+          }
+        });
+        statsJson['defenses'].forEach((defenseAddon) => {
+          if ("defense" in defenseAddon) {
+            defense += defenseAddon['defense'];
+          }
+          if ("eDefense" in defenseAddon) {
+            eDefense += defenseAddon['eDefense'];
+          }
+          if ("sensors" in defenseAddon) {
+            sensors += defenseAddon['sensors'];
+          }
+        });
+        statsJson['personnel'].forEach((person) => {
+          if ("defense" in person) {
+            defense += person['defense'];
+          }
+          if ("eDefense" in person) {
+            eDefense += person['eDefense'];
+          }
+          if ("sensors" in person) {
+            sensors += person['sensors'];
+          }
+        });
+
+        $('#stats-defense').text(defense);
+        $('#stats-edefense').text(eDefense);
+        $('#stats-sensors').text(sensors);
       }
 
       const addFacility = (facility) => {
@@ -430,6 +468,11 @@
               "quantity": currentResources['manna'] - addonCosts['manna']
           }
         };
+        let newBaseStats = {
+          "defense": 0,
+          "eDefense": 0,
+          "sensors": 0
+        }
 
         fetch('/update/base', {
           method: "POST",
@@ -440,6 +483,9 @@
           headers: {
             "Content-type": "application/json; charset=UTF-8"
           }
+        }).then((response) => response.json())
+        .then((responseJson) => {
+          updateBaseStats(responseJson['newBase']);
         });
 
         //Update page data. Yes I should probably be storing a main data object and refreshing the page from that. 

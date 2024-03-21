@@ -23,6 +23,7 @@ app.post('/update/base', function (req, res) {
     updateBase(params);
 
     res.send({
+        'newBase': baseData,
         'status': 'success',
     });
 });
