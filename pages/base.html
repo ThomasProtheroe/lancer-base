@@ -207,6 +207,7 @@
           '</div><div>' + facility['notes'] +
           '</div></div></div>'
         );
+        $('#facilities-container').find('.addon-item').last().data('stats', facility);
       }
 
       const addPersonnel = (person) => {
@@ -216,6 +217,7 @@
           '</div><div>' + person['notes'] +
           '</div></div></div>'
         );
+        $('#personnel-container').find('.addon-item').last().data('stats', person);
       }
 
       const addDefense = (defense) => {
@@ -225,6 +227,7 @@
           '</div><div>' + defense['notes'] +
           '</div></div></div>'
         );
+        $('#defenses-container').find('.addon-item').last().data('stats', defense);
       }
 
       const updateAddons = (addonsJson) => {
@@ -290,6 +293,7 @@
           if (recruit['available'] === 0) {
             return;
           }
+
           $('#personnel-recruit-container').append(
             '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + recruit['name'] +
             '</div><div class="addon-costs"><span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + recruit['cost']['manna'] + '</span>' +
@@ -298,14 +302,14 @@
             '</div></div></div>'
           );
           //Add resource costs as data attributes
-          $('#personnel-recruit-container').find('.addon-item').last()
-          .data('addon', recruit);
+          $('#personnel-recruit-container').find('.addon-item').last().data('addon', recruit);
         });
 
         addonJson['defenses'].forEach((defense) => {
           if (defense['available'] === 0) {
             return;
           }
+
           $('#defenses-build-container').append(
             '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + defense['name'] + 
             '</div><div class="addon-costs">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + defense['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + defense['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + defense['cost']['manna'] + '</span>' +
@@ -314,14 +318,14 @@
             '</div></div></div>'
           );
           //Add resource costs as data attributes
-          $('#defenses-build-container').find('.addon-item').last()
-          .data('addon', defense);
+          $('#defenses-build-container').find('.addon-item').last().data('addon', defense);
         });
 
         addonJson['facilities'].forEach((facility) => {
           if (facility['available'] === 0) {
             return;
           }
+
           $('#facilities-build-container').append(
             '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + facility['name'] +
             '</div><div class="addon-costs">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + facility['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + facility['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + facility['cost']['manna'] + '</span>' +
@@ -330,8 +334,7 @@
             '</div></div></div>'
           );
           //Add resource costs as data attributes
-          $('#facilities-build-container').find('.addon-item').last()
-          .data('addon', facility);
+          $('#facilities-build-container').find('.addon-item').last().data('addon', facility);
         });
 
         /*** Addon interation code ***/
@@ -405,6 +408,8 @@
             "Content-type": "application/json; charset=UTF-8"
           }
         });
+
+        //Update page data. Yes I should probably be storing a main data object and refreshing the page from that. 
         updateResources(newResources);
         if (addon['family'] == 'facilities') {
           addFacility(addon);
