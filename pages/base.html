@@ -283,90 +283,123 @@
         $('#morale-fill').css("background-color", moraleColor);
         
         updateAddons(baseJson);
-      });
 
-      //Add purchasable addons
-      fetch('./data/upgrades.json')
-      .then((response) => response.json())
-      .then((addonJson) => {
-        addonJson['personnel'].forEach((recruit) => {
-          if (recruit['available'] === 0) {
-            return;
-          }
 
-          $('#personnel-recruit-container').append(
-            '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + recruit['name'] +
-            '</div><div class="addon-costs"><span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + recruit['cost']['manna'] + '</span>' +
-            '</div><div>' + recruit['description'] +
-            '</div><div>' + recruit['notes'] +
-            '</div></div></div>'
-          );
-          //Add resource costs as data attributes
-          $('#personnel-recruit-container').find('.addon-item').last().data('addon', recruit);
-        });
-
-        addonJson['defenses'].forEach((defense) => {
-          if (defense['available'] === 0) {
-            return;
-          }
-
-          $('#defenses-build-container').append(
-            '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + defense['name'] + 
-            '</div><div class="addon-costs">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + defense['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + defense['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + defense['cost']['manna'] + '</span>' +
-            '</div><div>' + defense['description'] +
-            '</div><div>' + defense['notes'] +
-            '</div></div></div>'
-          );
-          //Add resource costs as data attributes
-          $('#defenses-build-container').find('.addon-item').last().data('addon', defense);
-        });
-
-        addonJson['facilities'].forEach((facility) => {
-          if (facility['available'] === 0) {
-            return;
-          }
-
-          $('#facilities-build-container').append(
-            '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + facility['name'] +
-            '</div><div class="addon-costs">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + facility['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + facility['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + facility['cost']['manna'] + '</span>' +
-            '</div><div>' + facility['description'] +
-            '</div><div>' + facility['notes'] +
-            '</div></div></div>'
-          );
-          //Add resource costs as data attributes
-          $('#facilities-build-container').find('.addon-item').last().data('addon', facility);
-        });
-
-        /*** Addon interation code ***/
-        $('.addon-item.selectable').click(function() {
-          deselectAll();
-
-          var costs = $(this).data('addon')['cost'];
-
-          var resources = {
-            "materials": $('#resources-materials').data('quantity'),
-            "refinedMaterials": $('#resources-r-materials').data('quantity'),
-            "manna": $('#resources-manna').data('quantity'),
-          };
-
-          $(this).addClass('selected');
-          var affordable = true;
-          for (const [name, value] of Object.entries(resources)) {
-            if(value < costs[name]) {
-              affordable = false;
-              break;
+        //Add purchasable addons
+        fetch('./data/upgrades.json')
+        .then((response) => response.json())
+        .then((addonJson) => {
+          addonJson['personnel'].forEach((recruit) => {
+            if (recruit['available'] === 0) {
+              return;
             }
-          }
+            //This is definitely the best way to check for built addons, don't worry about it
+            let built = false;
+            $('#personnel-container').find('.addon-item').each((i, addon) => {
+              if ($(addon).data('stats')['name'] === recruit['name']) {
+                built = true;
+              }
+            });
+            if (built) {
+              return;
+            }
 
-          if (affordable) {
-            $(this).closest('.modal-content').find('.btn-modal-confirm').prop('disabled', false);
-          }
-        });
+            $('#personnel-recruit-container').append(
+              '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + recruit['name'] +
+              '</div><div class="addon-costs"><span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + recruit['cost']['manna'] + '</span>' +
+              '</div><div>' + recruit['description'] +
+              '</div><div>' + recruit['notes'] +
+              '</div></div></div>'
+            );
+            //Add resource costs as data attributes
+            $('#personnel-recruit-container').find('.addon-item').last().data('addon', recruit);
+          });
 
-        $('.btn-close').click(function() {
-          deselectAll();
+          addonJson['defenses'].forEach((defense) => {
+            if (defense['available'] === 0) {
+              return;
+            }
+            //This is definitely the best way to check for built addons, don't worry about it
+            let built = false;
+            $('#defenses-container').find('.addon-item').each((i, addon) => {
+              if ($(addon).data('stats')['name'] === defense['name']) {
+                built = true;
+              }
+            });
+            if (built) {
+              return;
+            }
+
+            $('#defenses-build-container').append(
+              '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + defense['name'] + 
+              '</div><div class="addon-costs">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + defense['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + defense['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + defense['cost']['manna'] + '</span>' +
+              '</div><div>' + defense['description'] +
+              '</div><div>' + defense['notes'] +
+              '</div></div></div>'
+            );
+            //Add resource costs as data attributes
+            $('#defenses-build-container').find('.addon-item').last().data('addon', defense);
+          });
+
+          addonJson['facilities'].forEach((facility) => {
+            if (facility['available'] === 0) {
+              return;
+            }
+            //This is definitely the best way to check for built addons, don't worry about it
+            let built = false;
+            $('#facilities-container').find('.addon-item').each((i, addon) => {
+              if ($(addon).data('stats')['name'] === facility['name']) {
+                built = true;
+              }
+            });
+            if (built) {
+              return;
+            }
+
+            $('#facilities-build-container').append(
+              '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + facility['name'] +
+              '</div><div class="addon-costs">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + facility['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + facility['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + facility['cost']['manna'] + '</span>' +
+              '</div><div>' + facility['description'] +
+              '</div><div>' + facility['notes'] +
+              '</div></div></div>'
+            );
+            //Add resource costs as data attributes
+            $('#facilities-build-container').find('.addon-item').last().data('addon', facility);
+          });
+
+          /*** Addon interation code ***/
+          $('.addon-item.selectable').click(function() {
+            deselectAll();
+
+            var costs = $(this).data('addon')['cost'];
+
+            var resources = {
+              "materials": $('#resources-materials').data('quantity'),
+              "refinedMaterials": $('#resources-r-materials').data('quantity'),
+              "manna": $('#resources-manna').data('quantity'),
+            };
+
+            $(this).addClass('selected');
+            var affordable = true;
+            for (const [name, value] of Object.entries(resources)) {
+              if(value < costs[name]) {
+                affordable = false;
+                break;
+              }
+            }
+
+            if (affordable) {
+              $(this).closest('.modal-content').find('.btn-modal-confirm').prop('disabled', false);
+            }
+          });
+
+          $('.btn-close').click(function() {
+            deselectAll();
+          });
         });
       });
+
+      
 
       $('.buy-addon-btn').click((e) => {
         if ($(this).attr('disabled')) {

@@ -23,7 +23,6 @@
     },
     "facilities": [
         {
-            "family": "facilities",
             "type": "printer",
             "flaws": 1,
             "qualities": 0,
@@ -34,14 +33,12 @@
     ],
     "defenses": [
         {
-            "family": "defenses",
             "type": "defenders",
             "name": "Local Militia",
             "description": "Local civilians who will take up arms to defend their homes. Untrained and poorly equipped.",
             "notes": "Provides no defensive bonuses."
         },
         {
-            "family": "defenses",
             "type": "sensors",
             "sensors": 0,
             "name": "Simple Radar",
