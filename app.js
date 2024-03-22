@@ -49,6 +49,9 @@ app.post('/update/pilot', function (req, res) {
 });
 
 //Resource routes (styles, images, data objects etc)
+app.get('/data/baseData', function(req, res) {
+    res.send(baseData);
+});
 app.get('/data/pilotData', function(req, res) {
     res.send(pilotData);
 });
