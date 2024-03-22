@@ -14,9 +14,6 @@ const baseData = require('./public/data/base.json');
 const pilotData = require("./data/characters");
 
 //Main application routes
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname,"/pages/base.html"));
-});
 app.post('/update/base', function (req, res) {
     console.log('update base request');
     const params = {
