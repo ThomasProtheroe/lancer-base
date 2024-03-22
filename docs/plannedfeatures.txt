@@ -8,4 +8,5 @@ Planned
 
 Would be Cool
 -Login system of some kind for pilots
+-GM interface to hand out downtime units and create new addons
 -Mech hanger. List of all printed mechs by the team, tagged with an owner

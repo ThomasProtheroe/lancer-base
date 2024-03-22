@@ -17,14 +17,14 @@ const pilotData = require("./data/characters");
 app.post('/update/base', function (req, res) {
     console.log('update base request');
     const params = {
+        "action": req.body.action,
         "resources": req.body.resources,
         "addon": req.body.addon,
         "pilot": req.body.pilot
     }
 
     updateBase(params);
-
-    logger.write(params['pilot'] + ' purchased a new addon: ' + req.body.addon['name'] + '\n');
+    
     res.send({
         'newBase': baseData,
         'status': 'success',
@@ -59,8 +59,15 @@ app.listen(9000, function () {
 });
 
 const updateBase = (params) => {
-    baseData['resources'] = params['resources'];
-    baseData[params['addon']['family']].push(params['addon']);
+    if (params['action'] == 'buyAddon') {
+        if (params['resources']) {
+            baseData['resources'] = params['resources'];
+        }
+        if (params['addon']) {
+            baseData[params['addon']['family']].push(params['addon']);
+        }
+        logger.write(params['pilot'] + ' purchased a new addon: ' + params['addon']['name'] + '\n');
+    }
 
     // Yeah no validation callback right now, get over it
     fs.writeFile('public/data/base.json', JSON.stringify(baseData), 'utf8', () => {});

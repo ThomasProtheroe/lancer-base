@@ -496,6 +496,7 @@
         fetch('/update/base', {
           method: "POST",
           body: JSON.stringify({
+            action: 'buyAddon',
             resources: newResources,
             addon: addon,
             pilot: $('#pilot-select').val()
