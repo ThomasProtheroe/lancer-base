@@ -6,12 +6,12 @@ var fs = require('fs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-var logger = fs.createWriteStream('logs/activity.log', {
+const logger = fs.createWriteStream('logs/activity.log', {
     flags: 'a'
 });
 
 let baseData = {};
-baseData = require('./data/base.json');
+baseData = require('./public/data/base.json');
 const pilotData = require("./data/characters");
 
 //Main application routes
@@ -50,21 +50,10 @@ app.post('/update/pilot', function (req, res) {
 });
 
 //Resource routes (styles, images, data objects etc)
-app.get('/data/baseData', function(req, res) {
-    res.send(baseData);
-});
 app.get('/data/pilotData', function(req, res) {
     res.send(pilotData);
 });
-app.get('/styles.css', function (req, res) {
-    res.sendFile(path.join(__dirname,"/styles.css"));
-});
-app.get('/images/:filename', function (req, res) {
-    res.sendFile(path.join(__dirname,"/images/" + req.params['filename']));
-});
-app.get('/data/:filename', function (req, res) {
-    res.sendFile(path.join(__dirname,"/data/" + req.params['filename']));
-});
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(9000, function () {
     console.log('LancerBase listening on port 9000');
