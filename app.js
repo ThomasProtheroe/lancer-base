@@ -64,7 +64,7 @@ const updateBase = (params) => {
     baseData[params['addon']['family']].push(params['addon']);
 
     // Yeah no validation callback right now, get over it
-    fs.writeFile('data/base.json', JSON.stringify(baseData), 'utf8', () => {});
+    fs.writeFile('public/data/base.json', JSON.stringify(baseData), 'utf8', () => {});
 }
 
 const updatePilot = (params) => {
