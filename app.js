@@ -76,11 +76,9 @@ const updateBase = (params) => {
             logger.write(params['pilot'] + ' purchased a new addon: ' + params['addon']['name'] + '\n');
             break;
         case 'workAddon':
-            console.log('working on addon')
             let timeRemaining = params['addon']['timeRemaining'] - 1;
             params['addon']['timeRemaining'] = timeRemaining;
 
-            console.log('time remaining: ' + timeRemaining)
             updateAddon(params['addon']);
 
             if (timeRemaining === 0) {
@@ -98,7 +96,6 @@ const updateBase = (params) => {
             break;
     }
 
-    console.log('writing new data to file')
     // Yeah no validation callback right now, get over it
     fs.writeFile('public/data/base.json', JSON.stringify(baseData), 'utf8', () => {});
 }
@@ -119,7 +116,6 @@ const getResourcesString = (resources) => {
 }
 
 const updateAddon = (newAddon) => {
-    console.log(baseData[newAddon['family']])
     for (let i = 0; i < baseData[newAddon['family']].length; i++) {
         if (baseData[newAddon['family']][i]['name'] === newAddon['name']) {
             baseData[newAddon['family']][i] = newAddon;
