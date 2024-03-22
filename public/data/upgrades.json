@@ -1,0 +1,149 @@
+{
+    "facilities": [
+        {
+            "family": "facilities",
+            "type": "printer",
+            "flaws": 0,
+            "qualities": 0,
+            "name": "Mech Printer (fixed)",
+            "description": "A very old printer that has been repaired and now functions normally.",
+            "notes": "Allows the printing of mechs, weapons and systems.",
+            "available": 1,
+            "time": 6,
+            "timeRemaining": 6,
+            "cost": {
+                "materials": 4000,
+                "refinedMaterials": 100,
+                "manna": 0
+            }
+        },
+        {
+            "family": "facilities",
+            "type": "reclaimer",
+            "name": "Materials Reclaimer",
+            "description": "An array of machinery used to deconstruct waste materials into component parts for reuse.",
+            "notes": "Allows destroyed or damaged mechs, weapons and other machines to be recyclyed for materials.",
+            "available": 1,
+            "time": 4,
+            "timeRemaining": 4,
+            "cost": {
+                "materials": 1500,
+                "refinedMaterials": 50,
+                "manna": 1000
+            }
+        },
+        {
+            "family": "facilities",
+            "type": "munitions",
+            "name": "Munitions Fabricator",
+            "description": "A specialized printer used to produce mech-sized ammunition.",
+            "notes": "Allows the printing of special ammunition.",
+            "available": 0,
+            "time": 4,
+            "timeRemaining": 4,
+            "cost": {
+                "materials": 2000,
+                "refinedMaterials": 200,
+                "manna": 5000
+            }
+        }
+    ],
+    "defenses": [
+        {
+            "family": "defenses",
+            "type": "machine_guns",
+            "defense": 1,
+            "name": "Machine Gun Nests",
+            "description": "A number of man-portable machine guns stationed in a series of makeshift dugouts made from sandbags at the edge of Blue Haven.",
+            "notes": "Provides +1 defense. Provides light covering fire when fighting near the settlement. Must be manned.",
+            "available": 1,
+            "time": 4,
+            "timeRemaining": 4,
+            "cost": {
+                "materials": 1000,
+                "refinedMaterials": 0,
+                "manna": 0
+            }
+        },
+        {
+            "family": "defenses",
+            "type": "gun_emplacements",
+            "defense": 2,
+            "name": "Stationary Cannons",
+            "description": "A variety of mech scale weapons that have been mounted onto stationary emplacements at the edge of Blue Haven.",
+            "notes": "Provides +2 defense. Provides covering fire when fighting near the settlement. Must be manned.",
+            "available": 0,
+            "time": 6,
+            "timeRemaining": 6,
+            "cost": {
+                "materials": 2000,
+                "refinedMaterials": 0,
+                "manna": 0
+            }
+        },
+        {
+            "family": "defenses",
+            "type": "gun_turrets",
+            "defense": 3,
+            "name": "Automated Cannons",
+            "description": "A variety of mech scale weapons that have been fitted with simple FoF and target acquisition systems.",
+            "notes": "Provides +3 defense. Provides covering fire with +1 Accurracy when fighting near the settlement.",
+            "available": 0,
+            "time": 8,
+            "timeRemaining": 8,
+            "cost": {
+                "materials": 4000,
+                "refinedMaterials": 50,
+                "manna": 0
+            }
+        },
+        {
+            "family": "defenses",
+            "type": "sensors",
+            "sensors": 1,
+            "name": "Motion Sensors",
+            "description": "A relay of bog-standard motion sensors placed several kilometers out. Prone to false positives from wildlife.",
+            "notes": "Provides +1 sensors.",
+            "available": 1,
+            "time": 3,
+            "timeRemaining": 3,
+            "cost": {
+                "materials": 500,
+                "refinedMaterials": 0,
+                "manna": 1000
+            }
+        }
+    ],
+    "personnel": [
+        {
+            "family": "personnel",
+            "type": "engineer",
+            "name": "Laura Stahl",
+            "description": "A talented mechanical engineer who grew up on New Samona. She has a particular hatred for house Harken.",
+            "notes": "Provides the settlement with 2 blocks of construction or production time each downtime.",
+            "available": 1,
+            "time": 0,
+            "timeRemaining": 0,
+            "cost": {
+                "materials": 0,
+                "refinedMaterials": 0,
+                "manna": 8000
+            }
+        },
+        {
+            "family": "personnel",
+            "type": "soldier",
+            "name": "Boris Stelov",
+            "description": "A grey bearded ex-soldier. He spent most of his life as part of a rebel organization fighting for independance, and as such is adept at training soldiers to fight mechs.",
+            "notes": "Provides +1 defense. Allows training of higher tier militia.",
+            "available": 0,
+            "time": 0,
+            "timeRemaining": 0,
+            "cost": {
+                "materials": 0,
+                "refinedMaterials": 0,
+                "manna": 7000
+            }
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "flaws": [
+        {
+            "name": "Structurally Unsound",
+            "effect": "-1 to Structure"
+        },
+        {
+            "name": "Unstable Reactor",
+            "effect": "-1 to Stress"
+        },
+        {
+            "name": "Frail",
+            "effect": "-1 to HP"
+        },
+        {
+            "name": "Weak Reactor Shielding",
+            "effect": "-1 to Heat Cap"
+        },
+        {
+            "name": "Questionable Firewall",
+            "effect": "-1 to E-Defense"
+        },
+        {
+            "name": "Clunky",
+            "effect": "-1 to Evasion"
+        },
+        {
+            "name": "Touchy Gyros",
+            "effect": "When using the Boost action, must pass an agility check or become prone."
+        },
+        {
+            "name": "Unreliable Hydraulics",
+            "effect": "The mech may not use the Brace action."
+        },
+        {
+            "name": "Slow Targeting System",
+            "effect": "When using overwatch, all attacks suffer from +1 Difficulty."
+        },
+        {
+            "name": "That’s Not What I Printed…",
+            "effect": "Something very strange has happened during your print. Details will be provided by the GM."
+        }
+    ],
+    "qualities": [
+        
+    ]
+}
