@@ -11,7 +11,16 @@ const logger = fs.createWriteStream('logs/activity.log', {
 });
 
 const baseData = require('./public/data/base.json');
-const pilotData = require("./data/characters");
+const pilotData = require("./public/data/characters");
+//We're using comp/con pilot data, so need to add downtime property if it's the first time being loaded
+for (const [key, pilot] of Object.entries(pilotData)) {
+    if (!("downtimeUnits" in pilot)) {
+        pilot['downtimeUnits'] = 0;
+        fs.writeFile(`/public/data/characters/${pilot['callsign']}.json`, JSON.stringify(pilot), 'utf8', () => {});
+        console.log(`Character missing downtime stat, adding: ${pilot['callsign']}`);
+    }
+}
+
 
 //Main application routes
 app.post('/update/base', function (req, res) {
@@ -59,14 +68,24 @@ app.listen(9000, function () {
 });
 
 const updateBase = (params) => {
-    if (params['action'] == 'buyAddon') {
-        if (params['resources']) {
+    switch (params['action']) {
+        case 'buyAddon':
             baseData['resources'] = params['resources'];
-        }
-        if (params['addon']) {
             baseData[params['addon']['family']].push(params['addon']);
-        }
-        logger.write(params['pilot'] + ' purchased a new addon: ' + params['addon']['name'] + '\n');
+            
+            logger.write(params['pilot'] + ' purchased a new addon: ' + params['addon']['name'] + '\n');
+            break;
+        case 'workAddon':
+            
+            break;
+        case 'salvage':
+            baseData['resources'] = params['resources'];
+
+            logger.write(params['pilot'] + ' explored more of the facility and salvaged some resources: ' + getResourcesString(params['resources']) + '\n');
+            break;
+            break;
+        default:
+            break;
     }
 
     // Yeah no validation callback right now, get over it
@@ -78,4 +97,12 @@ const updatePilot = (params) => {
 
     // Yeah no validation callback right now, get over it
     fs.writeFile('data/characters/' + params['pilot']['callsign'] + '.json', JSON.stringify(pilotData[params['pilot']['callsign']]), 'utf8', () => {});
+}
+
+const getResourcesString = (resources) => {
+    let output = '';
+    for (const [key, resource] of Object.entries(resources)) {
+        output += resource['name'] + ' - ' + resource['quantity'] + ' ';
+    }
+    return output;
 }
