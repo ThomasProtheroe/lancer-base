@@ -257,11 +257,11 @@
           '<div class="addon-construction-controls">' +
           '<div class="addon-construction-sign">UNDER CONSTRUCTION' + '</div>' +
           '<div class="addon-construction-time">Work Remaining: ' + timeRemaining + '</div>' +
-          '<button class="base-btn">Add Work</button>' +
+          '<button class="base-btn work-addon-btn">Add Work</button>' +
           '</div>' +
           '</div></div>'
         );
-        $(containerSelector).find('.addon-item').last().data('stats', addon);
+        $(containerSelector).find('.addon-item').last().data('addon', addon);
 
       };
 
@@ -278,6 +278,11 @@
       }
 
       const updateAddons = (addonsJson) => {
+        //Clear addons
+        $('#facilities-container').empty();
+        $('#defenses-container').empty();
+        $('#personnel-container').empty();
+
         //Add facilities
         addonsJson['facilities'].forEach((facility) => {
           addFacility(facility);
@@ -292,6 +297,30 @@
         addonsJson['defenses'].forEach((defense) => {
           addDefense(defense);
         });
+
+        $('.work-addon-btn').click(function() {
+            if ($(this).attr('disabled')) {
+              return;
+            }
+            console.log('clicked, sending to server')
+            //Update addon
+            let addon = $(this).closest('.addon-item').data('addon');
+            fetch('/update/base', {
+              method: "POST",
+              body: JSON.stringify({
+                action: 'workAddon',
+                addon: addon,
+                pilot: $('#pilot-select').val()
+              }),
+              headers: {
+                "Content-type": "application/json; charset=UTF-8"
+              }
+            }).then((response) => response.json())
+            .then((responseJson) => {
+              updateAddons(responseJson['newBase']);
+            });
+
+          });
       }
 
       //Populate pilot dropdown
@@ -299,7 +328,6 @@
       .then((response) => response.json())
       .then((pilotJson) => {
         Object.keys(pilotJson).forEach(key => {
-          console.log(pilotJson[key]);
           $('#pilot-select').append(`<option value="${key}">${key}</option>`);
         });
         
@@ -354,7 +382,7 @@
             //This is definitely the best way to check for built addons, don't worry about it
             let built = false;
             $('#personnel-container').find('.addon-item').each((i, addon) => {
-              if ($(addon).data('stats')['name'] === recruit['name']) {
+              if ($(addon).data('addon')['name'] === recruit['name']) {
                 built = true;
               }
             });
@@ -380,7 +408,7 @@
             //This is definitely the best way to check for built addons, don't worry about it
             let built = false;
             $('#defenses-container').find('.addon-item').each((i, addon) => {
-              if ($(addon).data('stats')['name'] === defense['name']) {
+              if ($(addon).data('addon')['name'] === defense['name']) {
                 built = true;
               }
             });
@@ -406,7 +434,7 @@
             //This is definitely the best way to check for built addons, don't worry about it
             let built = false;
             $('#facilities-container').find('.addon-item').each((i, addon) => {
-              if ($(addon).data('stats')['name'] === facility['name']) {
+              if ($(addon).data('addon')['name'] === facility['name']) {
                 built = true;
               }
             });
@@ -507,6 +535,7 @@
         }).then((response) => response.json())
         .then((responseJson) => {
           updateBaseStats(responseJson['newBase']);
+          updateAddons(responseJson['newBase']);
         });
 
         //Update page data. Yes I should probably be storing a main data object and refreshing the page from that. 
