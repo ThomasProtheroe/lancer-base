@@ -1,7 +1,7 @@
-var express = require('express');
-var app = express();
-var path = require('path');
-var fs = require('fs');
+const express = require('express');
+const app = express();
+const path = require('path');
+const fs = require('fs');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -10,8 +10,7 @@ const logger = fs.createWriteStream('logs/activity.log', {
     flags: 'a'
 });
 
-let baseData = {};
-baseData = require('./public/data/base.json');
+const baseData = require('./public/data/base.json');
 const pilotData = require("./data/characters");
 
 //Main application routes
