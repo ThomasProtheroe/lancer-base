@@ -16,6 +16,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
 		integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
 	<link rel="stylesheet" href="/css/styles.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 
@@ -61,35 +62,13 @@
 							<span class="addon-header">Facilities</span>
 						</div>
 						<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
-							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
-								data-bs-target="#facilities-modal">
+							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal" data-bs-target="#addon-modal">
 								Build
 							</button>
 						</div>
 					</div>
 					<div id="facilities-container" class="row">
-
-					</div>
-				</div>
-			</div>
-			<div class="modal modal-xl fade" id="facilities-modal" tabindex="-1" aria-labelledby="facilities-modal-label"
-				aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h1 class="modal-title fs-5" id="facilities-modal-label">Build Facilities</h1>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<div id="facilities-build-container" class="row">
-								Loading...
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-							<button type="button" class="btn-modal-confirm base-btn buy-addon-btn" data-bs-dismiss="modal"
-								disabled>Build</button>
-						</div>
+						Loading...
 					</div>
 				</div>
 			</div>
@@ -102,34 +81,12 @@
 							<span class="addon-header">Defenses</span>
 						</div>
 						<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
-							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
-								data-bs-target="#defenses-modal">
+							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal" data-bs-target="#addon-modal">
 								Build
 							</button>
 						</div>
 						<div id="defenses-container" class="row">
 							Loading...
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal modal-xl fade" id="defenses-modal" tabindex="-1" aria-labelledby="defenses-modal-label"
-				aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h1 class="modal-title fs-5" id="defenses-modal-label">Build Defenses</h1>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<div id="defenses-build-container" class="row">
-								Loading...
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-							<button type="button" class="btn-modal-confirm base-btn buy-addon-btn" data-bs-dismiss="modal"
-								disabled>Build</button>
 						</div>
 					</div>
 				</div>
@@ -143,34 +100,12 @@
 							<span class="addon-header">Personnel</span>
 						</div>
 						<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
-							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
-								data-bs-target="#personnel-modal">
+							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal" data-bs-target="#addon-modal">
 								Recruit
 							</button>
 						</div>
 						<div id="personnel-container" class="row">
 							Loading...
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal modal-xl fade" id="personnel-modal" tabindex="-1" aria-labelledby="personnel-modal-label"
-				aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h1 class="modal-title fs-5" id="personnel-modal-label">Recruit Personnel</h1>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<div id="personnel-recruit-container" class="row">
-								Lodaing...
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-							<button type="button" class="btn-modal-confirm base-btn buy-addon-btn" data-bs-dismiss="modal"
-								disabled>Recruit</button>
 						</div>
 					</div>
 				</div>
@@ -192,6 +127,9 @@
 				</div>
 			</div>
 
+			<!-- Addon Upgrade Modal -->
+			<div id="addon-modal-container"></div>
+
 		</div>
 	</div>
 
@@ -212,47 +150,14 @@
 			</div>
 		{{/each}}
 	</script>
-	<script id="upgradeTemplate" type="text/x-handlebars-template">
-		{{#each upgrades}}
-			<div class="col-md-3">
-				<div class="addon-item selectable">
-					<div class="addon-name">
-						{{ name }}
-					</div>
-					<div class="addon-costs">
-						{{#if cost.materials}}
-							<span class="addon-cost-item">
-								<i class="bi bi-boxes"></i>
-								{{cost.materials}}
-							</span>
-						{{/if}}
-						{{#if cost.refinedMaterials}}
-							<span class="addon-cost-item">
-								<i class="bi bi-device-ssd"></i>
-								{{cost.refinedMaterials}}
-							</span>
-						{{/if}}
-						{{#if cost.manna}}
-						<span class="addon-cost-item">
-							<i class="bi bi-currency-bitcoin"></i>
-							{{cost.manna}}
-						</span>
-						{{/if}}
-					</div>
-					<div>
-						{{description}}
-					</div>
-					<div>
-						{{notes}}
-					</div>
-				</div>
-			</div>
-		{{/each}}
-	</script>
 	<script id="addonsTemplate" type="text/x-handlebars-template">
 		{{#each addons}}
 		<div class="col-md-3">
+			{{#if timeRemaining}}
+			<div class="addon-item under-construction">
+			{{else}}
 			<div class="addon-item">
+			{{/if}}
 				<div class="addon-name">{{name}}</div>
 				<div class="addon-description">{{description}}</div>
 				<div class="addon-notes">{{notes}}</div>
@@ -264,6 +169,65 @@
 			</div>
 		</div>
 		{{/each}}
+	</script>
+	<script id="addonsModalTemplate" type="text/x-handlebars-template">
+		<div class="modal modal-xl fade" id="addon-modal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="addon-modal-label">{{label}}</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div id="addon-container" class="row">
+							{{#each upgrades}}
+								<div class="col-md-3">
+									<div class="addon-item selectable">
+										<div class="addon-name">
+											{{ name }}
+										</div>
+										<div class="addon-costs">
+											{{#if cost.materials}}
+												<span class="addon-cost-item">
+													<i class="bi bi-boxes"></i>
+													{{cost.materials}}
+												</span>
+											{{/if}}
+											{{#if cost.refinedMaterials}}
+												<span class="addon-cost-item">
+													<i class="bi bi-device-ssd"></i>
+													{{cost.refinedMaterials}}
+												</span>
+											{{/if}}
+											{{#if cost.manna}}
+											<span class="addon-cost-item">
+												<i class="bi bi-currency-bitcoin"></i>
+												{{cost.manna}}
+											</span>
+											{{/if}}
+										</div>
+										<div>
+											{{description}}
+										</div>
+										<div>
+											{{notes}}
+										</div>
+									</div>
+								</div>
+							{{/each}}
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="base-btn" data-bs-dismiss="modal">
+							Close
+						</button>
+						<button type="button" class="btn-modal-confirm base-btn buy-addon-btn" data-bs-dismiss="modal" disabled>
+							Build
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</script>
 	<script id="resourcesTemplate" type="text/x-handlebars-template">
 		<div class="row">
@@ -288,105 +252,7 @@
 		</div>
 	</script>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script>
-		const deselectAll = () => {
-			$('.selectable.selected')
-				.closest('.modal-content')
-				.find('.btn-modal-confirm')
-				.prop('disabled', true);
-			$('.selectable.selected')
-				.removeClass('selected');
-		}
-
-		const addAddon = (addon, containerSelector) => {
-			let extraClasses = '';
-			let timeRemaining = 0;
-			if ('timeRemaining' in addon && addon['timeRemaining'] > 0) {
-				extraClasses += 'under-construction ';
-				timeRemaining = addon['timeRemaining'];
-			}
-			$(containerSelector).append(
-				'<div class="col-md-3"><div class="addon-item ' + extraClasses + '">' +
-				'<div class="addon-name">' + addon['name'] + '</div>' +
-				'<div class="addon-description">' + addon['description'] + '</div>' +
-				'<div class="addon-notes">' + addon['notes'] + '</div>' +
-				'<div class="addon-construction-controls">' +
-				'<div class="addon-construction-sign">UNDER CONSTRUCTION' + '</div>' +
-				'<div class="addon-construction-time">Work Remaining: ' + timeRemaining + '</div>' +
-				'<button class="base-btn work-addon-btn">Add Work</button>' +
-				'</div>' +
-				'</div></div>'
-			);
-			$(containerSelector).find('.addon-item').last().data('addon', addon);
-
-		};
-
-		/**************** Event handlers ***************/
-		$('.buy-addon-btn').click(async (e) => {
-			if ($(this).attr('disabled')) {
-				return;
-			}
-
-			//Update addon
-			const addon = $('.addon-item.selected').data('addon');
-
-			// Update resources
-			var currentResources = {
-				"materials": $('#resources-materials').data('quantity'),
-				"refinedMaterials": $('#resources-r-materials').data('quantity'),
-				"manna": $('#resources-manna').data('quantity')
-			};
-			let addonCosts = addon['cost'];
-			let newResources = {
-				"materials": {
-					"name": "Materials",
-					"quantity": currentResources['materials'] - addonCosts['materials']
-				},
-				"refinedMaterials": {
-					"name": "Refined Materials",
-					"quantity": currentResources['refinedMaterials'] - addonCosts['refinedMaterials']
-				},
-				"manna": {
-					"name": "Manna",
-					"quantity": currentResources['manna'] - addonCosts['manna']
-				}
-			};
-
-			try {
-				const response = await fetch('/update/base', {
-					method: "POST",
-					body: JSON.stringify({
-						action: 'buyAddon',
-						resources: newResources,
-						addon,
-						pilot: $('#pilot-select').val()
-					}),
-					headers: {
-						"Content-type": "application/json; charset=UTF-8"
-					}
-				});
-				const baseData = await response.json();
-				// updateBaseStats(baseData['newBase']); TODO update global state and rerender
-				// updateAddons(baseData['newBase']);
-			} catch (err) {
-				console.error(`Error: ${err}`);
-			}
-
-			//Update page data. Yes I should probably be storing a main data object and refreshing the page from that. 
-			// updateResources(newResources);
-			if (addon['family'] == 'facilities') {
-				addFacility(addon);
-			} else if (addon['family'] == 'defenses') {
-				addDefense(addon);
-			} else if (addon['family'] == 'personnel') {
-				addPersonnel(addon);
-			}
-
-			//Remove the addon from the build menu
-			$('.addon-item.selected').remove();
-		});
-
 		function renderLogs(logs) {
 			const source = document.getElementById('logTemplate').innerHTML;
 			const template = Handlebars.compile(source);
@@ -401,18 +267,37 @@
 			document.getElementById('defense-container').innerHTML = rendered;
 		}
 
-		function renderUpgrades(upgrades, containerId) {
-			const source = document.getElementById('upgradeTemplate').innerHTML;
-			const template = Handlebars.compile(source);
-			const rendered = template({ upgrades });
-			document.getElementById(containerId).innerHTML = rendered;
-		}
-
 		function renderAddons(addons, containerId) {
 			const source = document.getElementById('addonsTemplate').innerHTML;
 			const template = Handlebars.compile(source);
-			const rendered = template({ addons });
+			const rendered = template({ addons: addons.map((addon) => {
+				return {timeRemaining: 0, ...addon};
+			})});
 			document.getElementById(containerId).innerHTML = rendered;
+		}
+
+		function renderAddonsModal() {
+			const addonSelected = this.state.addonTypeSelected;
+			if (!addonSelected) {return};
+			let label = '';
+			switch (addonSelected) {
+				case 'facilities':
+					label = 'Build Facilities';
+					break;
+				case 'defenses':
+					label = 'Build Defenses';
+					break;
+				case 'personnel':
+					label = 'Recruit Personnel';
+					break;
+			}
+			const source = document.getElementById('addonsModalTemplate').innerHTML;
+			const template = Handlebars.compile(source);
+			const rendered = template({
+				label,
+				upgrades: this.state.upgrades[addonSelected]
+			});
+			document.getElementById('addon-modal-container').innerHTML = rendered;
 		}
 
 		function renderResources(resources) {
@@ -512,6 +397,8 @@
 				console.error(`Error: ${err}`);
 			}
 
+			this.state.addonTypeSelected = null;
+
 			render();
 		}
 
@@ -529,16 +416,26 @@
 			renderStatusBar('Condition', this.state.condition, this.state.conditionMax, 'condition-bar');
 			renderStatusBar('Morale', this.state.morale, this.state.moraleMax, 'morale-bar');
 			
-			renderUpgrades(this.state.facilities, 'facilities-container');
-			renderUpgrades(this.state.defenses, 'defenses-container');
-			renderUpgrades(this.state.personnel, 'personnel-container');
+			renderAddons(this.state.facilities, 'facilities-container');
+			renderAddons(this.state.defenses, 'defenses-container');
+			renderAddons(this.state.personnel, 'personnel-container');
 
-			renderAddons(this.state.upgrades.facilities,'facilities-build-container');
-			renderAddons(this.state.upgrades.defenses, 'defenses-build-container');
-			renderAddons(this.state.upgrades.personnel, 'personnel-recruit-container');
+			renderAddonsModal();
+
+			/**************** Event handlers ***************/
+
+			const deselectAll = () => {
+			$('.selectable.selected')
+				.closest('.modal-content')
+				.find('.btn-modal-confirm')
+				.prop('disabled', true);
+			$('.selectable.selected')
+				.removeClass('selected');
+		}
 
 			/*** Addon interation code ***/
-			$('.addon-item.selectable').click(function () {
+			$('.addon-item.selectable').click(function (e) {
+				console.log(e);
 				deselectAll();
 
 				var costs = $(this).data('addon')['cost'];
@@ -585,6 +482,70 @@
 				} catch (err) {
 					console.error(`Error: ${err}`);
 				}
+			});
+		
+			$('.buy-addon-btn').click(async (e) => {
+				if ($(this).attr('disabled')) {
+					return;
+				}
+
+				//Update addon
+				const addon = $('.addon-item.selected').data('addon');
+
+				// Update resources
+				var currentResources = {
+					"materials": $('#resources-materials').data('quantity'),
+					"refinedMaterials": $('#resources-r-materials').data('quantity'),
+					"manna": $('#resources-manna').data('quantity')
+				};
+				let addonCosts = addon['cost'];
+				let newResources = {
+					"materials": {
+						"name": "Materials",
+						"quantity": currentResources['materials'] - addonCosts['materials']
+					},
+					"refinedMaterials": {
+						"name": "Refined Materials",
+						"quantity": currentResources['refinedMaterials'] - addonCosts['refinedMaterials']
+					},
+					"manna": {
+						"name": "Manna",
+						"quantity": currentResources['manna'] - addonCosts['manna']
+					}
+				};
+
+				try {
+					const response = await fetch('/update/base', {
+						method: "POST",
+						body: JSON.stringify({
+							action: 'buyAddon',
+							resources: newResources,
+							addon,
+							pilot: $('#pilot-select').val()
+						}),
+						headers: {
+							"Content-type": "application/json; charset=UTF-8"
+						}
+					});
+					const baseData = await response.json();
+					// updateBaseStats(baseData['newBase']); TODO update global state and rerender
+					// updateAddons(baseData['newBase']);
+				} catch (err) {
+					console.error(`Error: ${err}`);
+				}
+
+				//Update page data. Yes I should probably be storing a main data object and refreshing the page from that. 
+				// updateResources(newResources);
+				if (addon['family'] == 'facilities') {
+					addFacility(addon);
+				} else if (addon['family'] == 'defenses') {
+					addDefense(addon);
+				} else if (addon['family'] == 'personnel') {
+					addPersonnel(addon);
+				}
+
+				//Remove the addon from the build menu
+				$('.addon-item.selected').remove();
 			});
 		}
 
