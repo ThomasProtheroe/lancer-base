@@ -57,6 +57,7 @@
     font-size: 24px;
     font-weight: bold;
     min-height: 40px;
+    text-align: center;
   }
   .status-bar {
     display: inline-block;
@@ -81,6 +82,16 @@
   .stats-text {
     font-size: 18px;
     font-weight: bold;
+  }
+
+  /** Status Bar component styles **/
+  .status-bar-label {
+    font-size: 24px;
+  }
+
+  .status-bar {
+    width: 100%;
+    text-align: center;
   }
 
   /*** Addon styles ***/
@@ -160,4 +171,16 @@
   }
   .addon-cost-item {
     margin-right: 7px;
+  }
+
+  #log-container {
+    > ol {
+      list-style: none;
+    }
+    
+  }
+
+  #pilot-select {
+    margin-top: 0;
+    width: 100%;
   }
