@@ -21,7 +21,6 @@ for (const [key, pilot] of Object.entries(pilotData)) {
     }
 }
 
-
 //Main application routes
 app.post('/update/base', function (req, res) {
     console.log('update base request');
@@ -39,6 +38,7 @@ app.post('/update/base', function (req, res) {
         'status': 'success',
     });
 });
+
 app.post('/update/pilot', function (req, res) {
     console.log('update pilot request');
     const params = {
@@ -54,12 +54,35 @@ app.post('/update/pilot', function (req, res) {
     });
 });
 
+app.get('/log', (req, res) => {
+
+    const log = [
+        {
+            user: "Neb3",
+            time: "1711141084730",
+            message: "purchased a new addon Nuke"
+        },
+        {
+            user: "Nobody",
+            time: "1711141085030",
+            message: "purchased a new addon: Motion Sensors"
+        },
+        {
+            user: "Barkeep",
+            time: "1711141090730",
+            message: "purchased a new addon: Materials Reclaimer"
+        }
+    ];
+    res.send(log);
+});
+
 //Resource routes (styles, images, data objects etc)
 app.get('/data/baseData', function(req, res) {
     res.send(baseData);
 });
 app.get('/data/pilotData', function(req, res) {
-    res.send(pilotData);
+    const reducedPilotData = Object.keys(pilotData);
+    res.send(reducedPilotData);
 });
 app.use(express.static(path.join(__dirname, 'public')));
 
