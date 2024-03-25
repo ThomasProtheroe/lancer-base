@@ -15,12 +15,11 @@ const pilotData = require("./public/data/characters");
 //We're using comp/con pilot data, so need to add downtime property if it's the first time being loaded
 for (const [key, pilot] of Object.entries(pilotData)) {
     if (!("downtimeUnits" in pilot)) {
-        pilot['downtimeUnits'] = 0;
+        pilot['downtimeUnits'] = 2;
         fs.writeFile(`/public/data/characters/${pilot['callsign']}.json`, JSON.stringify(pilot), 'utf8', () => {});
         console.log(`Character missing downtime stat, adding: ${pilot['callsign']}`);
     }
 }
-
 
 //Main application routes
 app.post('/update/base', function (req, res) {
@@ -36,6 +35,7 @@ app.post('/update/base', function (req, res) {
     
     res.send({
         'newBase': baseData,
+        'newPilots': pilotData,
         'status': 'success',
     });
 });
@@ -76,10 +76,19 @@ const updateBase = (params) => {
             logger.write(params['pilot'] + ' purchased a new addon: ' + params['addon']['name'] + '\n');
             break;
         case 'workAddon':
+            //Validate the pilot has enough downtime remaining
+            if (pilotData[params['pilot']]['downtimeUnits'] <= 0) {
+                console.log(params['pilot'] + ' tried to add work to an addon, but has no downtime remaining.');
+                break;
+            }
+
+            let updatedPilot = pilotData[params['pilot']];
+            updatedPilot['downtimeUnits'] --;
             let timeRemaining = params['addon']['timeRemaining'] - 1;
             params['addon']['timeRemaining'] = timeRemaining;
 
             updateAddon(params['addon']);
+            updatePilot({'pilot': updatedPilot});
 
             if (timeRemaining === 0) {
                 logger.write(params['pilot'] + ' finished work on : ' + params['addon']['name'] + '\n');

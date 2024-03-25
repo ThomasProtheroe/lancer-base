@@ -54,6 +54,8 @@
             <select id="pilot-select" class="base-select">
               
             </select>
+            <span class="condition-text">Downtime:</span>
+            <span id="downtime-display" class="condition-text ">0</span>
           </div>
         </div>
         <div class="row">
@@ -198,6 +200,16 @@
         $('#resources-manna').text(resourcesJson['manna']['quantity']).data('quantity', resourcesJson['manna']['quantity']);
       }
 
+      const updatePilotInfo = (pilotJson) => {
+        $('#pilot-select').empty();
+        Object.keys(pilotJson).forEach(key => {
+          $('#pilot-select').append(`<option value="${key}">${key}</option>`);
+          $('#pilot-select').find('option').last().data('downtime', pilotJson[key]['downtimeUnits']);
+        });
+        debugger;
+        $('#downtime-display').text($('#pilot-select').find('option:selected').data('downtime'));
+      }
+
       const updateBaseStats = (statsJson) => {
         let defense = statsJson['defense'];
         let eDefense = statsJson['eDefense'];
@@ -298,39 +310,37 @@
           addDefense(defense);
         });
 
+        /*** Add work for an addon that is under construction ***/
         $('.work-addon-btn').click(function() {
-            if ($(this).attr('disabled')) {
-              return;
+          if ($(this).attr('disabled') || $('#pilot-select').find('option:selected').data('downtime') == 0) {
+            return;
+          }
+          
+          //Update addon
+          let addon = $(this).closest('.addon-item').data('addon');
+          fetch('/update/base', {
+            method: "POST",
+            body: JSON.stringify({
+              action: 'workAddon',
+              addon: addon,
+              pilot: $('#pilot-select').val()
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8"
             }
-            console.log('clicked, sending to server')
-            //Update addon
-            let addon = $(this).closest('.addon-item').data('addon');
-            fetch('/update/base', {
-              method: "POST",
-              body: JSON.stringify({
-                action: 'workAddon',
-                addon: addon,
-                pilot: $('#pilot-select').val()
-              }),
-              headers: {
-                "Content-type": "application/json; charset=UTF-8"
-              }
-            }).then((response) => response.json())
-            .then((responseJson) => {
-              updateAddons(responseJson['newBase']);
-            });
-
+          }).then((response) => response.json())
+          .then((responseJson) => {
+            updateAddons(responseJson['newBase']);
+            updatePilotInfo(responseJson['newPilots']);
           });
+        });
       }
 
-      //Populate pilot dropdown
+      //Populate pilot display
       fetch('./data/pilotData')
       .then((response) => response.json())
       .then((pilotJson) => {
-        Object.keys(pilotJson).forEach(key => {
-          $('#pilot-select').append(`<option value="${key}">${key}</option>`);
-        });
-        
+        updatePilotInfo(pilotJson);
       });
 
       //Populate base data and addons
@@ -486,6 +496,9 @@
       });
 
       /**************** Event handlers ***************/
+      $('#pilot-select').change((e) => {
+        $('#downtime-display').text($('#pilot-select').find('option').last().data('downtime'));
+      });
       $('.buy-addon-btn').click((e) => {
         if ($(this).attr('disabled')) {
           return;
