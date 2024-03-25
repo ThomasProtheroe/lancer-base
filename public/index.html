@@ -201,12 +201,17 @@
       }
 
       const updatePilotInfo = (pilotJson) => {
+        let selectedPilot = $('#pilot-select').val();
         $('#pilot-select').empty();
+
         Object.keys(pilotJson).forEach(key => {
           $('#pilot-select').append(`<option value="${key}">${key}</option>`);
           $('#pilot-select').find('option').last().data('downtime', pilotJson[key]['downtimeUnits']);
         });
-        debugger;
+        
+        if (selectedPilot) {
+          $('#pilot-select').val(selectedPilot);
+        }
         $('#downtime-display').text($('#pilot-select').find('option:selected').data('downtime'));
       }
 
