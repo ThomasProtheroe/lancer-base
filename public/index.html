@@ -208,7 +208,7 @@
           $('#pilot-select').append(`<option value="${key}">${key}</option>`);
           $('#pilot-select').find('option').last().data('downtime', pilotJson[key]['downtimeUnits']);
         });
-        
+
         if (selectedPilot) {
           $('#pilot-select').val(selectedPilot);
         }
@@ -502,7 +502,7 @@
 
       /**************** Event handlers ***************/
       $('#pilot-select').change((e) => {
-        $('#downtime-display').text($('#pilot-select').find('option').last().data('downtime'));
+        $('#downtime-display').text($('#pilot-select').find('option:selected').data('downtime'));
       });
       $('.buy-addon-btn').click((e) => {
         if ($(this).attr('disabled')) {
