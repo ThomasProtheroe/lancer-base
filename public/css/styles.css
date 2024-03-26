@@ -165,10 +165,10 @@
     box-shadow: gray;
     border: black 4px solid;
   }
-  .addon-costs {
+  .item-costs {
     margin: 0px 4px;
     font-weight: bold;
   }
-  .addon-cost-item {
+  .item-cost-item {
     margin-right: 7px;
   }

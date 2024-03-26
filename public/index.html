@@ -222,6 +222,13 @@
 
 
     <script>
+      const icons = {
+          "materials": "boxes",
+          "refinedMaterials": "device-ssd",
+          "manna":"currency-bitcoin",
+          "downtimeUnits": "clock"
+        };
+
       const deselectAll = () => {
         $('.selectable.selected').closest('.modal-content').find('.btn-modal-confirm').prop('disabled', true);
         $('.selectable.selected').removeClass('selected');
@@ -318,6 +325,7 @@
         $('#activities-container').append(
           '<div class="col-md-3"><div class="activity-item">' +
           '<div class="activity-name">' + activity['name'] + '</div>' +
+          getCostsDisplay(activity['cost']) +
           '<div class="activity-description">' + activity['description'] + '</div>' +
           '<div class="activity-notes">' + activity['notes'] + '</div>' +
           '<button class="base-btn perform-activity-btn">Perform</button>' +
@@ -336,6 +344,16 @@
 
       const addDefense = (defense) => {
         addAddon(defense, '#defenses-container');
+      }
+
+      const getCostsDisplay = (jsonObject) => {
+        let displayString = '<div class="item-costs">';
+
+        Object.keys(jsonObject).forEach(key => {
+          displayString += '<span class="item-cost-item"><i class="bi bi-' + icons[key] + '"></i>' + jsonObject[key] + '</span>';
+        });
+        displayString += '</div>';
+        return displayString;
       }
 
       const updateActivities = (baseJson) => {
@@ -462,9 +480,9 @@
             }
 
             $('#personnel-recruit-container').append(
-              '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + recruit['name'] +
-              '</div><div class="addon-costs"><span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + recruit['cost']['manna'] + '</span>' +
-              '</div><div>' + recruit['description'] +
+              '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + recruit['name'] + '</div>' +
+              getCostsDisplay(recruit['cost']) +
+              '<div>' + recruit['description'] +
               '</div><div>' + recruit['notes'] +
               '</div></div></div>'
             );
@@ -488,9 +506,9 @@
             }
 
             $('#defenses-build-container').append(
-              '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + defense['name'] + 
-              '</div><div class="addon-costs">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + defense['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + defense['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + defense['cost']['manna'] + '</span>' +
-              '</div><div>' + defense['description'] +
+              '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + defense['name'] + '</div>' +
+              getCostsDisplay(defense['cost']) +
+              '<div>' + defense['description'] +
               '</div><div>' + defense['notes'] +
               '</div></div></div>'
             );
@@ -514,9 +532,9 @@
             }
 
             $('#facilities-build-container').append(
-              '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + facility['name'] +
-              '</div><div class="addon-costs">' + '<span class="addon-cost-item"><i class="bi bi-boxes"></i>' + facility['cost']['materials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-device-ssd"></i>' + facility['cost']['refinedMaterials'] + '</span>' + '<span class="addon-cost-item"><i class="bi bi-currency-bitcoin"></i>' + facility['cost']['manna'] + '</span>' +
-              '</div><div>' + facility['description'] +
+              '<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + facility['name'] + '</div>' +
+              getCostsDisplay(facility['cost']) +
+              '<div>' + facility['description'] +
               '</div><div>' + facility['notes'] +
               '</div></div></div>'
             );
