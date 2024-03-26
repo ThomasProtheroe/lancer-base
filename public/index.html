@@ -252,7 +252,7 @@
         if (selectedPilot) {
           $('#pilot-select').val(selectedPilot);
         }
-        $('#downtime-display').text($('#pilot-select').find('option:selected').data('downtime'));
+        $('#downtime-display').text(getDowntimeRemaining());
       }
 
       const updateBaseStats = (statsJson) => {
@@ -314,7 +314,7 @@
           '<div class="addon-construction-controls">' +
           '<div class="addon-construction-sign">UNDER CONSTRUCTION' + '</div>' +
           '<div class="addon-construction-time">Work Remaining: ' + timeRemaining + '</div>' +
-          '<button class="base-btn work-addon-btn">Add Work</button>' +
+          '<button class="base-btn work-addon-btn downtime-required">Add Work</button>' +
           '</div>' +
           '</div></div>'
         );
@@ -328,7 +328,7 @@
           getCostsDisplay(activity['cost']) +
           '<div class="activity-description">' + activity['description'] + '</div>' +
           '<div class="activity-notes">' + activity['notes'] + '</div>' +
-          '<button class="base-btn perform-activity-btn">Perform</button>' +
+          '<button class="base-btn perform-activity-btn downtime-required">Perform</button>' +
           '</div></div>'
         );
         $('#activities-container').find('.activity-item').last().data('activity', activity);
@@ -354,6 +354,20 @@
         });
         displayString += '</div>';
         return displayString;
+      }
+
+      const getDowntimeRemaining = () => {
+        return $('#pilot-select').find('option:selected').data('downtime');
+      }
+
+      const updateDowntime = () => {
+        const downtimeRemaining = getDowntimeRemaining();
+        $('#downtime-display').text(downtimeRemaining);
+        if (downtimeRemaining <= 0) {
+          $('.downtime-required').prop('disabled', true)
+        } else {
+          $('.downtime-required').prop('disabled', false)
+        }
       }
 
       const updateActivities = (baseJson) => {
@@ -390,7 +404,7 @@
 
         /*** Add work for an addon that is under construction ***/
         $('.work-addon-btn').click(function() {
-          if ($(this).attr('disabled') || $('#pilot-select').find('option:selected').data('downtime') == 0) {
+          if ($(this).attr('disabled') || getDowntimeRemaining() == 0) {
             return;
           }
           
@@ -408,12 +422,14 @@
             }
           }).then((response) => response.json())
           .then((responseJson) => {
-            updateAddons(responseJson['newBase']);
             updatePilotInfo(responseJson['newPilots']);
+            updateAddons(responseJson['newBase']);
+            updateActivities(responseJson['newBase']);
           });
         });
       }
 
+      //*************************** Runs on page load *************************//
       //Populate pilot display
       fetch('./data/pilotData')
       .then((response) => response.json())
@@ -542,6 +558,8 @@
             $('#facilities-build-container').find('.addon-item').last().data('addon', facility);
           });
 
+          updateDowntime();
+
           /*** Addon interation code ***/
           $('.addon-item.selectable').click(function() {
             deselectAll();
@@ -576,8 +594,15 @@
 
       /**************** Event handlers ***************/
       $('#pilot-select').change((e) => {
-        $('#downtime-display').text($('#pilot-select').find('option:selected').data('downtime'));
+        const downtimeRemaining = getDowntimeRemaining();
+        $('#downtime-display').text(downtimeRemaining);
+        if (downtimeRemaining <= 0) {
+          $('.downtime-required').prop('disabled', true)
+        } else {
+          $('.downtime-required').prop('disabled', false)
+        }
       });
+
       $('.buy-addon-btn').click((e) => {
         if ($(this).attr('disabled')) {
           return;
@@ -628,6 +653,7 @@
         .then((responseJson) => {
           updateBaseStats(responseJson['newBase']);
           updateAddons(responseJson['newBase']);
+          updateActivities(responseJson['newBase']);
         });
 
         //Update page data. Yes I should probably be storing a main data object and refreshing the page from that. 
