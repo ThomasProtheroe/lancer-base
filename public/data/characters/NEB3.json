@@ -1,0 +1,592 @@
+{
+    "id": "b295b906-0e32-494f-9b89-10d3b236d81c",
+    "level": 0,
+    "callsign": "Neb3",
+    "name": "Neb3",
+    "player_name": "",
+    "status": "Active",
+    "dead": false,
+    "text_appearance": "",
+    "notes": "",
+    "history": "",
+    "quirks": [],
+    "current_hp": 6,
+    "background": "Spec Ops",
+    "resistances": [],
+    "mechs": [
+        {
+            "id": "a8394ac9-aaad-49dc-a140-bdc098413d64",
+            "name": "Neb3",
+            "notes": "",
+            "gm_note": "",
+            "frame": "mf_standard_pattern_i_everest",
+            "active": false,
+            "current_structure": 4,
+            "current_move": 4,
+            "boost": 0,
+            "current_hp": 12,
+            "overshield": 0,
+            "current_stress": 4,
+            "current_heat": 0,
+            "current_repairs": 5,
+            "current_overcharge": 0,
+            "current_core_energy": 1,
+            "statuses": [],
+            "conditions": [],
+            "resistances": [],
+            "reactions": [],
+            "burn": 0,
+            "destroyed": false,
+            "defeat": "",
+            "activations": 1,
+            "meltdown_imminent": false,
+            "reactor_destroyed": false,
+            "core_active": false,
+            "cc_ver": "ERR",
+            "lastModified": "Tue Mar 12 2024 22:04:55 GMT-0700 (Pacific Daylight Time)",
+            "isDeleted": false,
+            "expireTime": "",
+            "deleteTime": "",
+            "portrait": "",
+            "cloud_portrait": "",
+            "loadouts": [
+                {
+                    "id": "cfa960f7-f94d-49cb-858e-f2574ee93eaf",
+                    "name": "Primary",
+                    "systems": [
+                        {
+                            "id": "ms_manipulators",
+                            "uses": 0,
+                            "destroyed": false,
+                            "cascading": false,
+                            "flavorName": "",
+                            "flavorDescription": "Precise interaction with built and natural environments, soft targets, and hazardous materials is part of the daily routine for support-class mechs. This is made possible by manipulators – added multi-digit “hands” with haptic sensors."
+                        },
+                        {
+                            "id": "ms_type_3_projected_shield",
+                            "uses": 0,
+                            "destroyed": false,
+                            "cascading": false,
+                            "flavorName": "",
+                            "flavorDescription": "The GMS Type-3 Projected Shield traps and denies incoming projectiles by projecting an aggressive, superpositional anti-ballistic barrier."
+                        },
+                        {
+                            "id": "ms_rapid_burst_jump_jet_system",
+                            "uses": 0,
+                            "destroyed": false,
+                            "cascading": false,
+                            "flavorName": "",
+                            "flavorDescription": ""
+                        },
+                        {
+                            "id": "ms_personalizations",
+                            "uses": 0,
+                            "destroyed": false,
+                            "cascading": false,
+                            "flavorName": "",
+                            "flavorDescription": ""
+                        }
+                    ],
+                    "integratedSystems": [],
+                    "mounts": [
+                        {
+                            "mount_type": "Main",
+                            "lock": false,
+                            "slots": [
+                                {
+                                    "size": "Main",
+                                    "weapon": {
+                                        "id": "mw_shotgun",
+                                        "destroyed": false,
+                                        "cascading": false,
+                                        "loaded": true,
+                                        "mod": null,
+                                        "flavorName": "",
+                                        "flavorDescription": "Much like GMS mechs, GMS weapons are reliable galactic standards, made using interchangeable parts and built to withstand almost any conditions. There are three lines currently in production.<br>The Type-I (T-1) line is defined by powerful, reliable, and conventional-kinetic ranged and melee weapons, including the GMS assault rifle, heavy machine gun, shotgun, pistol, and various light and heavy blades. Reliable galactic standards, the GMS T-1 line is the most widely used mech-scale line of weaponry across the galaxy. Echoing the Everest’s design notes, T-1 weapons are simply designed, with few (if any) moving parts, intended to be used in or adaptable to any environment.",
+                                        "customDamageType": null,
+                                        "maxUseOverride": 0,
+                                        "uses": 0,
+                                        "selectedProfile": 0
+                                    }
+                                }
+                            ],
+                            "extra": [],
+                            "bonus_effects": [],
+                            "modifiable": true
+                        },
+                        {
+                            "mount_type": "Flex",
+                            "lock": false,
+                            "slots": [
+                                {
+                                    "size": "Flex",
+                                    "weapon": {
+                                        "id": "mw_segment_knife",
+                                        "destroyed": false,
+                                        "cascading": false,
+                                        "loaded": true,
+                                        "mod": null,
+                                        "flavorName": "",
+                                        "flavorDescription": "Much like GMS mechs, GMS weapons are reliable galactic standards, made using interchangeable parts and built to withstand almost any conditions. There are three lines currently in production.<br>The Type-III (T-3) line is made up of heavy weapons, ordnance, and other exotic, specialized, or massive weapons. A broad classification, the T-3 range includes conventional-kinetic anti-materiel rifles, super-rapid cycling pulse rifles, missile racks, cannons, and drone nexuses – “hive”style launchers that serve as miniature factory, hangar, and deployment systems for portable drones. The classification also includes the fearsome “segment knife”, a system that uses flash-printing to produce disposable edged weapons in a vicinity around the user.",
+                                        "customDamageType": null,
+                                        "maxUseOverride": 0,
+                                        "uses": 0,
+                                        "selectedProfile": 0
+                                    }
+                                }
+                            ],
+                            "extra": [
+                                {
+                                    "size": "Auxiliary",
+                                    "weapon": {
+                                        "id": "mw_segment_knife",
+                                        "destroyed": false,
+                                        "cascading": false,
+                                        "loaded": true,
+                                        "mod": null,
+                                        "flavorName": "",
+                                        "flavorDescription": "Much like GMS mechs, GMS weapons are reliable galactic standards, made using interchangeable parts and built to withstand almost any conditions. There are three lines currently in production.<br>The Type-III (T-3) line is made up of heavy weapons, ordnance, and other exotic, specialized, or massive weapons. A broad classification, the T-3 range includes conventional-kinetic anti-materiel rifles, super-rapid cycling pulse rifles, missile racks, cannons, and drone nexuses – “hive”style launchers that serve as miniature factory, hangar, and deployment systems for portable drones. The classification also includes the fearsome “segment knife”, a system that uses flash-printing to produce disposable edged weapons in a vicinity around the user.",
+                                        "customDamageType": null,
+                                        "maxUseOverride": 0,
+                                        "uses": 0,
+                                        "selectedProfile": 0
+                                    }
+                                }
+                            ],
+                            "bonus_effects": [],
+                            "modifiable": true
+                        },
+                        {
+                            "mount_type": "Heavy",
+                            "lock": false,
+                            "slots": [
+                                {
+                                    "size": "Heavy",
+                                    "weapon": {
+                                        "id": "mw_thermal_lance",
+                                        "destroyed": false,
+                                        "cascading": false,
+                                        "loaded": true,
+                                        "mod": null,
+                                        "flavorName": "",
+                                        "flavorDescription": "Much like GMS mechs, GMS weapons are reliable galactic standards, made using interchangeable parts and built to withstand almost any conditions. There are three lines currently in production.<br>The Type-II (T-2) line displays GMS’s proprietary “charged” melee weapons and energy weapons.",
+                                        "customDamageType": null,
+                                        "maxUseOverride": 0,
+                                        "uses": 0,
+                                        "selectedProfile": 0
+                                    }
+                                }
+                            ],
+                            "extra": [],
+                            "bonus_effects": [],
+                            "modifiable": true
+                        }
+                    ],
+                    "integratedMounts": [],
+                    "improved_armament": {
+                        "mount_type": "Flex",
+                        "lock": false,
+                        "slots": [
+                            {
+                                "size": "Flex",
+                                "weapon": null
+                            }
+                        ],
+                        "extra": [
+                            {
+                                "size": "Auxiliary",
+                                "weapon": null
+                            }
+                        ],
+                        "bonus_effects": [],
+                        "modifiable": true
+                    },
+                    "superheavy_mounting": {
+                        "mount_type": "Superheavy",
+                        "lock": false,
+                        "slots": [
+                            {
+                                "size": "Superheavy",
+                                "weapon": null
+                            }
+                        ],
+                        "extra": [],
+                        "bonus_effects": [],
+                        "modifiable": true
+                    },
+                    "integratedWeapon": {
+                        "mount_type": "Aux",
+                        "lock": false,
+                        "slots": [
+                            {
+                                "size": "Auxiliary",
+                                "weapon": null
+                            }
+                        ],
+                        "extra": [],
+                        "bonus_effects": [],
+                        "modifiable": true
+                    },
+                    "extraMounts": [],
+                    "extraIntegratedMounts": []
+                }
+            ],
+            "active_loadout_index": 0
+        },
+        {
+            "id": "7281b965-7898-48ad-b62e-79b04c1abee1",
+            "name": "Knifeling",
+            "notes": "",
+            "gm_note": "",
+            "frame": "mf_chomolungma",
+            "active": true,
+            "current_structure": 4,
+            "current_move": 4,
+            "boost": 0,
+            "current_hp": 10,
+            "overshield": 0,
+            "current_stress": 4,
+            "current_heat": 0,
+            "current_repairs": 4,
+            "current_overcharge": 0,
+            "current_core_energy": 1,
+            "statuses": [],
+            "conditions": [],
+            "resistances": [],
+            "reactions": [],
+            "burn": 0,
+            "destroyed": false,
+            "defeat": "",
+            "activations": 1,
+            "meltdown_imminent": false,
+            "reactor_destroyed": false,
+            "core_active": false,
+            "cc_ver": "ERR",
+            "lastModified": "Fri Mar 22 2024 17:46:39 GMT-0700 (Pacific Daylight Time)",
+            "isDeleted": false,
+            "expireTime": "",
+            "deleteTime": "",
+            "portrait": "",
+            "cloud_portrait": "https://d2c79xe1p61csc.cloudfront.net/frames/pre_vanguard_pixel.png",
+            "loadouts": [
+                {
+                    "id": "f29f95f8-5517-4960-9dac-313f36c7af3b",
+                    "name": "Primary",
+                    "systems": [
+                        {
+                            "id": "ms_manipulators",
+                            "uses": 0,
+                            "destroyed": false,
+                            "cascading": false,
+                            "flavorName": "",
+                            "flavorDescription": "Precise interaction with built and natural environments, soft targets, and hazardous materials is part of the daily routine for support-class mechs. This is made possible by manipulators – added multi-digit “hands” with haptic sensors."
+                        },
+                        {
+                            "id": "ms_rapid_burst_jump_jet_system",
+                            "uses": 0,
+                            "destroyed": false,
+                            "cascading": false,
+                            "flavorName": "",
+                            "flavorDescription": ""
+                        },
+                        {
+                            "id": "ms_type_3_projected_shield",
+                            "uses": 0,
+                            "destroyed": false,
+                            "cascading": false,
+                            "flavorName": "",
+                            "flavorDescription": "The GMS Type-3 Projected Shield traps and denies incoming projectiles by projecting an aggressive, superpositional anti-ballistic barrier."
+                        },
+                        {
+                            "id": "ms_pattern_a_jericho_deployable_cover",
+                            "uses": 0,
+                            "destroyed": false,
+                            "cascading": false,
+                            "flavorName": "",
+                            "flavorDescription": ""
+                        }
+                    ],
+                    "integratedSystems": [],
+                    "mounts": [
+                        {
+                            "mount_type": "Main/Aux",
+                            "lock": false,
+                            "slots": [
+                                {
+                                    "size": "Main",
+                                    "weapon": {
+                                        "id": "mw_shotgun",
+                                        "destroyed": false,
+                                        "cascading": false,
+                                        "loaded": true,
+                                        "mod": null,
+                                        "flavorName": "",
+                                        "flavorDescription": "Much like GMS mechs, GMS weapons are reliable galactic standards, made using interchangeable parts and built to withstand almost any conditions. There are three lines currently in production.<br>The Type-I (T-1) line is defined by powerful, reliable, and conventional-kinetic ranged and melee weapons, including the GMS assault rifle, heavy machine gun, shotgun, pistol, and various light and heavy blades. Reliable galactic standards, the GMS T-1 line is the most widely used mech-scale line of weaponry across the galaxy. Echoing the Everest’s design notes, T-1 weapons are simply designed, with few (if any) moving parts, intended to be used in or adaptable to any environment.",
+                                        "customDamageType": null,
+                                        "maxUseOverride": 0,
+                                        "uses": 0,
+                                        "selectedProfile": 0
+                                    }
+                                },
+                                {
+                                    "size": "Auxiliary",
+                                    "weapon": {
+                                        "id": "mw_segment_knife",
+                                        "destroyed": false,
+                                        "cascading": false,
+                                        "loaded": true,
+                                        "mod": null,
+                                        "flavorName": "",
+                                        "flavorDescription": "Much like GMS mechs, GMS weapons are reliable galactic standards, made using interchangeable parts and built to withstand almost any conditions. There are three lines currently in production.<br>The Type-III (T-3) line is made up of heavy weapons, ordnance, and other exotic, specialized, or massive weapons. A broad classification, the T-3 range includes conventional-kinetic anti-materiel rifles, super-rapid cycling pulse rifles, missile racks, cannons, and drone nexuses – “hive”style launchers that serve as miniature factory, hangar, and deployment systems for portable drones. The classification also includes the fearsome “segment knife”, a system that uses flash-printing to produce disposable edged weapons in a vicinity around the user.",
+                                        "customDamageType": null,
+                                        "maxUseOverride": 0,
+                                        "uses": 0,
+                                        "selectedProfile": 0
+                                    }
+                                }
+                            ],
+                            "extra": [],
+                            "bonus_effects": [],
+                            "modifiable": true
+                        },
+                        {
+                            "mount_type": "Flex",
+                            "lock": false,
+                            "slots": [
+                                {
+                                    "size": "Flex",
+                                    "weapon": {
+                                        "id": "mw_segment_knife",
+                                        "destroyed": false,
+                                        "cascading": false,
+                                        "loaded": true,
+                                        "mod": null,
+                                        "flavorName": "",
+                                        "flavorDescription": "Much like GMS mechs, GMS weapons are reliable galactic standards, made using interchangeable parts and built to withstand almost any conditions. There are three lines currently in production.<br>The Type-III (T-3) line is made up of heavy weapons, ordnance, and other exotic, specialized, or massive weapons. A broad classification, the T-3 range includes conventional-kinetic anti-materiel rifles, super-rapid cycling pulse rifles, missile racks, cannons, and drone nexuses – “hive”style launchers that serve as miniature factory, hangar, and deployment systems for portable drones. The classification also includes the fearsome “segment knife”, a system that uses flash-printing to produce disposable edged weapons in a vicinity around the user.",
+                                        "customDamageType": null,
+                                        "maxUseOverride": 0,
+                                        "uses": 0,
+                                        "selectedProfile": 0
+                                    }
+                                }
+                            ],
+                            "extra": [
+                                {
+                                    "size": "Auxiliary",
+                                    "weapon": {
+                                        "id": "mw_segment_knife",
+                                        "destroyed": false,
+                                        "cascading": false,
+                                        "loaded": true,
+                                        "mod": null,
+                                        "flavorName": "",
+                                        "flavorDescription": "Much like GMS mechs, GMS weapons are reliable galactic standards, made using interchangeable parts and built to withstand almost any conditions. There are three lines currently in production.<br>The Type-III (T-3) line is made up of heavy weapons, ordnance, and other exotic, specialized, or massive weapons. A broad classification, the T-3 range includes conventional-kinetic anti-materiel rifles, super-rapid cycling pulse rifles, missile racks, cannons, and drone nexuses – “hive”style launchers that serve as miniature factory, hangar, and deployment systems for portable drones. The classification also includes the fearsome “segment knife”, a system that uses flash-printing to produce disposable edged weapons in a vicinity around the user.",
+                                        "customDamageType": null,
+                                        "maxUseOverride": 0,
+                                        "uses": 0,
+                                        "selectedProfile": 0
+                                    }
+                                }
+                            ],
+                            "bonus_effects": [],
+                            "modifiable": true
+                        }
+                    ],
+                    "integratedMounts": [],
+                    "improved_armament": {
+                        "mount_type": "Flex",
+                        "lock": false,
+                        "slots": [
+                            {
+                                "size": "Flex",
+                                "weapon": null
+                            }
+                        ],
+                        "extra": [
+                            {
+                                "size": "Auxiliary",
+                                "weapon": null
+                            }
+                        ],
+                        "bonus_effects": [],
+                        "modifiable": true
+                    },
+                    "superheavy_mounting": {
+                        "mount_type": "Superheavy",
+                        "lock": false,
+                        "slots": [
+                            {
+                                "size": "Superheavy",
+                                "weapon": null
+                            }
+                        ],
+                        "extra": [],
+                        "bonus_effects": [],
+                        "modifiable": true
+                    },
+                    "integratedWeapon": {
+                        "mount_type": "Aux",
+                        "lock": false,
+                        "slots": [
+                            {
+                                "size": "Auxiliary",
+                                "weapon": null
+                            }
+                        ],
+                        "extra": [],
+                        "bonus_effects": [],
+                        "modifiable": true
+                    },
+                    "extraMounts": [],
+                    "extraIntegratedMounts": []
+                }
+            ],
+            "active_loadout_index": 0
+        }
+    ],
+    "cc_ver": "",
+    "special_equipment": {
+        "PilotGear": [],
+        "Frames": [],
+        "MechWeapons": [],
+        "WeaponMods": [],
+        "MechSystems": [],
+        "SystemMods": []
+    },
+    "combat_history": {
+        "moves": 0,
+        "kills": 0,
+        "damage": 0,
+        "hp_damage": 0,
+        "structure_damage": 0,
+        "overshield": 0,
+        "heat_damage": 0,
+        "reactor_damage": 0,
+        "overcharge_uses": 0,
+        "core_uses": 0
+    },
+    "state": {
+        "active_mech_id": "",
+        "remote_mech_id": "",
+        "stage": "Narrative",
+        "turn": 1,
+        "actions": 2,
+        "braced": false,
+        "overcharged": false,
+        "prepare": false,
+        "bracedCooldown": false,
+        "redundant": false,
+        "stats": {
+            "moves": 0,
+            "kills": 0,
+            "damage": 0,
+            "hp_damage": 0,
+            "structure_damage": 0,
+            "overshield": 0,
+            "heat_damage": 0,
+            "reactor_damage": 0,
+            "overcharge_uses": 0,
+            "core_uses": 0
+        },
+        "deployed": []
+    },
+    "lastModified": "Fri Mar 22 2024 17:46:53 GMT-0700 (Pacific Daylight Time)",
+    "isDeleted": false,
+    "expireTime": "",
+    "deleteTime": "",
+    "lastUpdate_cloud": "Fri Mar 22 2024 17:46:53 GMT-0700 (Pacific Daylight Time)",
+    "lastSync": "Fri Mar 22 2024 17:46:53 GMT-0700 (Pacific Daylight Time)",
+    "skills": [
+        {
+            "id": "sk_act_unseen_or_unheard",
+            "rank": 1
+        },
+        {
+            "id": "sk_get_a_hold_of_something",
+            "rank": 1
+        },
+        {
+            "id": "sk_read_a_situation",
+            "rank": 1
+        },
+        {
+            "id": "sk_show_off",
+            "rank": 1
+        }
+    ],
+    "talents": [
+        {
+            "id": "t_hunter",
+            "rank": 1
+        },
+        {
+            "id": "t_infiltrator",
+            "rank": 1
+        },
+        {
+            "id": "t_nuclear_cavalier",
+            "rank": 1
+        }
+    ],
+    "mechSkills": [
+        0,
+        2,
+        0,
+        0
+    ],
+    "counter_data": [],
+    "custom_counters": [],
+    "core_bonuses": [],
+    "licenses": [],
+    "reserves": [],
+    "orgs": [],
+    "bondId": "",
+    "xp": 0,
+    "stress": 0,
+    "isBroken": false,
+    "burdens": [],
+    "bondPowers": [],
+    "powerSelections": 0,
+    "maxStress": 8,
+    "bondAnswers": [
+        "",
+        ""
+    ],
+    "minorIdeal": "",
+    "clocks": [],
+    "group": "",
+    "sort_index": -1,
+    "portrait": "",
+    "cloud_portrait": "",
+    "loadout": {
+        "id": "c46afd58-93a0-4bfe-8a0a-05140fa6b793",
+        "name": "Primary",
+        "armor": [
+            null
+        ],
+        "weapons": [
+            null,
+            null
+        ],
+        "gear": [
+            null,
+            null,
+            null
+        ],
+        "extendedWeapons": [
+            null
+        ],
+        "extendedGear": [
+            null,
+            null
+        ]
+    },
+    "brews": [
+        {
+            "LcpId": "GWG3TKHfJGNXeO3U3Q+CgjhS/Os=",
+            "LcpName": "Operation Solstice Rain Data",
+            "LcpVersion": "1.2.0",
+            "Website": "https://massif-press.itch.io/operation-solstice-rain"
+        }
+    ]
+}
