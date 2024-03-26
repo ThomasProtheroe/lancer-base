@@ -21,6 +21,25 @@
             "quantity": 10000
         }
     },
+    "activities": [
+        {
+            "name": "Scavange",
+            "description": "Search the ruined sections of the bunker for salvagable materials.",
+            "notes": "Slow and monotonous, but free.",
+            "available": 1,
+            "cost": {
+                "downtimeUnits": 1
+            },
+            "effects": {
+                "resources":{
+                    "chance": 100,
+                    "materials": 200,
+                    "refinedMaterials": 10,
+                    "modifierPercent": 30
+                }
+            }
+        }
+    ],
     "facilities": [
         {
             "type": "printer",

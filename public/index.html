@@ -70,6 +70,39 @@
           </div>
         </div>
 
+        <!-- Activities -->
+        <div class="row">
+          <div class="col-md-12 info-container">
+            <div class="row">
+              <div class="col-md-4">
+                <span class="addon-header">Activities</span>
+              </div>
+            </div>
+            <div id="activities-container" class="row">
+              
+            </div>
+          </div>
+        </div>
+        <!-- <div class="modal modal-xl fade" id="activities-modal" tabindex="-1" aria-labelledby="activities-modal-label" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="activities-modal-label">Pilot Activities</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div id="activities-build-container" class="row">
+              
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" data-bs-dismiss="modal" disabled>Perform</button>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
         <!-- Facilities -->
         <div class="row">
           <div class="col-md-12 info-container">
@@ -279,8 +312,19 @@
           '</div></div>'
         );
         $(containerSelector).find('.addon-item').last().data('addon', addon);
-
       };
+
+      const addActivity = (activity) => {
+        $('#activities-container').append(
+          '<div class="col-md-3"><div class="activity-item">' +
+          '<div class="activity-name">' + activity['name'] + '</div>' +
+          '<div class="activity-description">' + activity['description'] + '</div>' +
+          '<div class="activity-notes">' + activity['notes'] + '</div>' +
+          '<button class="base-btn perform-activity-btn">Perform</button>' +
+          '</div></div>'
+        );
+        $(containerSelector).find('.activity-item').last().data('activity', activity);
+      }
 
       const addFacility = (facility) => {
         addAddon(facility, '#facilities-container');
@@ -292,6 +336,17 @@
 
       const addDefense = (defense) => {
         addAddon(defense, '#defenses-container');
+      }
+
+      const updateActivities = (baseJson) => {
+         //Clear list
+         $('#activities-container').empty();
+
+         baseJson['activities'].forEach((activity) => {
+          if (activity['available'] == 1) {
+            addActivity(activity);
+          }
+        });
       }
 
       const updateAddons = (addonsJson) => {
@@ -384,6 +439,7 @@
         $('#morale-fill').css("width", moralePercent + "%");
         $('#morale-fill').css("background-color", moraleColor);
         
+        updateActivities(baseJson);
         updateAddons(baseJson);
 
         //Add purchasable addons
