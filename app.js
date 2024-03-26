@@ -11,15 +11,7 @@ const logger = fs.createWriteStream('logs/activity.log', {
 });
 
 const baseData = require('./public/data/base.json');
-const pilotData = require("./public/data/characters");
-//We're using comp/con pilot data, so need to add downtime property if it's the first time being loaded
-for (const [key, pilot] of Object.entries(pilotData)) {
-    if (!("downtimeUnits" in pilot)) {
-        pilot['downtimeUnits'] = 2;
-        fs.writeFile(`/public/data/characters/${pilot['callsign']}.json`, JSON.stringify(pilot), 'utf8', () => {});
-        console.log(`Character missing downtime stat, adding: ${pilot['callsign']}`);
-    }
-}
+const pilotData = require("./public/data/pilots.json");
 
 //Main application routes
 app.post('/update/base', function (req, res) {
@@ -113,7 +105,7 @@ const updatePilot = (params) => {
     pilotData[params['pilot']['callsign']] = params['pilot'];
 
     // Yeah no validation callback right now, get over it
-    fs.writeFile('data/characters/' + params['pilot']['callsign'] + '.json', JSON.stringify(pilotData[params['pilot']['callsign']]), 'utf8', () => {});
+    fs.writeFile('/public/data/pilots.json', JSON.stringify(pilotData), 'utf8', () => {});
 }
 
 const getResourcesString = (resources) => {
