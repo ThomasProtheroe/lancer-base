@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const logger = fs.createWriteStream('logs/activity.log', {
-    flags: 'a'
+	flags: 'a'
 });
 
 const baseData = require('./public/data/base.json');
@@ -15,165 +15,165 @@ const pilotData = require("./public/data/pilots.json");
 
 //Main application routes
 app.post('/update/base', function (req, res) {
-    console.log('update base request');
-    const params = {
-        "action": req.body.action,
-        "resources": req.body.resources,
-        "addon": req.body.addon,
-        "activity": req.body.activity,
-        "pilot": req.body.pilot
-    }
+	console.log('update base request');
+	const params = {
+		"action": req.body.action,
+		"resources": req.body.resources,
+		"addon": req.body.addon,
+		"activity": req.body.activity,
+		"pilot": req.body.pilot
+	}
 
-    updateBase(params);
-    
-    res.send({
-        'newBase': baseData,
-        'newPilots': pilotData,
-        'status': 'success',
-    });
+	updateBase(params);
+
+	res.send({
+		'newBase': baseData,
+		'newPilots': pilotData,
+		'status': 'success',
+	});
 });
 app.post('/update/pilot', function (req, res) {
-    console.log('update pilot request');
-    const params = {
-        "pilot": req.body.pilot
-    }
+	console.log('update pilot request');
+	const params = {
+		"pilot": req.body.pilot
+	}
 
-    updatePilot(params);
+	updatePilot(params);
 
-    logger.write('Pilot was updated');
-    res.send({
-        'newPilot': pilotData[params['pilot']],
-        'status': 'success',
-    });
+	logger.write('Pilot was updated');
+	res.send({
+		'newPilot': pilotData[params['pilot']],
+		'status': 'success',
+	});
 });
 
 //Resource routes (styles, images, data objects etc)
-app.get('/data/baseData', function(req, res) {
-    res.send(baseData);
+app.get('/data/baseData', function (req, res) {
+	res.send(baseData);
 });
-app.get('/data/pilotData', function(req, res) {
-    res.send(pilotData);
+app.get('/data/pilotData', function (req, res) {
+	res.send(pilotData);
 });
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(9000, function () {
-    console.log('LancerBase listening on port 9000');
+	console.log('LancerBase listening on port 9000');
 });
 
 const updateBase = (params) => {
-    switch (params['action']) {
-        case 'buyAddon':
-            baseData['resources'] = params['resources'];
-            baseData[params['addon']['family']].push(params['addon']);
-            
-            logger.write(params['pilot'] + ' purchased a new addon: ' + params['addon']['name'] + '\n');
-            break;
-        case 'workAddon':
-            //Validate the pilot has enough downtime remaining
-            if (pilotData[params['pilot']]['downtimeUnits'] <= 0) {
-                console.log(params['pilot'] + ' tried to add work to an addon, but has no downtime remaining.');
-                break;
-            }
+	switch (params['action']) {
+		case 'buyAddon':
+			baseData['resources'] = params['resources'];
+			baseData[params['addon']['family']].push(params['addon']);
 
-            let updatedPilot = pilotData[params['pilot']];
-            updatedPilot['downtimeUnits'] --;
-            let timeRemaining = params['addon']['timeRemaining'] - 1;
-            params['addon']['timeRemaining'] = timeRemaining;
+			logger.write(params['pilot'] + ' purchased a new addon: ' + params['addon']['name'] + '\n');
+			break;
+		case 'workAddon':
+			//Validate the pilot has enough downtime remaining
+			if (pilotData[params['pilot']]['downtimeUnits'] <= 0) {
+				console.log(params['pilot'] + ' tried to add work to an addon, but has no downtime remaining.');
+				break;
+			}
 
-            updateAddon(params['addon']);
-            updatePilot({'pilot': updatedPilot});
+			let updatedPilot = pilotData[params['pilot']];
+			updatedPilot['downtimeUnits']--;
+			let timeRemaining = params['addon']['timeRemaining'] - 1;
+			params['addon']['timeRemaining'] = timeRemaining;
 
-            if (timeRemaining === 0) {
-                logger.write(params['pilot'] + ' finished work on : ' + params['addon']['name'] + '\n');
-            } else {
-                logger.write(params['pilot'] + ' worked on : ' + params['addon']['name'] + '\n');
-            }
-            break;
-        case 'performActivity':
-            const activity = getActivityByName(params['activity']);
-            const newActivity = JSON.parse(JSON.stringify(activity));
+			updateAddon(params['addon']);
+			updatePilot({ 'pilot': updatedPilot });
 
-            if (pilotData[params['pilot']]['downtimeUnits'] < newActivity['cost']['downtimeUnits']) {
-                console.log(params['pilot'] + ' tried to perform an activity, but has no downtime remaining.');
-                break;
-            }
+			if (timeRemaining === 0) {
+				logger.write(params['pilot'] + ' finished work on : ' + params['addon']['name'] + '\n');
+			} else {
+				logger.write(params['pilot'] + ' worked on : ' + params['addon']['name'] + '\n');
+			}
+			break;
+		case 'performActivity':
+			const activity = getActivityByName(params['activity']);
+			const newActivity = JSON.parse(JSON.stringify(activity));
 
-            //Determine resource gain/loss
-            if (activity['effects']['resources']) {
-                const modifierMax = activity['effects']['resources']['modifierPercent'];
-                for (const [resource, quantity] of Object.entries(activity['effects']['resources']['quantities'])) {
-                    const modifier = Math.floor(Math.random() * modifierMax);
-                    if(Math.random() < 0.5) {
-                        amount = Math.round(quantity * (1 + (modifier / 100)));
-                    } else {
-                        amount = Math.round(quantity * (1 - (modifier / 100)));
-                    }
+			if (pilotData[params['pilot']]['downtimeUnits'] < newActivity['cost']['downtimeUnits']) {
+				console.log(params['pilot'] + ' tried to perform an activity, but has no downtime remaining.');
+				break;
+			}
 
-                    baseData['resources'][resource]['quantity'] += amount;
-                    newActivity['effects']['resources']['quantities'][resource] = amount;
-                }
-            }
-            
-            //ToDo - other effects
+			//Determine resource gain/loss
+			if (activity['effects']['resources']) {
+				const modifierMax = activity['effects']['resources']['modifierPercent'];
+				for (const [resource, quantity] of Object.entries(activity['effects']['resources']['quantities'])) {
+					const modifier = Math.floor(Math.random() * modifierMax);
+					if (Math.random() < 0.5) {
+						amount = Math.round(quantity * (1 + (modifier / 100)));
+					} else {
+						amount = Math.round(quantity * (1 - (modifier / 100)));
+					}
+
+					baseData['resources'][resource]['quantity'] += amount;
+					newActivity['effects']['resources']['quantities'][resource] = amount;
+				}
+			}
+
+			//ToDo - other effects
 
 
-            //Downtime costs
-            pilotData[params['pilot']]['downtimeUnits'] -= newActivity['cost']['downtimeUnits'];
-            updatePilot({'pilot': pilotData[params['pilot']]});
+			//Downtime costs
+			pilotData[params['pilot']]['downtimeUnits'] -= newActivity['cost']['downtimeUnits'];
+			updatePilot({ 'pilot': pilotData[params['pilot']] });
 
-            //Results output
-            const outputString = getActivityEffectsString({"activity": newActivity, "pilot": params['pilot']});
-            logger.write(outputString);
-            break;
-        default:
-            break;
-    }
+			//Results output
+			const outputString = getActivityEffectsString({ "activity": newActivity, "pilot": params['pilot'] });
+			logger.write(outputString);
+			break;
+		default:
+			break;
+	}
 
-    // Yeah no validation callback right now, get over it
-    fs.writeFile('public/data/base.json', JSON.stringify(baseData), 'utf8', () => {});
+	// Yeah no validation callback right now, get over it
+	fs.writeFile('public/data/base.json', JSON.stringify(baseData), 'utf8', () => { });
 }
 
 const updatePilot = (params) => {
-    pilotData[params['pilot']['callsign']] = params['pilot'];
+	pilotData[params['pilot']['callsign']] = params['pilot'];
 
-    // Yeah no validation callback right now, get over it
-    fs.writeFile('/public/data/pilots.json', JSON.stringify(pilotData), 'utf8', () => {});
+	// Yeah no validation callback right now, get over it
+	fs.writeFile('/public/data/pilots.json', JSON.stringify(pilotData), 'utf8', () => { });
 }
 
 const getResourcesString = (resources) => {
-    let output = 'Resources gained: ';
-    console.log(resources);
-    for (const [key, resource] of Object.entries(resources)) {
-        output += key + ' - ' + resource + ' ';
-    }
-    return output;
+	let output = 'Resources gained: ';
+	console.log(resources);
+	for (const [key, resource] of Object.entries(resources)) {
+		output += key + ' - ' + resource + ' ';
+	}
+	return output;
 }
 
 const getActivityByName = (name) => {
-    let targetActivity = null;
-    baseData['activities'].forEach((activity) => {
-        if (activity['name'] === name) {
-            targetActivity = activity;
-        }
-    });
-    return targetActivity;
+	let targetActivity = null;
+	baseData['activities'].forEach((activity) => {
+		if (activity['name'] === name) {
+			targetActivity = activity;
+		}
+	});
+	return targetActivity;
 }
 
 const getActivityEffectsString = (params) => {
-    let effects = params['activity']['effects'];
-    let output = `${params['pilot']} ${effects['description']}\n`;
-    if (effects['resources']) {
-        output += `${params['pilot']} ${effects['resources']['description']}\n`;
-        output += `${getResourcesString(effects['resources']['quantities'])}\n`;
-    }
+	let effects = params['activity']['effects'];
+	let output = `${params['pilot']} ${effects['description']}\n`;
+	if (effects['resources']) {
+		output += `${params['pilot']} ${effects['resources']['description']}\n`;
+		output += `${getResourcesString(effects['resources']['quantities'])}\n`;
+	}
 
-    return output;
+	return output;
 }
 
 const updateAddon = (newAddon) => {
-    for (let i = 0; i < baseData[newAddon['family']].length; i++) {
-        if (baseData[newAddon['family']][i]['name'] === newAddon['name']) {
-            baseData[newAddon['family']][i] = newAddon;
-        }
-    }
+	for (let i = 0; i < baseData[newAddon['family']].length; i++) {
+		if (baseData[newAddon['family']][i]['name'] === newAddon['name']) {
+			baseData[newAddon['family']][i] = newAddon;
+		}
+	}
 }
