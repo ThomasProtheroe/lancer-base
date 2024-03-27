@@ -1,17 +1,14 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs').promises;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const logger = fs.createWriteStream('logs/activity.log', {
-	flags: 'a'
-});
-
 const baseData = require('./public/data/base.json');
 const pilotData = require("./public/data/pilots.json");
+const logs = require('./logs/activity_log.json');
 
 //Main application routes
 app.post('/update/base', function (req, res) {
@@ -40,7 +37,8 @@ app.post('/update/pilot', function (req, res) {
 
 	updatePilot(params);
 
-	logger.write('Pilot was updated');
+	writeLog(params.pilot, ' was updated');
+
 	res.send({
 		'newPilot': pilotData[params['pilot']],
 		'status': 'success',
@@ -54,19 +52,22 @@ app.get('/data/baseData', function (req, res) {
 app.get('/data/pilotData', function (req, res) {
 	res.send(pilotData);
 });
+app.get('/log', (req, res) => {
+	res.send(logs);
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(9000, function () {
 	console.log('LancerBase listening on port 9000');
 });
 
-const updateBase = (params) => {
+const updateBase = async (params) => {
 	switch (params['action']) {
 		case 'buyAddon':
 			baseData['resources'] = params['resources'];
 			baseData[params['addon']['family']].push(params['addon']);
 
-			logger.write(params['pilot'] + ' purchased a new addon: ' + params['addon']['name'] + '\n');
+			writeLog(params['pilot'], `purchased a new addon ${params['addon']['name']}`);
 			break;
 		case 'workAddon':
 			//Validate the pilot has enough downtime remaining
@@ -83,11 +84,7 @@ const updateBase = (params) => {
 			updateAddon(params['addon']);
 			updatePilot({ 'pilot': updatedPilot });
 
-			if (timeRemaining === 0) {
-				logger.write(params['pilot'] + ' finished work on : ' + params['addon']['name'] + '\n');
-			} else {
-				logger.write(params['pilot'] + ' worked on : ' + params['addon']['name'] + '\n');
-			}
+			writeLog(params['pilot'], `${timeRemaining ? 'worked on' : 'finished work on'} ${params['addon']['name']}`);
 			break;
 		case 'performActivity':
 			const activity = getActivityByName(params['activity']);
@@ -123,21 +120,46 @@ const updateBase = (params) => {
 
 			//Results output
 			const outputString = getActivityEffectsString({ "activity": newActivity, "pilot": params['pilot'] });
-			logger.write(outputString);
+			writeLog(params.pilot, outputString);
 			break;
 		default:
 			break;
 	}
 
 	// Yeah no validation callback right now, get over it
-	fs.writeFile('public/data/base.json', JSON.stringify(baseData), 'utf8', () => { });
+	try {
+		await fs.writeFile('./public/data/base.json', JSON.stringify(baseData), 'utf8');
+	} catch (err) {
+		console.log(err);
+	}
 }
 
-const updatePilot = (params) => {
+async function writeLog(user, message){
+	const log = {
+		user: user,
+		time: Date.now(),
+		message: `${message}\n`
+	};
+	logs.push(log);
+	try {
+		await fs.writeFile('./logs/activity_log.json', JSON.stringify(logs));
+	} catch (err) {
+		console.log('error: ', err);
+		console.log('Failed to write logs to file, dumping contents');
+		console.log(logs);
+	}
+	
+}
+
+const updatePilot = async (params) => {
 	pilotData[params['pilot']['callsign']] = params['pilot'];
 
 	// Yeah no validation callback right now, get over it
-	fs.writeFile('/public/data/pilots.json', JSON.stringify(pilotData), 'utf8', () => { });
+	try {
+		await fs.writeFile('./public/data/pilots.json', JSON.stringify(pilotData), 'utf8');
+	} catch (err) {
+		console.log(err);
+	};
 }
 
 const getResourcesString = (resources) => {
@@ -161,7 +183,7 @@ const getActivityByName = (name) => {
 
 const getActivityEffectsString = (params) => {
 	let effects = params['activity']['effects'];
-	let output = `${params['pilot']} ${effects['description']}\n`;
+	let output = `${effects['description']}\n`;
 	if (effects['resources']) {
 		output += `${params['pilot']} ${effects['resources']['description']}\n`;
 		output += `${getResourcesString(effects['resources']['quantities'])}\n`;

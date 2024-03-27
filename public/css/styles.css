@@ -172,3 +172,35 @@
   .item-cost-item {
     margin-right: 7px;
   }
+
+  #log-container {
+    > ol {
+      list-style: none;
+    }
+
+    /* very temporary */
+    .Neb3_text {
+      color: blue;
+    }
+
+    .Nobody_text {
+      color: forestgreen;
+    }
+
+    .Barkeep_text {
+      color: red;
+    }
+
+    .Chirurgeon_text {
+      color: yellow;
+    }
+
+    .Deputy_text {
+      color: rgb(255, 94, 0);
+    }
+
+    .Shadow_text {
+      color: rgb(119, 0, 255);
+    }
+    
+  }
