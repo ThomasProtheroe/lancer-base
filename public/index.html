@@ -379,6 +379,35 @@
             addActivity(activity);
           }
         });
+
+        $('.perform-activity-btn').click((e) => {
+            if ($(this).attr('disabled')) {
+              return;
+            }
+
+            //Update addon
+            let activityName = $(e.target).closest('.activity-item').data('activity')['name'];
+
+            fetch('/update/base', {
+              method: "POST",
+              body: JSON.stringify({
+                action: 'performActivity',
+                activity: activityName,
+                pilot: $('#pilot-select').val()
+              }),
+              headers: {
+                "Content-type": "application/json; charset=UTF-8"
+              }
+            }).then((response) => response.json())
+            .then((responseJson) => {
+              updatePilotInfo(responseJson['newPilots']);
+              updateBaseStats(responseJson['newBase']);
+              updateAddons(responseJson['newBase']);
+              updateActivities(responseJson['newBase']);
+              updateResources(responseJson['newBase']['resources']);
+              updateDowntime();
+            });
+          });
       }
 
       const updateAddons = (addonsJson) => {
@@ -425,6 +454,7 @@
             updatePilotInfo(responseJson['newPilots']);
             updateAddons(responseJson['newBase']);
             updateActivities(responseJson['newBase']);
+            updateDowntime();
           });
         });
       }
@@ -594,13 +624,7 @@
 
       /**************** Event handlers ***************/
       $('#pilot-select').change((e) => {
-        const downtimeRemaining = getDowntimeRemaining();
-        $('#downtime-display').text(downtimeRemaining);
-        if (downtimeRemaining <= 0) {
-          $('.downtime-required').prop('disabled', true)
-        } else {
-          $('.downtime-required').prop('disabled', false)
-        }
+        updateDowntime();
       });
 
       $('.buy-addon-btn').click((e) => {

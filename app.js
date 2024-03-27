@@ -20,6 +20,7 @@ app.post('/update/base', function (req, res) {
         "action": req.body.action,
         "resources": req.body.resources,
         "addon": req.body.addon,
+        "activity": req.body.activity,
         "pilot": req.body.pilot
     }
 
@@ -88,10 +89,41 @@ const updateBase = (params) => {
                 logger.write(params['pilot'] + ' worked on : ' + params['addon']['name'] + '\n');
             }
             break;
-        case 'salvage':
-            baseData['resources'] = params['resources'];
+        case 'performActivity':
+            const activity = getActivityByName(params['activity']);
+            const newActivity = JSON.parse(JSON.stringify(activity));
 
-            logger.write(params['pilot'] + ' explored more of the facility and salvaged some resources: ' + getResourcesString(params['resources']) + '\n');
+            if (pilotData[params['pilot']]['downtimeUnits'] < newActivity['cost']['downtimeUnits']) {
+                console.log(params['pilot'] + ' tried to perform an activity, but has no downtime remaining.');
+                break;
+            }
+
+            //Determine resource gain/loss
+            if (activity['effects']['resources']) {
+                const modifierMax = activity['effects']['resources']['modifierPercent'];
+                for (const [resource, quantity] of Object.entries(activity['effects']['resources']['quantities'])) {
+                    const modifier = Math.floor(Math.random() * modifierMax);
+                    if(Math.random() < 0.5) {
+                        amount = Math.round(quantity * (1 + (modifier / 100)));
+                    } else {
+                        amount = Math.round(quantity * (1 - (modifier / 100)));
+                    }
+
+                    baseData['resources'][resource]['quantity'] += amount;
+                    newActivity['effects']['resources']['quantities'][resource] = amount;
+                }
+            }
+            
+            //ToDo - other effects
+
+
+            //Downtime costs
+            pilotData[params['pilot']]['downtimeUnits'] -= newActivity['cost']['downtimeUnits'];
+            updatePilot({'pilot': pilotData[params['pilot']]});
+
+            //Results output
+            const outputString = getActivityEffectsString({"activity": newActivity, "pilot": params['pilot']});
+            logger.write(outputString);
             break;
         default:
             break;
@@ -109,10 +141,32 @@ const updatePilot = (params) => {
 }
 
 const getResourcesString = (resources) => {
-    let output = '';
+    let output = 'Resources gained: ';
+    console.log(resources);
     for (const [key, resource] of Object.entries(resources)) {
-        output += resource['name'] + ' - ' + resource['quantity'] + ' ';
+        output += key + ' - ' + resource + ' ';
     }
+    return output;
+}
+
+const getActivityByName = (name) => {
+    let targetActivity = null;
+    baseData['activities'].forEach((activity) => {
+        if (activity['name'] === name) {
+            targetActivity = activity;
+        }
+    });
+    return targetActivity;
+}
+
+const getActivityEffectsString = (params) => {
+    let effects = params['activity']['effects'];
+    let output = `${params['pilot']} ${effects['description']}\n`;
+    if (effects['resources']) {
+        output += `${params['pilot']} ${effects['resources']['description']}\n`;
+        output += `${getResourcesString(effects['resources']['quantities'])}\n`;
+    }
+
     return output;
 }
 

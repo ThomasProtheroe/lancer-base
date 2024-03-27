@@ -23,6 +23,19 @@
     },
     "activities": [
         {
+            "name": "Build Mech",
+            "description": "Use the printer to produce a mech that you have a license for.",
+            "notes": "A labor intensive process that takes considerable time. Printer quality determines mechs traits.",
+            "available": 1,
+            "cost": {
+                "downtimeUnits": 1,
+                "materials": 300
+            },
+            "effects": {
+                
+            }
+        },
+        {
             "name": "Scavange",
             "description": "Search the ruined sections of the bunker for salvagable materials.",
             "notes": "Slow and monotonous, but free.",
@@ -31,11 +44,16 @@
                 "downtimeUnits": 1
             },
             "effects": {
+                "description": "explored more of the facility.",
                 "resources":{
+                    "description": "salvaged some resources from the ruins.",
                     "chance": 100,
-                    "materials": 200,
-                    "refinedMaterials": 10,
-                    "modifierPercent": 30
+                    "lose": false,
+                    "modifierPercent": 30,
+                    "quantities": {
+                        "materials": 200,
+                        "refinedMaterials": 10
+                    }
                 }
             }
         }
