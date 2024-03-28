@@ -178,29 +178,37 @@
       list-style: none;
     }
 
+    background-color: #073642;
+    color: #839496;
+    font: 1.3rem Consolas, monospace;
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: scroll;
+
     /* very temporary */
     .Neb3_text {
-      color: blue;
+      color: #268bd2;
     }
 
     .Nobody_text {
-      color: forestgreen;
+      color: #859900;
     }
 
     .Barkeep_text {
-      color: red;
+      color: #dc322f;
     }
 
     .Chirurgeon_text {
-      color: yellow;
+      color: #b58900;
     }
 
     .Deputy_text {
-      color: rgb(255, 94, 0);
+      color: #cb4b16;
     }
 
     .Shadow_text {
-      color: rgb(119, 0, 255);
+      color: #6c71c4;
     }
-    
+
   }
+

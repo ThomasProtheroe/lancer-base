@@ -725,19 +725,15 @@
 	<!-- Handlebars templates -->
 	<script id="logTemplate" type="text/x-handlebars-template">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="row">
 				<span class="addon-header">Logs</span>
 			</div>
-			<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
-			</div>
-			<div id="log-container" class="row">
-				<ol>
-					{{#each logs}}
-						<li>
-							<span class="{{user}}_text">[{{ user }}]</span> - {{ message }}
-						</li>
-					{{/each}}
-				</ol>
+			<div id="log-display" class="row">
+				{{#each logs}}
+					<div>
+						<span class="{{user}}_text">[{{ user }}]</span> - {{ message }}
+					</div>
+				{{/each}}
 			</div>
 		</div>
 	</script>
