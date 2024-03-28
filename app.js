@@ -1,7 +1,11 @@
 const express = require('express');
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
 const path = require('path');
 const fs = require('fs').promises;
+const {Server} = require('socket.io');
+const io = new Server(server);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -57,9 +61,10 @@ app.get('/data/pilotData', function (req, res) {
 app.get('/log', (req, res) => {
 	res.send(logs);
 });
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.listen(9000, function () {
+server.listen(9000, function () {
 	console.log('LancerBase listening on port 9000');
 });
 
@@ -137,12 +142,14 @@ const updateBase = async (params) => {
 }
 
 async function writeLog(user, message){
+	
 	const log = {
 		user: user,
 		time: Date.now(),
 		message: `${message}`
 	};
 	logs.push(log);
+	io.emit('activity_log', log);
 	try {
 		await fs.writeFile('./logs/activity_log.json', JSON.stringify(logs));
 	} catch (err) {
@@ -150,7 +157,6 @@ async function writeLog(user, message){
 		console.log('Failed to write logs to file, dumping contents');
 		console.log(logs);
 	}
-	
 }
 
 const updatePilot = async (params) => {
