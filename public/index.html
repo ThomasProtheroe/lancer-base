@@ -65,7 +65,7 @@
 				</div>
 				<div class="col-md-4">
 					<span class="condition-text">Pilot: </span>
-					<select id="pilot-select" class="base-select">
+					<select id="pilot-select" class="base-select" onchange="updateSelectedPilot(this.value)">
 
 					</select>
 					<span class="condition-text">Downtime:</span>
@@ -488,13 +488,6 @@
 		}
 
 		//*************************** Runs on page load *************************//
-		//Populate pilot display
-		fetch('./data/pilotData')
-			.then((response) => response.json())
-			.then((pilotJson) => {
-				updatePilotInfo(pilotJson);
-			});
-
 		//Populate base data and addons
 		fetch('./data/baseData')
 			.then((response) => response.json())
@@ -736,31 +729,68 @@
 				{{/each}}
 			</div>
 		</div>
+		<div id="log-input" class="row">
+			<div>
+				<span class="{{selectedPilot}}_text">{{ selectedPilot }}</span>
+				<span>:~$ </span>
+			</div>
+			<div>
+				<input id="log-text-input" type="text" onkeydown="sendMessage(this.value)"/>
+			</div>
+		</div>
 	</script>
 	<!-- Component Render functions -->
 	<script>
+		function updateSelectedPilot(pilot) {
+			this.state.selectedPilot = pilot;
+			renderLogs();
+		}
+		function sendMessage(text) {
+			if(event.keyCode == 13) {
+				const message = {
+					user: this.state.selectedPilot,
+					time: Date.now(),
+					message: text
+				};
+				addLog(message); 
+			}
+		}
 		function addLog(log) {
 			this.state.logs.push(log);
 			renderLogs();
 		}
 		function renderLogs() {
 			const logs = this.state.logs;
+			const selectedPilot = this.state.selectedPilot;
+			console.log('SP: ', selectedPilot);
 			const source = document.getElementById('logTemplate').innerHTML;
 			const template = Handlebars.compile(source);
-			const rendered = template({ logs });
+			const rendered = template({ logs, selectedPilot});
 			document.getElementById('log-container').innerHTML = rendered;
 		}
 	</script>
 	<!-- App Start Up -->
 	<script>
 		// Global State object
-		this.state = {};
+		this.state = {
+			selectedPilot: ''
+		};
 
 		async function init() {
 			// Load log data	
 			try {
 				const response = await fetch(`./log`);
 				this.state.logs = await response.json();
+			} catch (err) {
+				console.error(`Error: ${err}`);
+			}
+
+			try {
+				const response = await fetch('./data/pilotData');
+				const pilots = await response.json();
+				this.state.pilots = pilots;
+				this.state.selectedPilot = Object.keys(pilots)[0];
+				updatePilotInfo(pilots);
 			} catch (err) {
 				console.error(`Error: ${err}`);
 			}

@@ -173,11 +173,16 @@
     margin-right: 7px;
   }
 
-  #log-container {
-    > ol {
-      list-style: none;
-    }
+  #log-input {
+    background-color: #073642;
+  }
 
+  #log-text-input {
+    background-color: #073642;
+    width: 100%;
+  }
+
+  #log-container {
     background-color: #073642;
     color: #839496;
     font: 1.3rem Consolas, monospace;
