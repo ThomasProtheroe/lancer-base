@@ -8,7 +8,17 @@ app.use(express.urlencoded({ extended: true }));
 
 const baseData = require('./public/data/base.json');
 const pilotData = require("./public/data/pilots.json");
-const logs = require('./logs/activity_log.json');
+// I swear this makes sense
+let logs = [];
+(async () => {
+	try {
+		logs = await fs.readFile('./logs/activity_log.json');
+	} catch (err) {
+		console.log(err);
+	}
+})
+
+
 
 //Main application routes
 app.post('/update/base', function (req, res) {
@@ -138,7 +148,7 @@ async function writeLog(user, message){
 	const log = {
 		user: user,
 		time: Date.now(),
-		message: `${message}\n`
+		message: `${message}`
 	};
 	logs.push(log);
 	try {
