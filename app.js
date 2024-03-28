@@ -8,15 +8,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const baseData = require('./public/data/base.json');
 const pilotData = require("./public/data/pilots.json");
-// I swear this makes sense
-let logs = [];
-(async () => {
-	try {
-		logs = await fs.readFile('./logs/activity_log.json');
-	} catch (err) {
-		console.log(err);
-	}
-})
+const logs = require('./logs/activity_log.json');
 
 
 
