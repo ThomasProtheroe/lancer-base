@@ -16,7 +16,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
 		integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
 	<link rel="stylesheet" href="/css/styles.css">
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -237,6 +237,11 @@
 						</div>
 					</div>
 				</div>
+			</div>
+
+			<!-- Logs -->
+			<div class="row">
+				<div id="log-container" class="col-md-12 info-container"></div>
 			</div>
 
 		</div>
@@ -715,6 +720,62 @@
 			//Remove the addon from the build menu
 			$('.addon-item.selected').remove();
 		})
+	</script>
+	<!-- Handlebars templates -->
+	<script id="logTemplate" type="text/x-handlebars-template">
+		<div class="row">
+			<div class="col-md-4">
+				<span class="addon-header">Logs</span>
+			</div>
+			<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
+			</div>
+			<div id="log-container" class="row">
+				<ol>
+					{{#each logs}}
+						<li>
+							<span class="{{user}}_text">[{{ user }}]</span> - {{ message }}
+						</li>
+					{{/each}}
+				</ol>
+			</div>
+		</div>
+	</script>
+	<!-- Component Render functions -->
+	<script>
+		function updateLogs(logs) {
+			this.state.logs = logs;
+			renderLogs();
+		}
+		function renderLogs() {
+			const logs = this.state.logs;
+			const source = document.getElementById('logTemplate').innerHTML;
+			const template = Handlebars.compile(source);
+			const rendered = template({ logs });
+			document.getElementById('log-container').innerHTML = rendered;
+		}
+	</script>
+	<!-- App Start Up -->
+	<script>
+		// Global State object
+		this.state = {};
+
+		async function init() {
+			// Load log data	
+			try {
+				const response = await fetch(`./log`);
+				this.state.logs = await response.json();
+			} catch (err) {
+				console.error(`Error: ${err}`);
+			}
+
+			renderAll();
+		}
+
+		function renderAll() {
+			renderLogs();
+		}
+		
+		init();
 	</script>
 </body>
 
