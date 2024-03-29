@@ -160,7 +160,7 @@ const updateBase = async (params) => {
 
 	// Yeah no validation callback right now, get over it
 	try {
-		await fs.writeFile('./public/data/base.json', JSON.stringify(baseData), 'utf8');
+		await fs.writeFile('./public/data/base.json', JSON.stringify(baseData, null, "    "), 'utf8');
 	} catch (err) {
 		console.log(err);
 	}
@@ -180,7 +180,7 @@ async function writeLog(user, message){
 	logs.push(log);
 	io.emit('activity_log', log);
 	try {
-		await fs.writeFile('./logs/activity_log.json', JSON.stringify(logs));
+		await fs.writeFile('./logs/activity_log.json', JSON.stringify(logs, null, "    "));
 	} catch (err) {
 		console.log('error: ', err);
 		console.log('Failed to write logs to file, dumping contents');
@@ -193,7 +193,7 @@ const updatePilot = async (params) => {
 
 	// Yeah no validation callback right now, get over it
 	try {
-		await fs.writeFile('./public/data/pilots.json', JSON.stringify(pilotData), 'utf8');
+		await fs.writeFile('./public/data/pilots.json', JSON.stringify(pilotData, null, "    "), 'utf8');
 	} catch (err) {
 		console.log(err);
 	};
