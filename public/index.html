@@ -725,14 +725,20 @@
 			this.state.selectedPilot = pilot;
 			renderLogs();
 		}
-		function sendMessage(text) {
+		async function sendMessage(text) {
 			if(event.keyCode == 13) {
 				const message = {
 					user: this.state.selectedPilot,
 					time: Date.now(),
 					message: text
 				};
-				addLog(message); 
+				await fetch('/log', {
+					method: 'POST',
+					body: JSON.stringify(message),
+					headers: {
+						"Content-type": "application/json; charset=UTF-8"
+					}
+				});
 			}
 		}
 		function addLog(log) {

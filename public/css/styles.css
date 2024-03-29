@@ -1,26 +1,208 @@
-  body, html {
-    height: 100%;
-    font-family: "Inconsolata", sans-serif;
+body, html {
+  height: 100%;
+  font-family: "Inconsolata", sans-serif;
+}
+
+.main-title {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  color: #fff;
+  font-size: 90px;
+}
+
+.bannerimg {
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-image: url("/images/base_banner.jpg");
+  min-height: 50%;
+  margin-top: 40px;
+}
+
+.bgfullimg {
+  /* background-image: url("/images/base_ui_background.jpg"); */
+  background-color: lightgrey;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+.page-container {
+  padding: 40px 90px;
+  /* max-width: 1400px; */
+}
+.info-container {
+  color: #000;
+  background-color: #f1f1f1;
+  border: 6px solid #ccc;
+  margin-top: 20px;
+}
+.info-readout {
+  color: black;
+  margin-top: 16px;
+}
+
+/*** Status/Resources styles ***/
+#resources-bar {
+  background-color: lightgray;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+  font-size: 24px;
+  font-weight: bold;
+  min-height: 40px;
+  text-align: center;
+}
+.status-bar {
+  display: inline-block;
+  border-radius: 8px;
+  width: 200px;
+  height: 30px;
+  background-color: white;
+  border: black 2px solid;
+}
+.status-bar-fill {
+  display: inline-block;
+  border-radius: 8px;
+  height: 100%;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+.condition-text {
+  font-size: 24px;
+}
+.stats-text {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/*** Addon/Activity styles ***/
+.addon-header {
+  font-size: 42px;
+  font-weight: bold;
+}
+.addon-header-button {
+  font-size: 32px;
+}
+.perform-activity-btn,
+.work-addon-btn {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.base-btn:disabled {
+  cursor: not-allowed;
+}
+.base-btn:hover {
+  background-color: gray;
+}
+.base-btn:disabled:hover {
+  background-color: lightgray;
+}
+.base-select {
+  min-width: 150px;
+  font-size: 24px;
+  margin-top: 3px;
+}
+.addon-item,
+.activity-item {
+  border: darkgray 4px solid;
+  padding: 10px;
+  margin-bottom: 20px;
+  height: 225px;
+  overflow-y: scroll;
+}
+.addon-item.under-construction {
+  background: repeating-linear-gradient(
+    45deg,
+    #fce101,
+    #fce101 30px,
+    #5b5b5b 30px,
+    #5b5b5b 60px
+  );
+  
+}
+.addon-item .addon-construction-controls {
+  display: none;
+}
+.addon-item.under-construction .addon-construction-controls {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #e4362a;
+}
+.addon-item.under-construction .addon-description,
+.addon-item.under-construction .addon-notes
+{
+  display: none;
+}
+.addon-name,
+.activity-name {
+  font-size: 22px;
+  font-weight: bold;
+}
+.modal {
+  margin-top: 50px;
+}
+.addon-item.selectable,
+.activity-item.selectable {
+  cursor: pointer;
+}
+.addon-item.selectable:hover,
+.activity-item.selectable:hover {
+  background-color: lightgrey;
+}
+.addon-item.addon-item.selectable.selected,
+.activity-item.activity-item.selectable.selected {
+  background-color: lightblue;
+  box-shadow: gray;
+  border: black 4px solid;
+}
+.item-costs {
+  margin: 0px 4px;
+  font-weight: bold;
+}
+.item-cost-item {
+  margin-right: 7px;
+}
+
+#log-input {
+  background-color: #073642;
+}
+
+#log-text-input {
+  background-color: #073642;
+  width: 100%;
+}
+
+#log-container {
+  /* Using the color palette from this page: https://en.wikipedia.org/wiki/Solarized */
+  background-color: #073642;
+  color: #839496;
+  font: 1.3rem Consolas, monospace;
+  margin-bottom: 20px;
+  max-height: 400px;
+  overflow-y: scroll;
+
+  /* very temporary */
+  .Neb3_text {
+    color: #268bd2;
   }
 
-  .main-title {
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
-    color: #fff;
-    font-size: 90px;
+  .Nobody_text {
+    color: #859900;
   }
 
-  .bannerimg {
-    position: relative;
-    background-position: center;
-    background-size: cover;
-    background-image: url("/images/base_banner.jpg");
-    min-height: 50%;
-    margin-top: 40px;
+  .Barkeep_text {
+    color: #dc322f;
   }
 
   .bgfullimg {
@@ -29,199 +211,92 @@
     background-size: cover;
     background-position: center;
     width: 100%;
+  .Chirurgeon_text {
+    color: #b58900;
   }
 
-  .page-container {
-    padding: 40px 90px;
-    /* max-width: 1400px; */
-  }
-  .info-container {
-    color: #000;
-    background-color: #f1f1f1;
-    border: 6px solid #ccc;
-    margin-top: 20px;
-  }
-  .info-readout {
-    color: black;
-    margin-top: 16px;
+  .Deputy_text {
+    color: #cb4b16;
   }
 
-  /*** Status/Resources styles ***/
-  #resources-bar {
-    background-color: lightgray;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 9999;
-    font-size: 24px;
-    font-weight: bold;
-    min-height: 40px;
-    text-align: center;
-  }
-  .status-bar {
-    display: inline-block;
-    border-radius: 8px;
-    width: 200px;
-    height: 30px;
-    background-color: white;
-    border: black 2px solid;
-  }
-  .status-bar-fill {
-    display: inline-block;
-    border-radius: 8px;
-    height: 100%;
-    color: black;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-  }
-  .condition-text {
-    font-size: 24px;
-  }
-  .stats-text {
-    font-size: 18px;
-    font-weight: bold;
+  .Shadow_text {
+    color: #6c71c4;
   }
 
-  /*** Addon/Activity styles ***/
-  .addon-header {
-    font-size: 42px;
-    font-weight: bold;
-  }
-  .addon-header-button {
-    font-size: 32px;
-  }
-  .perform-activity-btn,
-  .work-addon-btn {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 10px;
-  }
-  .base-btn:disabled {
-    cursor: not-allowed;
-  }
-  .base-btn:hover {
-    background-color: gray;
-  }
-  .base-btn:disabled:hover {
-    background-color: lightgray;
-  }
-  .base-select {
-    min-width: 150px;
-    font-size: 24px;
-    margin-top: 3px;
-  }
-  .addon-item,
-  .activity-item {
-    border: darkgray 4px solid;
-    padding: 10px;
-    margin-bottom: 20px;
-    height: 225px;
-    overflow-y: scroll;
-  }
-  .addon-item.under-construction {
-    background: repeating-linear-gradient(
-      45deg,
-      #fce101,
-      #fce101 30px,
-      #5b5b5b 30px,
-      #5b5b5b 60px
-    );
-    
-  }
-  .addon-item .addon-construction-controls {
-    display: none;
-  }
-  .addon-item.under-construction .addon-construction-controls {
-    display: block;
-    font-size: 24px;
-    font-weight: bold;
-    color: #e4362a;
-  }
-  .addon-item.under-construction .addon-description,
-  .addon-item.under-construction .addon-notes
-  {
-    display: none;
-  }
-  .addon-name,
-  .activity-name {
-    font-size: 22px;
-    font-weight: bold;
-  }
-  .modal {
-    margin-top: 50px;
-  }
-  .addon-item.selectable,
-  .activity-item.selectable {
-    cursor: pointer;
-  }
-  .addon-item.selectable:hover,
-  .activity-item.selectable:hover {
-    background-color: lightgrey;
-  }
-  .addon-item.addon-item.selectable.selected,
-  .activity-item.activity-item.selectable.selected {
-    background-color: lightblue;
-    box-shadow: gray;
-    border: black 4px solid;
-  }
-  .item-costs {
-    margin: 0px 4px;
-    font-weight: bold;
-  }
-  .item-cost-item {
-    margin-right: 7px;
+  .GM_text {
+    color: #d33682;
   }
 
-  #log-input {
-    background-color: #073642;
+  .SYSTEM_text {
+    color: #fdf6e3;
+  }
+}
+
+#gm-log-container {
+  /* Using the color palette from this page: https://en.wikipedia.org/wiki/Solarized */
+  background-color: #073642;
+  color: #839496;
+  font: 1.3rem Consolas, monospace;
+  margin-bottom: 20px;
+
+  .cursor {
+    width: 7%;
+  }
+
+  .text-input {
+    width: 93%;
   }
 
   #log-text-input {
-    background-color: #073642;
-    width: 100%;
+    color: #fdf6e3;
   }
 
-  #log-container {
-    /* Using the color palette from this page: https://en.wikipedia.org/wiki/Solarized */
-    background-color: #073642;
-    color: #839496;
-    font: 1.3rem Consolas, monospace;
-    margin-bottom: 20px;
-    max-height: 400px;
-    overflow-y: scroll;
+  /* very temporary */
+  .Neb3_text {
+    color: #268bd2;
+  }
 
-    /* very temporary */
-    .Neb3_text {
-      color: #268bd2;
-    }
+  .Nobody_text {
+    color: #859900;
+  }
 
-    .Nobody_text {
-      color: #859900;
-    }
+  .Barkeep_text {
+    color: #dc322f;
+  }
 
-    .Barkeep_text {
-      color: #dc322f;
-    }
+  .Chirurgeon_text {
+    color: #b58900;
+  }
 
-    .Chirurgeon_text {
-      color: #b58900;
-    }
+  .Deputy_text {
+    color: #cb4b16;
+  }
 
-    .Deputy_text {
-      color: #cb4b16;
-    }
+  .Shadow_text {
+    color: #6c71c4;
+  }
 
-    .Shadow_text {
-      color: #6c71c4;
-    }
+  .GM_text {
+    color: #d33682;
+  }
 
-    .GM_text {
-      color: #d33682;
-    }
+  .SYSTEM_text {
+    color: #fdf6e3;
+  }
 
-    .SYSTEM_text {
-      color: #fdf6e3;
+  > #log-input {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+
+    > div {
+      float: left;
     }
+  }
+
+  > #log-container {
+    max-height: 1000px;
+  }
 }
 
