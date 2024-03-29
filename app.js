@@ -107,6 +107,14 @@ const updateBase = async (params) => {
 				console.log(params.pilot + ' tried to perform an activity, but has no downtime remaining.');
 				break;
 			}
+			if (newActivity.cost.materials > 0) {
+				if (baseData.resources.materials.quantity < newActivity.cost.materials) {
+					console.log(params.pilot + ' tried to perform an activity, but could not afford materials.');
+					break;
+				}
+				baseData.resources.materials.quantity -= newActivity.cost.materials;
+				updateResources(baseData.resources);
+			}
 
 			//Determine resource gain/loss
 			if (activity.effects.resources) {
@@ -152,7 +160,7 @@ const updateBase = async (params) => {
 
 	// Yeah no validation callback right now, get over it
 	try {
-		await fs.writeFile('./public/data/base.json', JSON.stringify(baseData), 'utf8');
+		await fs.writeFile('./public/data/base.json', JSON.stringify(baseData, null, "    "), 'utf8');
 	} catch (err) {
 		console.log(err);
 	}
@@ -172,7 +180,7 @@ async function writeLog(user, message){
 	logs.push(log);
 	io.emit('activity_log', log);
 	try {
-		await fs.writeFile('./logs/activity_log.json', JSON.stringify(logs));
+		await fs.writeFile('./logs/activity_log.json', JSON.stringify(logs, null, "    "));
 	} catch (err) {
 		console.log('error: ', err);
 		console.log('Failed to write logs to file, dumping contents');
@@ -185,7 +193,7 @@ const updatePilot = async (params) => {
 
 	// Yeah no validation callback right now, get over it
 	try {
-		await fs.writeFile('./public/data/pilots.json', JSON.stringify(pilotData), 'utf8');
+		await fs.writeFile('./public/data/pilots.json', JSON.stringify(pilotData, null, "    "), 'utf8');
 	} catch (err) {
 		console.log(err);
 	};
