@@ -1,26 +1,26 @@
 {
     "Barkeep": {
         "callsign": "Barkeep",
-        "downtimeUnits": 2
+        "downtimeUnits": 3
     },
     "Chirurgeon": {
         "callsign": "Chirurgeon",
-        "downtimeUnits": 2
+        "downtimeUnits": 3
     },
     "Deputy": {
         "callsign": "Deputy",
-        "downtimeUnits": 2
+        "downtimeUnits": 3
     },
     "Neb3": {
         "callsign": "Neb3",
-        "downtimeUnits": 2
+        "downtimeUnits": 3
     },
     "Nobody": {
         "callsign": "Nobody",
-        "downtimeUnits": 2
+        "downtimeUnits": 3
     },
     "Shadow": {
         "callsign": "Shadow",
-        "downtimeUnits": 2
+        "downtimeUnits": 3
     }
 }

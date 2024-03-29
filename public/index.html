@@ -24,20 +24,7 @@
 
 	<!-- Sticky top bar for resources -->
 	<div id="resources-bar">
-		<div class="row">
-			<div class="offset-md-2 col-md-3">
-				<i class="bi bi-boxes"></i>
-				<span>Materials: <span id="resources-materials"></span></span>
-			</div>
-			<div class="col-md-3">
-				<i class="bi bi-device-ssd"></i>
-				<span>Refined Materials: <span id="resources-r-materials"></span></span>
-			</div>
-			<div class="col-md-3">
-				<i class="bi bi-currency-bitcoin"></i>
-				<span>Manna: <span id="resources-manna"></span></span>
-			</div>
-		</div>
+		Loading...
 	</div>
 
 	<!-- Header -->
@@ -262,12 +249,6 @@
 			$('.selectable.selected').removeClass('selected');
 		}
 
-		const updateResources = (resourcesJson) => {
-			$('#resources-materials').text(resourcesJson['materials']['quantity']).data('quantity', resourcesJson['materials']['quantity']);
-			$('#resources-r-materials').text(resourcesJson['refinedMaterials']['quantity']).data('quantity', resourcesJson['refinedMaterials']['quantity']);
-			$('#resources-manna').text(resourcesJson['manna']['quantity']).data('quantity', resourcesJson['manna']['quantity']);
-		}
-
 		const updatePilotInfo = (pilotJson) => {
 			let selectedPilot = $('#pilot-select').val();
 			$('#pilot-select').empty();
@@ -432,7 +413,6 @@
 						updateBaseStats(responseJson['newBase']);
 						updateAddons(responseJson['newBase']);
 						updateActivities(responseJson['newBase']);
-						updateResources(responseJson['newBase']['resources']);
 						updateDowntime();
 					});
 			});
@@ -493,7 +473,7 @@
 			.then((response) => response.json())
 			.then((baseJson) => {
 				//Update resources bar
-				updateResources(baseJson['resources']);
+				this.state.resources = baseJson.resources;
 
 				//Update stats values
 				updateBaseStats(baseJson);
@@ -657,26 +637,11 @@
 			let addon = $('.addon-item.selected').data('addon');
 
 			// Update resources
-			var currentResources = {
-				"materials": $('#resources-materials').data('quantity'),
-				"refinedMaterials": $('#resources-r-materials').data('quantity'),
-				"manna": $('#resources-manna').data('quantity')
-			};
 			let addonCosts = addon['cost'];
-			let newResources = {
-				"materials": {
-					"name": "Materials",
-					"quantity": currentResources['materials'] - addonCosts['materials']
-				},
-				"refinedMaterials": {
-					"name": "Refined Materials",
-					"quantity": currentResources['refinedMaterials'] - addonCosts['refinedMaterials']
-				},
-				"manna": {
-					"name": "Manna",
-					"quantity": currentResources['manna'] - addonCosts['manna']
-				}
-			};
+			const newResources = JSON.parse(JSON.stringify(this.state.resources));
+			newResources.materials.quantity -= addonCosts.materials;
+			newResources.refinedMaterials.quantity -= addonCosts.refinedMaterials;
+			newResources.manna.quantity -= addonCosts.manna;
 			let newBaseStats = {
 				"defense": 0,
 				"eDefense": 0,
@@ -702,7 +667,6 @@
 				});
 
 			//Update page data. Yes I should probably be storing a main data object and refreshing the page from that. 
-			updateResources(newResources);
 			if (addon['family'] == 'facilities') {
 				addFacility(addon);
 			} else if (addon['family'] == 'defenses') {
@@ -739,6 +703,22 @@
 			</div>
 		</div>
 	</script>
+	<script id="resourcesTemplate" type="text/x-handlebars-template">
+		<div class="row">
+			<div class="col-md-4">
+				<i class="bi bi-boxes"></i>
+				<span>Materials: {{resources.materials.quantity}}</span>
+			</div>
+			<div class="col-md-4">
+				<i class="bi bi-device-ssd"></i>
+				<span>Refined Materials: {{resources.refinedMaterials.quantity}}</span>
+			</div>
+			<div class="col-md-4">
+				<i class="bi bi-currency-bitcoin"></i>
+				<span>Manna: {{resources.manna.quantity}}</span>
+			</div>
+		</div>
+	</script>
 	<!-- Component Render functions -->
 	<script>
 		function updateSelectedPilot(pilot) {
@@ -762,18 +742,33 @@
 		function renderLogs() {
 			const logs = this.state.logs;
 			const selectedPilot = this.state.selectedPilot;
-			console.log('SP: ', selectedPilot);
 			const source = document.getElementById('logTemplate').innerHTML;
 			const template = Handlebars.compile(source);
 			const rendered = template({ logs, selectedPilot});
 			document.getElementById('log-container').innerHTML = rendered;
+		}
+		function updateResources(resources) {
+			this.state.resources = resources;
+			renderResources();
+		}
+		function renderResources() {
+			resources = this.state.resources;
+			const source = document.getElementById('resourcesTemplate').innerHTML;
+			const template = Handlebars.compile(source);
+			const rendered = template({ resources });
+			document.getElementById('resources-bar').innerHTML = rendered;
 		}
 	</script>
 	<!-- App Start Up -->
 	<script>
 		// Global State object
 		this.state = {
-			selectedPilot: ''
+			selectedPilot: '',
+			resources: {
+				materials: {name: 'Materials', quantity: 0},
+				refinedMaterials: {name: 'Refined Materials', quantity: 0},
+				manna: {name: 'Manna', quantity: 0}
+			}
 		};
 
 		async function init() {
@@ -800,6 +795,7 @@
 
 		function renderAll() {
 			renderLogs();
+			renderResources();
 		}
 		
 		init();
@@ -808,6 +804,9 @@
 		const socket = io();
 		socket.on('activity_log', (msg) => {
 			addLog(msg);
+		});
+		socket.on('resources', (msg) => {
+			updateResources(msg);
 		});
 	</script>
 </body>

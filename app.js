@@ -2,10 +2,11 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-const path = require('path');
-const fs = require('fs').promises;
 const {Server} = require('socket.io');
 const io = new Server(server);
+
+const path = require('path');
+const fs = require('fs').promises;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -14,7 +15,6 @@ const baseData = require('./public/data/base.json');
 const pilotData = require("./public/data/pilots.json");
 const mechTraitsData = require("./public/data/traits.json");
 const logs = require('./logs/activity_log.json');
-
 
 //Main application routes
 app.post('/update/base', function (req, res) {
@@ -58,6 +58,11 @@ app.get('/data/baseData', function (req, res) {
 app.get('/data/pilotData', function (req, res) {
 	res.send(pilotData);
 });
+app.post('/log', (req, res) => {
+	const {user, message} = req.body;
+	writeLog(user, message);
+	res.send({'status': 'success'});
+});
 app.get('/log', (req, res) => {
 	res.send(logs);
 });
@@ -71,10 +76,11 @@ server.listen(9000, function () {
 const updateBase = async (params) => {
 	switch (params['action']) {
 		case 'buyAddon':
-			baseData['resources'] = params['resources'];
-			baseData[params['addon']['family']].push(params['addon']);
+			baseData.resources = params.resources;
+			updateResources(baseData.resources);
+			baseData[params.addon.family].push(params.addon);
 
-			writeLog(params['pilot'], `purchased a new addon ${params['addon']['name']}`);
+			writeLog(params.pilot, `purchased a new addon ${params.addon.name}`);
 			break;
 		case 'workAddon':
 			//Validate the pilot has enough downtime remaining
@@ -91,21 +97,21 @@ const updateBase = async (params) => {
 			updateAddon(params['addon']);
 			updatePilot({ 'pilot': updatedPilot });
 
-			writeLog(params['pilot'], `${timeRemaining ? 'worked on' : 'finished work on'} ${params['addon']['name']}`);
+			writeLog(params.plot, `${timeRemaining ? 'worked on' : 'finished work on'} ${params.addon.name}`);
 			break;
 		case 'performActivity':
-			const activity = getActivityByName(params['activity']);
+			const activity = getActivityByName(params.activity);
 			const newActivity = JSON.parse(JSON.stringify(activity));
 
-			if (pilotData[params['pilot']]['downtimeUnits'] < newActivity['cost']['downtimeUnits']) {
-				console.log(params['pilot'] + ' tried to perform an activity, but has no downtime remaining.');
+			if (pilotData[params.pilot].downtimeUnits < newActivity.cost.downtimeUnits) {
+				console.log(params.pilot + ' tried to perform an activity, but has no downtime remaining.');
 				break;
 			}
 
 			//Determine resource gain/loss
-			if (activity['effects']['resources']) {
-				const modifierMax = activity['effects']['resources']['modifierPercent'];
-				for (const [resource, quantity] of Object.entries(activity['effects']['resources']['quantities'])) {
+			if (activity.effects.resources) {
+				const modifierMax = activity.effects.resources.modifierPercent;
+				for (const [resource, quantity] of Object.entries(activity.effects.resources.quantities)) {
 					const modifier = Math.floor(Math.random() * modifierMax);
 					if (Math.random() < 0.5) {
 						amount = Math.round(quantity * (1 + (modifier / 100)));
@@ -116,6 +122,7 @@ const updateBase = async (params) => {
 					baseData['resources'][resource]['quantity'] += amount;
 					newActivity['effects']['resources']['quantities'][resource] = amount;
 				}
+				updateResources(baseData.resources);
 			}
 
             //Build mechs
@@ -149,6 +156,10 @@ const updateBase = async (params) => {
 	} catch (err) {
 		console.log(err);
 	}
+}
+
+function updateResources(resources) {
+	io.emit('resources', resources);
 }
 
 async function writeLog(user, message){
