@@ -2,8 +2,11 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
+
+const {engine} = require('express-handlebars')
 const {Server} = require('socket.io');
 const io = new Server(server);
+const matter = require('gray-matter');
 
 const path = require('path');
 const fs = require('fs').promises;
@@ -11,10 +14,30 @@ const fs = require('fs').promises;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.engine('hbs', engine({extname: '.hbs'}));
+app.set('view engine', '.hbs');
+app.set('views', './views');
+
 const baseData = require('./public/data/base.json');
 const pilotData = require("./public/data/pilots.json");
 const mechTraitsData = require("./public/data/traits.json");
 const logs = require('./logs/activity_log.json');
+
+//Blog route
+app.get('/blog/:article', (req, res) => {
+	const file = matter.read(`${__dirname}/blog/${req.params.article}.md`);
+	
+	const md = require('markdown-it')();
+	const content = file.content;
+	const result = md.render(content);
+	
+	res.render('post', {
+		post: result,
+		title: file.data.title,
+		description: file.data.description,
+		image: file.data.image
+	});
+});
 
 //Main application routes
 app.post('/update/base', function (req, res) {
