@@ -29,7 +29,6 @@ body, html {
   background-size: cover;
   background-position: center;
   width: 100%;
-  height: 100%;
 }
 
 .page-container {
@@ -181,6 +180,7 @@ body, html {
 #log-text-input {
   background-color: #073642;
   width: 100%;
+  color: #fdf6e3;
 }
 
 #log-container {
@@ -205,12 +205,6 @@ body, html {
     color: #dc322f;
   }
 
-  .bgfullimg {
-    /* background-image: url("/images/base_ui_background.jpg"); */
-    background-color: lightgrey;
-    background-size: cover;
-    background-position: center;
-    width: 100%;
   .Chirurgeon_text {
     color: #b58900;
   }
@@ -245,10 +239,6 @@ body, html {
 
   .text-input {
     width: 93%;
-  }
-
-  #log-text-input {
-    color: #fdf6e3;
   }
 
   /* very temporary */
