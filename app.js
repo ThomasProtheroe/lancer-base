@@ -107,6 +107,14 @@ const updateBase = async (params) => {
 				console.log(params.pilot + ' tried to perform an activity, but has no downtime remaining.');
 				break;
 			}
+			if (newActivity.cost.materials > 0) {
+				if (baseData.resources.materials.quantity < newActivity.cost.materials) {
+					console.log(params.pilot + ' tried to perform an activity, but could not afford materials.');
+					break;
+				}
+				baseData.resources.materials.quantity -= newActivity.cost.materials;
+				updateResources(baseData.resources);
+			}
 
 			//Determine resource gain/loss
 			if (activity.effects.resources) {
