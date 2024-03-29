@@ -57,6 +57,7 @@
     font-size: 24px;
     font-weight: bold;
     min-height: 40px;
+    text-align: center;
   }
   .status-bar {
     display: inline-block;
@@ -183,6 +184,7 @@
   }
 
   #log-container {
+    /* Using the color palette from this page: https://en.wikipedia.org/wiki/Solarized */
     background-color: #073642;
     color: #839496;
     font: 1.3rem Consolas, monospace;
@@ -215,5 +217,12 @@
       color: #6c71c4;
     }
 
-  }
+    .GM_text {
+      color: #d33682;
+    }
+
+    .SYSTEM_text {
+      color: #fdf6e3;
+    }
+}
 

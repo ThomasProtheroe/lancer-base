@@ -57,6 +57,11 @@ app.get('/data/baseData', function (req, res) {
 app.get('/data/pilotData', function (req, res) {
 	res.send(pilotData);
 });
+app.post('/log', (req, res) => {
+	const {user, message} = req.body;
+	writeLog(user, message);
+	res.send({'status': 'success'});
+});
 app.get('/log', (req, res) => {
 	res.send(logs);
 });
@@ -177,7 +182,6 @@ const updatePilot = async (params) => {
 
 const getResourcesString = (resources) => {
 	let output = 'Resources gained: ';
-	console.log(resources);
 	for (const [key, resource] of Object.entries(resources)) {
 		output += key + ' - ' + resource + ' ';
 	}
