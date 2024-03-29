@@ -2,43 +2,53 @@
     "flaws": [
         {
             "name": "Structurally Unsound",
-            "effect": "-1 to Structure"
+            "effect": "-1 to Structure",
+            "weight": 3
         },
         {
             "name": "Unstable Reactor",
-            "effect": "-1 to Stress"
+            "effect": "-1 to Stress",
+            "weight": 3
         },
         {
             "name": "Frail",
-            "effect": "-1 to HP"
+            "effect": "-1 to HP",
+            "weight": 3
         },
         {
             "name": "Weak Reactor Shielding",
-            "effect": "-1 to Heat Cap"
+            "effect": "-1 to Heat Cap",
+            "weight": 3
         },
         {
             "name": "Questionable Firewall",
-            "effect": "-1 to E-Defense"
+            "effect": "-1 to E-Defense",
+            "weight": 3
         },
         {
             "name": "Clunky",
-            "effect": "-1 to Evasion"
+            "effect": "-1 to Evasion",
+            "weight": 3
         },
         {
             "name": "Touchy Gyros",
-            "effect": "When using the Boost action, must pass an agility check or become prone."
+            "effect": "When using the Boost action, must pass an agility check or the boost fails.",
+            "weight": 2
         },
         {
             "name": "Unreliable Hydraulics",
-            "effect": "The mech may not use the Brace action."
+            "effect": "When using the brace action, you do not retain a quick action next turn.",
+            "weight": 2
         },
         {
             "name": "Slow Targeting System",
-            "effect": "When using overwatch, all attacks suffer from +1 Difficulty."
+            "effect": "When using overwatch, all attacks suffer from +1 Difficulty.",
+            "weight": 2
         },
         {
             "name": "That’s Not What I Printed…",
-            "effect": "Something very strange has happened during your print. Details will be provided by the GM."
+            "effect": "Something very strange has happened during your print. Details will be provided by the GM.",
+            "weight": 1
         }
     ],
     "qualities": [

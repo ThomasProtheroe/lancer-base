@@ -5,6 +5,7 @@
             "type": "printer",
             "flaws": 0,
             "qualities": 0,
+            "printCost": 400,
             "name": "Mech Printer (fixed)",
             "description": "A very old printer that has been repaired and now functions normally.",
             "notes": "Allows the printing of mechs, weapons and systems.",
@@ -12,7 +13,7 @@
             "time": 6,
             "timeRemaining": 6,
             "cost": {
-                "materials": 4000,
+                "materials": 3500,
                 "refinedMaterials": 100,
                 "manna": 0
             }
@@ -108,9 +109,9 @@
             "time": 3,
             "timeRemaining": 3,
             "cost": {
-                "materials": 500,
+                "materials": 600,
                 "refinedMaterials": 0,
-                "manna": 1000
+                "manna": 0
             }
         }
     ],
@@ -121,7 +122,7 @@
             "name": "Laura Stahl",
             "description": "A talented mechanical engineer who grew up on New Samona. She has a particular hatred for house Harken.",
             "notes": "Provides the settlement with 2 blocks of construction or production time each downtime.",
-            "available": 1,
+            "available": 0,
             "time": 0,
             "timeRemaining": 0,
             "cost": {
@@ -132,11 +133,28 @@
         },
         {
             "family": "personnel",
+            "type": "intelligence",
+            "name": "Andrea Morris",
+            "description": "A young reporter with contacts all over Radahn. An expert at finding people and information.",
+            "notes": "Provides +1 e-defense. Provides the settlement with 1 block of recruitment time each downtime.",
+            "eDefense": 1,
+            "available": 1,
+            "time": 0,
+            "timeRemaining": 0,
+            "cost": {
+                "materials": 0,
+                "refinedMaterials": 0,
+                "manna": 2000
+            }
+        },
+        {
+            "family": "personnel",
             "type": "soldier",
             "name": "Boris Stelov",
-            "description": "A grey bearded ex-soldier. He spent most of his life as part of a rebel organization fighting for independance, and as such is adept at training soldiers to fight mechs.",
+            "description": "A grey bearded ex-soldier. Claims he spent most of his life as part of a rebel organization fighting for planetary independance.",
             "notes": "Provides +1 defense. Allows training of higher tier militia.",
-            "available": 0,
+            "defense": 1,
+            "available": 1,
             "time": 0,
             "timeRemaining": 0,
             "cost": {

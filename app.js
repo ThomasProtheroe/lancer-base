@@ -12,8 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 
 const baseData = require('./public/data/base.json');
 const pilotData = require("./public/data/pilots.json");
+const mechTraitsData = require("./public/data/traits.json");
 const logs = require('./logs/activity_log.json');
-
 
 
 //Main application routes
@@ -118,6 +118,16 @@ const updateBase = async (params) => {
 				}
 			}
 
+            //Build mechs
+            if (activity['effects']['mech']) {
+                const mechPrinter = baseData['facilities'].filter((facility) => facility.type == 'printer');
+                const flaws = [];
+                for (let i = 0; i < mechPrinter[0].flaws; i++) {
+                    flaws.push(getRandomTrait('flaws'));
+                }
+                newActivity['flaws'] = flaws;
+            }
+
 			//ToDo - other effects
 
 
@@ -172,7 +182,6 @@ const updatePilot = async (params) => {
 
 const getResourcesString = (resources) => {
 	let output = 'Resources gained: ';
-	console.log(resources);
 	for (const [key, resource] of Object.entries(resources)) {
 		output += key + ' - ' + resource + ' ';
 	}
@@ -197,7 +206,33 @@ const getActivityEffectsString = (params) => {
 		output += `${getResourcesString(effects['resources']['quantities'])}\n`;
 	}
 
+    if (effects['mech']) {
+        output += 'A new mech was produced with the following traits:';
+        if (params['activity']['flaws']) {
+            output += `Flaws: `
+            params['activity']['flaws'].forEach((flaw) => {
+                output += `${flaw['name']}: ${flaw['effect']}`;
+            });
+        }
+        if (params['activity']['qualities']) {
+            output += `Qualities: `
+            params['activity']['qualities'].forEach((quality) => {
+                output += `${quality['name']}: ${quality['effect']}`;
+            });
+        }
+    }
+
 	return output;
+}
+
+const getRandomTrait = (type) => {
+    const weightedTraits = [];
+    for (let traitIndex = 0; traitIndex < mechTraitsData[type].length; traitIndex++) {
+        for (let addIndex = 0; addIndex < mechTraitsData[type][traitIndex].weight; addIndex++) {
+            weightedTraits.push(mechTraitsData[type][traitIndex]);
+        }
+    }
+    return weightedTraits[Math.floor(Math.random() * weightedTraits.length)];
 }
 
 const updateAddon = (newAddon) => {

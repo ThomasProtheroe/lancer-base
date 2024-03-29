@@ -32,7 +32,8 @@
                 "materials": 300
             },
             "effects": {
-                
+                "description": "printed a new mech.",
+                "mech": true
             }
         },
         {
@@ -55,6 +56,18 @@
                         "refinedMaterials": 10
                     }
                 }
+            }
+        },
+        {
+            "name": "Other Activity",
+            "description": "Use this activity when you need to spend a unit of downtime on anything else, such as training.",
+            "notes": "Confirm with the GM before spending downtime.",
+            "available": 1,
+            "cost": {
+                "downtimeUnits": 1
+            },
+            "effects": {
+                "description": "took some personal time."
             }
         }
     ],
