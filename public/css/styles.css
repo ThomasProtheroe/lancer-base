@@ -183,6 +183,46 @@ body, html {
   color: #fdf6e3;
 }
 
+
+@keyframes rainbow{
+	100%,0%{
+		color: rgb(255,0,0);
+	}
+	8%{
+		color: rgb(255,127,0);
+	}
+	16%{
+		color: rgb(255,255,0);
+	}
+	25%{
+		color: rgb(127,255,0);
+	}
+	33%{
+		color: rgb(0,255,0);
+	}
+	41%{
+		color: rgb(0,255,127);
+	}
+	50%{
+		color: rgb(0,255,255);
+	}
+	58%{
+		color: rgb(0,127,255);
+	}
+	66%{
+		color: rgb(0,0,255);
+	}
+	75%{
+		color: rgb(127,0,255);
+	}
+	83%{
+		color: rgb(255,0,255);
+	}
+	91%{
+		color: rgb(255,0,127);
+	}
+}
+
 #log-container {
   /* Using the color palette from this page: https://en.wikipedia.org/wiki/Solarized */
   background-color: #073642;
@@ -219,6 +259,10 @@ body, html {
 
   .GM_text {
     color: #d33682;
+  }
+  .Zen_text {
+    animation: rainbow 2.5s linear;
+    animation-iteration-count: infinite;
   }
 
   .SYSTEM_text {
@@ -268,6 +312,11 @@ body, html {
 
   .GM_text {
     color: #d33682;
+  }
+
+  .Zen_text {
+    animation: rainbow 2.5s linear;
+    animation-iteration-count: infinite;
   }
 
   .SYSTEM_text {
