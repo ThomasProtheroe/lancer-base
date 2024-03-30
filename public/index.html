@@ -260,6 +260,9 @@
 
 			if (selectedPilot) {
 				$('#pilot-select').val(selectedPilot);
+			} else if (localStorage.selectedPilot) {
+				$('#pilot-select').val(localStorage.selectedPilot);
+				updateSelectedPilot(localStorage.selectedPilot);
 			}
 			$('#downtime-display').text(getDowntimeRemaining());
 		}
@@ -723,6 +726,7 @@
 	<script>
 		function updateSelectedPilot(pilot) {
 			this.state.selectedPilot = pilot;
+			localStorage.selectedPilot = pilot;
 			renderLogs();
 		}
 		async function sendMessage(text) {
