@@ -1,9 +1,9 @@
 {
     "id": "b295b906-0e32-494f-9b89-10d3b236d81c",
     "level": 0,
-    "callsign": "Neb3",
-    "name": "Neb3",
-    "player_name": "",
+    "callsign": "Razor",
+    "name": "Nebual",
+    "player_name": "Nebual",
     "status": "Active",
     "dead": false,
     "text_appearance": "",
@@ -16,7 +16,7 @@
     "mechs": [
         {
             "id": "a8394ac9-aaad-49dc-a140-bdc098413d64",
-            "name": "Neb3",
+            "name": "Nebverest",
             "notes": "",
             "gm_note": "",
             "frame": "mf_standard_pattern_i_everest",
