@@ -27,8 +27,7 @@ app.set('views', './views');
 import matter from 'gray-matter';
 import markdownit from 'markdown-it';
 
-// Cache lancer base data
-import pilotData from './public/data/pilots.json' with {type: 'json'};
+// Load and Cache lancer base data
 import mechTraitsData from './public/data/traits.json' with {type: 'json'};
 
 let baseData;
@@ -41,6 +40,23 @@ try{
 		const defaultBaseData = await fs.readFile('./data/base_default.json');
 		await fs.writeFile('./public/data/base.json', defaultBaseData);
 		baseData = JSON.parse(defaultBaseData);
+	} else {
+		console.log('unexpected error');
+		console.error(e);
+		process.exit(1);
+	}
+}
+
+let pilotData;
+try{
+	const data = await fs.readFile('./public/data/pilots.json');
+	pilotData = JSON.parse(data);
+} catch(e) {
+	if (e.code === 'ENOENT') {
+		console.log('No Pilots data was detected, generating default Pilots data');
+		const defaultPilotsData = await fs.readFile('./data/pilots_default.json');
+		await fs.writeFile('./public/data/pilots.json', defaultPilotsData);
+		pilotData = JSON.parse(defaultPilotsData);
 	} else {
 		console.log('unexpected error');
 		console.error(e);
@@ -185,6 +201,7 @@ const updateBase = async (params) => {
 				const modifierMax = activity.effects.resources.modifierPercent;
 				for (const [resource, quantity] of Object.entries(activity.effects.resources.quantities)) {
 					const modifier = Math.floor(Math.random() * modifierMax);
+					let amount;
 					if (Math.random() < 0.5) {
 						amount = Math.round(quantity * (1 + (modifier / 100)));
 					} else {
