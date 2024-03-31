@@ -28,9 +28,25 @@ import matter from 'gray-matter';
 import markdownit from 'markdown-it';
 
 // Cache lancer base data
-import baseData from './public/data/base.json' with {type: 'json'};
 import pilotData from './public/data/pilots.json' with {type: 'json'};
 import mechTraitsData from './public/data/traits.json' with {type: 'json'};
+
+let baseData;
+try{
+	const data = await fs.readFile('./public/data/base.json');
+	baseData = JSON.parse(data);
+} catch(e) {
+	if (e.code === 'ENOENT') {
+		console.log('No Base data was detected, generating default Base data');
+		const defaultBaseData = await fs.readFile('./data/base_default.json');
+		await fs.writeFile('./public/data/base.json', defaultBaseData);
+		baseData = JSON.parse(defaultBaseData);
+	} else {
+		console.log('unexpected error');
+		console.error(e);
+		process.exit(1);
+	}
+}
 
 let logs;
 try {
@@ -38,7 +54,7 @@ try {
 	logs = JSON.parse(logData);
 } catch(e) {
 	if (e.code === 'ENOENT') {
-		console.log('No existing Activity Log detected, generating default file');
+		console.log('No Activity Log detected, generating default Activity Log');
 		await fs.writeFile('./logs/activity_log.json', JSON.stringify([], null, '	'));
 		logs = [];
 	} else {
