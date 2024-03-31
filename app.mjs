@@ -28,12 +28,16 @@ import matter from 'gray-matter';
 import markdownit from 'markdown-it';
 
 // Load and Cache lancer base data
-import mechTraitsData from './public/data/traits.json' with {type: 'json'};
+let mechTraitsData;
+try {
+	mechTraitsData = JSON.parse(await fs.readFile('./public/data/traits.json'));
+} catch (e) {
+	console.error(e);
+}
 
 let baseData;
 try{
-	const data = await fs.readFile('./public/data/base.json');
-	baseData = JSON.parse(data);
+	baseData = JSON.parse(await fs.readFile('./public/data/base.json'));
 } catch(e) {
 	if (e.code === 'ENOENT') {
 		console.log('No Base data was detected, generating default Base data');
@@ -49,8 +53,7 @@ try{
 
 let pilotData;
 try{
-	const data = await fs.readFile('./public/data/pilots.json');
-	pilotData = JSON.parse(data);
+	pilotData = JSON.parse(await fs.readFile('./public/data/pilots.json'));
 } catch(e) {
 	if (e.code === 'ENOENT') {
 		console.log('No Pilots data was detected, generating default Pilots data');
@@ -66,8 +69,7 @@ try{
 
 let logs;
 try {
-	const logData = await fs.readFile('./logs/activity_log.json');
-	logs = JSON.parse(logData);
+	logs = JSON.parse(await fs.readFile('./logs/activity_log.json'));
 } catch(e) {
 	if (e.code === 'ENOENT') {
 		console.log('No Activity Log detected, generating default Activity Log');
