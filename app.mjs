@@ -155,7 +155,7 @@ server.listen(9000, function () {
 	console.log('LancerBase listening on port 9000');
 });
 
-const updateBase = async (params) => {
+async function updateBase(params) {
 	switch (params['action']) {
 		case 'buyAddon':
 			baseData.resources = params.resources;
@@ -171,9 +171,9 @@ const updateBase = async (params) => {
 				break;
 			}
 
-			let updatedPilot = pilotData[params['pilot']];
+			const updatedPilot = pilotData[params['pilot']];
 			updatedPilot['downtimeUnits']--;
-			let timeRemaining = params['addon']['timeRemaining'] - 1;
+			const timeRemaining = params['addon']['timeRemaining'] - 1;
 			params['addon']['timeRemaining'] = timeRemaining;
 
 			updateAddon(params['addon']);
@@ -202,13 +202,9 @@ const updateBase = async (params) => {
 			if (activity.effects.resources) {
 				const modifierMax = activity.effects.resources.modifierPercent;
 				for (const [resource, quantity] of Object.entries(activity.effects.resources.quantities)) {
-					const modifier = Math.floor(Math.random() * modifierMax);
-					let amount;
-					if (Math.random() < 0.5) {
-						amount = Math.round(quantity * (1 + (modifier / 100)));
-					} else {
-						amount = Math.round(quantity * (1 - (modifier / 100)));
-					}
+					const modifier = (Math.floor(Math.random() * (modifierMax + 1)))/100;
+					const sign = Math.random() < 0.5 ? 1 : -1;
+					const amount = Math.round(quantity * (1 + (sign * modifier)));
 
 					baseData['resources'][resource]['quantity'] += amount;
 					newActivity['effects']['resources']['quantities'][resource] = amount;
@@ -271,7 +267,7 @@ async function writeLog(user, message){
 	}
 }
 
-const updatePilot = async (params) => {
+async function updatePilot(params) {
 	pilotData[params['pilot']['callsign']] = params['pilot'];
 
 	// Yeah no validation callback right now, get over it
@@ -282,25 +278,15 @@ const updatePilot = async (params) => {
 	};
 }
 
-const getResourcesString = (resources) => {
-	let output = 'Resources gained: ';
-	for (const [key, resource] of Object.entries(resources)) {
-		output += key + ' - ' + resource + ' ';
-	}
-	return output;
+function getResourcesString(resources) {
+	return Object.entries(resources).reduce((acc, [key, resource])=> acc += `${key} - ${resource} `, 'Resources gained: ');
 }
 
-const getActivityByName = (name) => {
-	let targetActivity = null;
-	baseData['activities'].forEach((activity) => {
-		if (activity['name'] === name) {
-			targetActivity = activity;
-		}
-	});
-	return targetActivity;
+function getActivityByName(name){
+	return baseData.activities.find((activity) => activity.name === name);
 }
 
-const getActivityEffectsString = (params) => {
+function getActivityEffectsString(params) {
 	let effects = params['activity']['effects'];
 	let output = `${effects['description']}\n`;
 	if (effects['resources']) {
@@ -327,7 +313,7 @@ const getActivityEffectsString = (params) => {
 	return output;
 }
 
-const getRandomTrait = (type) => {
+function getRandomTrait(type) {
     const weightedTraits = [];
     for (let traitIndex = 0; traitIndex < mechTraitsData[type].length; traitIndex++) {
         for (let addIndex = 0; addIndex < mechTraitsData[type][traitIndex].weight; addIndex++) {
@@ -337,10 +323,10 @@ const getRandomTrait = (type) => {
     return weightedTraits[Math.floor(Math.random() * weightedTraits.length)];
 }
 
-const updateAddon = (newAddon) => {
-	for (let i = 0; i < baseData[newAddon['family']].length; i++) {
-		if (baseData[newAddon['family']][i]['name'] === newAddon['name']) {
-			baseData[newAddon['family']][i] = newAddon;
-		}
+function updateAddon(newAddon) {
+	const addOnType =  newAddon['family'];
+	const addonIndex = baseData[addOnType].findIndex((baseAddon) => baseAddon.name === newAddon.name);
+	if (addonIndex > -1) {
+		baseData[addOnType][addonIndex] = newAddon;
 	}
 }
