@@ -23,3 +23,7 @@ hr {
 ul, ol {
     margin-left: 16px;
 }
+
+img {
+    width: 100%;
+}
