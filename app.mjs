@@ -1,33 +1,43 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const http = require('http');
+import http from 'http';
 const server = http.createServer(app);
 
-const {engine} = require('express-handlebars')
-const {Server} = require('socket.io');
+import {Server} from 'socket.io';
 const io = new Server(server);
-const matter = require('gray-matter');
-
-const path = require('path');
-const fs = require('fs').promises;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+import * as fs from 'node:fs/promises';
+
+// These aren't defined in the ES module scope
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Setup view engine
+import {engine} from 'express-handlebars';
 app.engine('hbs', engine({extname: '.hbs'}));
 app.set('view engine', '.hbs');
 app.set('views', './views');
 
-const baseData = require('./public/data/base.json');
-const pilotData = require("./public/data/pilots.json");
-const mechTraitsData = require("./public/data/traits.json");
-const logs = require('./logs/activity_log.json');
+// Markdown parsing tools
+import matter from 'gray-matter';
+import markdownit from 'markdown-it';
+
+// Cache lancer base data
+import baseData from './public/data/base.json' with {type: 'json'};
+import pilotData from './public/data/pilots.json' with {type: 'json'};
+import mechTraitsData from './public/data/traits.json' with {type: 'json'};
+import logs from './logs/activity_log.json' with {type: 'json'};
 
 //Blog route
 app.get('/blog/:article', (req, res) => {
 	const file = matter.read(`${__dirname}/blog/${req.params.article}.md`);
 	
-	const md = require('markdown-it')();
+	const md = markdownit();
 	const content = file.content;
 	const result = md.render(content);
 	
