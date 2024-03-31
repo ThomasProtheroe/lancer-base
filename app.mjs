@@ -31,7 +31,22 @@ import markdownit from 'markdown-it';
 import baseData from './public/data/base.json' with {type: 'json'};
 import pilotData from './public/data/pilots.json' with {type: 'json'};
 import mechTraitsData from './public/data/traits.json' with {type: 'json'};
-import logs from './logs/activity_log.json' with {type: 'json'};
+
+let logs;
+try {
+	const logData = await fs.readFile('./logs/activity_log.json');
+	logs = JSON.parse(logData);
+} catch(e) {
+	if (e.code === 'ENOENT') {
+		console.log('No existing Activity Log detected, generating default file');
+		await fs.writeFile('./logs/activity_log.json', JSON.stringify([], null, '	'));
+		logs = [];
+	} else {
+		console.log('unexpected error');
+		console.error(e);
+		process.exit(1);
+	}
+}
 
 //Blog route
 app.get('/blog/:article', (req, res) => {
