@@ -82,25 +82,47 @@ try {
 	}
 }
 
-//Blog route
-app.get('/blog/:article', (req, res) => {
-	const file = matter.read(`${__dirname}/blog/${req.params.article}.md`);
-	
-	const md = markdownit();
-	const content = file.content;
-	const result = md.render(content);
-	
-	res.render('post', {
-		post: result,
-		title: file.data.title,
-		description: file.data.description,
-		image: file.data.image
+// API Routes
+
+// Logs
+app.post('/log', (req, res) => {
+	const {user, message} = req.body;
+	const log = writeLog(user, message);
+	res.send(log);
+});
+app.get('/log', (req, res) => {
+	res.send(logs);
+});
+
+// Pilots
+app.get('/pilots', function (req, res) {
+	res.send(pilotData);
+});
+app.get('/pilots/:pilot_id', function (req, res) {
+	const pilot_id = req.params.pilot_id;
+	// TODO add longer form pilot data
+	res.send(pilotData[pilot_id]);
+});
+app.put('/pilots', function (req, res) {
+	const params = {
+		"pilot": req.body.pilot
+	}
+
+	updatePilot(params);
+
+	writeLog(params.pilot, ' was updated');
+
+	res.send({
+		'newPilot': pilotData[params['pilot']],
+		'status': 'success',
 	});
 });
 
-//Main application routes
-app.post('/update/base', function (req, res) {
-	console.log('update base request');
+// Base
+app.get('/base', function (req, res) {
+	res.send(baseData);
+});
+app.put('/base', function (req, res) {
 	const params = {
 		"action": req.body.action,
 		"resources": req.body.resources,
@@ -117,38 +139,29 @@ app.post('/update/base', function (req, res) {
 		'status': 'success',
 	});
 });
-app.post('/update/pilot', function (req, res) {
-	console.log('update pilot request');
-	const params = {
-		"pilot": req.body.pilot
-	}
 
-	updatePilot(params);
-
-	writeLog(params.pilot, ' was updated');
-
-	res.send({
-		'newPilot': pilotData[params['pilot']],
-		'status': 'success',
+//Dynamic content
+app.get('/blog/:article', (req, res) => {
+	const file = matter.read(`${__dirname}/blog/${req.params.article}.md`);
+	
+	const md = markdownit();
+	const content = file.content;
+	const result = md.render(content);
+	
+	res.render('post', {
+		post: result,
+		title: file.data.title,
+		description: file.data.description,
+		image: file.data.image
 	});
 });
 
-//Resource routes (styles, images, data objects etc)
-app.get('/data/baseData', function (req, res) {
-	res.send(baseData);
-});
-app.get('/data/pilotData', function (req, res) {
-	res.send(pilotData);
-});
-app.post('/log', (req, res) => {
-	const {user, message} = req.body;
-	writeLog(user, message);
-	res.send({'status': 'success'});
-});
-app.get('/log', (req, res) => {
-	res.send(logs);
-});
+app.get('/blog', (req, res) => {
+	// TODO add view to show summarized view of all mission notes
+	res.send({status: 200});
+})
 
+// Static content
 app.use(express.static(path.join(__dirname, 'public')));
 
 server.listen(9000, function () {
@@ -179,7 +192,7 @@ async function updateBase(params) {
 			updateAddon(params['addon']);
 			updatePilot({ 'pilot': updatedPilot });
 
-			writeLog(params.plot, `${timeRemaining ? 'worked on' : 'finished work on'} ${params.addon.name}`);
+			writeLog(params.pilot, `${timeRemaining ? 'worked on' : 'finished work on'} ${params.addon.name}`);
 			break;
 		case 'performActivity':
 			const activity = getActivityByName(params.activity);
@@ -265,6 +278,7 @@ async function writeLog(user, message){
 		console.log('Failed to write logs to file, dumping contents');
 		console.log(logs);
 	}
+	return log;
 }
 
 async function updatePilot(params) {

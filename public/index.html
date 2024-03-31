@@ -400,8 +400,8 @@
 				//Update addon
 				let activityName = $(e.target).closest('.activity-item').data('activity')['name'];
 
-				fetch('/update/base', {
-					method: "POST",
+				fetch('./base', {
+					method: "PUT",
 					body: JSON.stringify({
 						action: 'performActivity',
 						activity: activityName,
@@ -450,8 +450,8 @@
 
 				//Update addon
 				let addon = $(this).closest('.addon-item').data('addon');
-				fetch('/update/base', {
-					method: "POST",
+				fetch('./base', {
+					method: "PUT",
 					body: JSON.stringify({
 						action: 'workAddon',
 						addon: addon,
@@ -472,7 +472,7 @@
 
 		//*************************** Runs on page load *************************//
 		//Populate base data and addons
-		fetch('./data/baseData')
+		fetch('./base')
 			.then((response) => response.json())
 			.then((baseJson) => {
 				//Update resources bar
@@ -651,8 +651,8 @@
 				"sensors": 0
 			}
 
-			fetch('/update/base', {
-				method: "POST",
+			fetch('./base', {
+				method: "PUT",
 				body: JSON.stringify({
 					action: 'buyAddon',
 					resources: newResources,
@@ -736,7 +736,7 @@
 					time: Date.now(),
 					message: text
 				};
-				await fetch('/log', {
+				await fetch('./log', {
 					method: 'POST',
 					body: JSON.stringify(message),
 					headers: {
@@ -791,7 +791,7 @@
 			}
 
 			try {
-				const response = await fetch('./data/pilotData');
+				const response = await fetch('./pilots');
 				const pilots = await response.json();
 				this.state.pilots = pilots;
 				this.state.selectedPilot = Object.keys(pilots)[0];
