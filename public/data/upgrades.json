@@ -47,6 +47,21 @@
                 "refinedMaterials": 200,
                 "manna": 5000
             }
+        }, 
+        {
+            "family": "facilities",
+            "type": "prison",
+            "name": "Holding cell",
+            "description": "A storeroom repurposed into a makeshift holding cell.",
+            "notes": "Allows a single captive to be held with very low chance of escape.",
+            "available": 1,
+            "time": 3,
+            "timeRemaining": 4,
+            "cost": {
+                "materials": 500,
+                "refinedMaterials": 20,
+                "manna": 0
+            }
         }
     ],
     "defenses": [
