@@ -67,31 +67,21 @@ try{
 	}
 }
 
-let logs;
-try {
-	logs = JSON.parse(await fs.readFile('./logs/activity_log.json'));
-} catch(e) {
-	if (e.code === 'ENOENT') {
-		console.log('No Activity Log detected, generating default Activity Log');
-		await fs.writeFile('./logs/activity_log.json', JSON.stringify([], null, '	'));
-		logs = [];
-	} else {
-		console.log('unexpected error');
-		console.error(e);
-		process.exit(1);
-	}
-}
+import { ActivityLog } from './src/ActivityLog.mjs';
+const activityLogger = new ActivityLog('logs/activity_log.json', io);
+await activityLogger.load();
 
 // API Routes
 
 // Logs
 app.post('/log', (req, res) => {
 	const {user, message} = req.body;
-	const log = writeLog(user, message);
+	const log = activityLogger.createLog(user, message);
 	res.send(log);
 });
 app.get('/log', (req, res) => {
-	res.send(logs);
+	const activityLogs = activityLogger.getLogs();
+	res.send(activityLogs);
 });
 
 // Pilots
@@ -110,7 +100,7 @@ app.put('/pilots', function (req, res) {
 
 	updatePilot(params);
 
-	writeLog(params.pilot, ' was updated');
+	activityLogger.createLog(params.pilot, ' was updated');
 
 	res.send({
 		'newPilot': pilotData[params['pilot']],
@@ -175,7 +165,7 @@ async function updateBase(params) {
 			updateResources(baseData.resources);
 			baseData[params.addon.family].push(params.addon);
 
-			writeLog(params.pilot, `purchased a new addon ${params.addon.name}`);
+			activityLogger.createLog(params.pilot, `purchased a new addon ${params.addon.name}`);
 			break;
 		case 'workAddon':
 			//Validate the pilot has enough downtime remaining
@@ -192,7 +182,7 @@ async function updateBase(params) {
 			updateAddon(params['addon']);
 			updatePilot({ 'pilot': updatedPilot });
 
-			writeLog(params.pilot, `${timeRemaining ? 'worked on' : 'finished work on'} ${params.addon.name}`);
+			activityLogger.createLog(params.pilot, `${timeRemaining ? 'worked on' : 'finished work on'} ${params.addon.name}`);
 			break;
 		case 'performActivity':
 			const activity = getActivityByName(params.activity);
@@ -244,7 +234,7 @@ async function updateBase(params) {
 
 			//Results output
 			const outputString = getActivityEffectsString({ "activity": newActivity, "pilot": params['pilot'] });
-			writeLog(params.pilot, outputString);
+			activityLogger.createLog(params.pilot, outputString);
 			break;
 		default:
 			break;
@@ -260,25 +250,6 @@ async function updateBase(params) {
 
 function updateResources(resources) {
 	io.emit('resources', resources);
-}
-
-async function writeLog(user, message){
-	
-	const log = {
-		user: user,
-		time: Date.now(),
-		message: `${message}`
-	};
-	logs.push(log);
-	io.emit('activity_log', log);
-	try {
-		await fs.writeFile('./logs/activity_log.json', JSON.stringify(logs, null, "    "));
-	} catch (err) {
-		console.log('error: ', err);
-		console.log('Failed to write logs to file, dumping contents');
-		console.log(logs);
-	}
-	return log;
 }
 
 async function updatePilot(params) {
