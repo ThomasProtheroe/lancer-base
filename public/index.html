@@ -268,41 +268,19 @@
 		}
 
 		const updateBaseStats = (statsJson) => {
-			let defense = statsJson['defense'];
-			let eDefense = statsJson['eDefense'];
-			let sensors = statsJson['sensors'];
+			let defense = statsJson.defenses.defense;
+			let eDefense = statsJson.defenses.eDefense;
+			let sensors = statsJson.defenses.sensors;
 
-			statsJson['facilities'].forEach((facility) => {
-				if ("defense" in facility) {
-					defense += facility['defense'];
+			statsJson.addons.map((addon) => {
+				if('defense' in addon) {
+					defense += addon.defense;
 				}
-				if ("eDefense" in facility) {
-					eDefense += facility['eDefense'];
+				if('eDefense' in addon) {
+					eDefense += addon.eDefense;
 				}
-				if ("sensors" in facility) {
-					sensors += facility['sensors'];
-				}
-			});
-			statsJson['defenses'].forEach((defenseAddon) => {
-				if ("defense" in defenseAddon) {
-					defense += defenseAddon['defense'];
-				}
-				if ("eDefense" in defenseAddon) {
-					eDefense += defenseAddon['eDefense'];
-				}
-				if ("sensors" in defenseAddon) {
-					sensors += defenseAddon['sensors'];
-				}
-			});
-			statsJson['personnel'].forEach((person) => {
-				if ("defense" in person) {
-					defense += person['defense'];
-				}
-				if ("eDefense" in person) {
-					eDefense += person['eDefense'];
-				}
-				if ("sensors" in person) {
-					sensors += person['sensors'];
+				if('sensors' in addon) {
+					sensors += addon.sensors;
 				}
 			});
 
@@ -386,7 +364,7 @@
 			//Clear list
 			$('#activities-container').empty();
 
-			baseJson['activities'].forEach((activity) => {
+			baseJson.addons.filter((addon) => addon.category === 'activity').forEach((activity) => {
 				if (activity['available'] == 1) {
 					addActivity(activity);
 				}
@@ -400,10 +378,9 @@
 				//Update addon
 				let activityName = $(e.target).closest('.activity-item').data('activity')['name'];
 
-				fetch('./base', {
-					method: "PUT",
+				fetch('./base/performActivity', {
+					method: "POST",
 					body: JSON.stringify({
-						action: 'performActivity',
 						activity: activityName,
 						pilot: $('#pilot-select').val()
 					}),
@@ -412,10 +389,11 @@
 					}
 				}).then((response) => response.json())
 					.then((responseJson) => {
-						updatePilotInfo(responseJson['newPilots']);
-						updateBaseStats(responseJson['newBase']);
-						updateAddons(responseJson['newBase']);
-						updateActivities(responseJson['newBase']);
+						const {newBase, newPilots} = responseJson;
+						updatePilotInfo(newPilots);
+						updateBaseStats(newBase);
+						updateAddons(newBase);
+						updateActivities(newBase);
 						updateDowntime();
 					});
 			});
@@ -428,17 +406,17 @@
 			$('#personnel-container').empty();
 
 			//Add facilities
-			addonsJson['facilities'].forEach((facility) => {
+			addonsJson.addons.filter((addon) => addon.category === 'facilities').forEach((facility) => {
 				addFacility(facility);
 			});
 
 			//Add personnel
-			addonsJson['personnel'].forEach((person) => {
+			addonsJson.addons.filter((addon) => addon.category === 'personnel').forEach((person) => {
 				addPersonnel(person);
 			});
 
 			//Add defenses
-			addonsJson['defenses'].forEach((defense) => {
+			addonsJson.addons.filter((addon) => addon.category === 'defenses').forEach((defense) => {
 				addDefense(defense);
 			});
 
@@ -450,10 +428,9 @@
 
 				//Update addon
 				let addon = $(this).closest('.addon-item').data('addon');
-				fetch('./base', {
-					method: "PUT",
+				fetch('./base/workAddon', {
+					method: "POST",
 					body: JSON.stringify({
-						action: 'workAddon',
 						addon: addon,
 						pilot: $('#pilot-select').val()
 					}),
@@ -481,10 +458,10 @@
 				//Update stats values
 				updateBaseStats(baseJson);
 
-				const conditionPercent = (baseJson['condition'] / baseJson['conditionMax']) * 100;
-				const moralePercent = (baseJson['morale'] / baseJson['moraleMax']) * 100;
+				const conditionPercent = (baseJson.condition.value / baseJson.condition.max) * 100;
+				const moralePercent = (baseJson.morale.value / baseJson.morale.max) * 100;
 				var moraleColor = '';
-				var conditionColor = '';
+				var conditionColor = '';null
 				if (conditionPercent > 65) {
 					conditionColor = '#2196F3';
 				} else if (conditionPercent > 25) {
@@ -500,10 +477,10 @@
 					moraleColor = 'red';
 				}
 
-				$('#stats-condition').text(baseJson['condition'] + "/" + baseJson['conditionMax']);
+				$('#stats-condition').text(baseJson.condition.value + "/" + baseJson.condition.max);
 				$('#condition-fill').css("width", conditionPercent + "%");
 				$('#condition-fill').css("background-color", conditionColor);
-				$('#stats-morale').text(baseJson['morale'] + "/" + baseJson['moraleMax']);
+				$('#stats-morale').text(baseJson.morale.value + "/" + baseJson.morale.max);
 				$('#morale-fill').css("width", moralePercent + "%");
 				$('#morale-fill').css("background-color", moraleColor);
 
@@ -651,10 +628,9 @@
 				"sensors": 0
 			}
 
-			fetch('./base', {
-				method: "PUT",
+			fetch('./base/buyAddon', {
+				method: "POST",
 				body: JSON.stringify({
-					action: 'buyAddon',
 					resources: newResources,
 					addon: addon,
 					pilot: $('#pilot-select').val()
