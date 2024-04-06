@@ -1,0 +1,135 @@
+body,
+html {
+	height: 100%;
+	font-family: "Inconsolata", sans-serif;
+	background-color: #002b36;
+	color: #657b83;
+}
+
+.container {
+	background-color: #073642;
+	height: 100%;
+	padding: 30px 30px 0 30px;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: #93a1a1;
+}
+
+h1 {
+	font-size: 42px;
+	font-weight: bold;
+}
+
+hr {
+	margin: 1rem 0 !important;
+}
+
+ul,
+ol {
+	margin-left: 16px;
+}
+
+img {
+	width: 100%;
+}
+
+/*** Status/Resources styles ***/
+.base-status-bar-label {
+	font-size: 24px;
+}
+
+.base-status-bar {
+	border: #073642 2px solid;
+	height: 100%;
+}
+
+.base-status-bar-fill {
+	color: #073642;
+	padding: 12px;
+	text-align: center;
+	font-size: 1.25rem;
+	font-weight: bold;
+}
+
+.base-status-button {
+	background-color: #eee8d5;
+	font-size: 2rem;
+	text-align: center;
+	border-radius: 5rem;;
+}
+
+#gm-log-container {
+	/* Using the color palette from this page: https://en.wikipedia.org/wiki/Solarized */
+	background-color: #073642;
+	color: #839496;
+	font: 1.3rem Consolas, monospace;
+	margin-bottom: 20px;
+
+	.cursor {
+		width: 7%;
+	}
+
+	.text-input {
+		width: 93%;
+	}
+
+	/* very temporary */
+	.Razor_text {
+		color: #268bd2;
+	}
+
+	.Nobody_text {
+		color: #859900;
+	}
+
+	.Barkeep_text {
+		color: #dc322f;
+	}
+
+	.Chirurgeon_text {
+		color: #b58900;
+	}
+
+	.Deputy_text {
+		color: #cb4b16;
+	}
+
+	.Shadow_text {
+		color: #6c71c4;
+	}
+
+	.GM_text {
+		color: #d33682;
+	}
+
+	.Zen_text {
+		animation: rainbow 2.5s linear;
+		animation-iteration-count: infinite;
+	}
+
+	.SYSTEM_text {
+		color: #fdf6e3;
+	}
+
+	>#log-input {
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+
+		>div {
+			float: left;
+		}
+	}
+
+	>#log-container {
+		max-height: 1000px;
+	}
+}

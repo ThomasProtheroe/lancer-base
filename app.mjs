@@ -94,10 +94,10 @@ app.patch('/base', async(req, res) => {
 	if (defenses) {
 		lancerBase.updateDefenses(defenses);
 	}
-	if (condition) {
+	if (Number.isInteger(condition)) {
 		lancerBase.updateCondition(condition);
 	}
-	if (morale) {
+	if (Number.isInteger(morale)) {
 		lancerBase.updateMorale(morale);
 	}
 	if (resources) {

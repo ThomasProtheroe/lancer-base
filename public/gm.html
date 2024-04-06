@@ -16,16 +16,27 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
 		integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
 	<link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="/css/gm.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
-	<div id="gm-log-container"></div>
+	<div class="container">
+		<div class="row">
+			<h1>GM Screen</h1>
+		</div>
+		<hr/>
+		<div id="gm-base-status-bars" class="row">Loading...</div>
+		<hr/>
+		<div id="gm-log-container" class="row">Loading...</div>
+	</div>
+
+	
 	<!-- Handlebars templates -->
 	<script id="logTemplate" type="text/x-handlebars-template">
 		<div>
-			<span class="addon-header">GM Screen</span>
+			<span class="addon-header">Game Log</span>
 		</div>
 		<div id="log-display">
 			{{#each logs}}
@@ -43,6 +54,24 @@
 				<input id="log-text-input" type="text" onkeydown="sendMessage(this.value)"/>
 			</div>
 		</div>
+	</script>
+	<script id="baseStatusBarsTemplate" type="text/x-handlebars-template">
+		{{#each statusBars}}
+			<div class="col-md-6 base-status">
+				<div class="row">
+					<span class="base-status-bar-label">{{label}}: </span>
+				</div>
+				<div class="row">
+					<div class="col-md-10">
+						<div class="base-status-bar" style="{{styles}}">
+							<div class="base-status-bar-fill">{{value}}/{{maxValue}}</div>
+						</div>
+					</div>
+					<button onclick="alterStatus({statusBar: '{{label}}', action: 'subtract'})" class="col-md-1 base-status-button">-</button>
+					<button onclick="alterStatus({statusBar: '{{label}}', action: 'add'})" class="col-md-1 base-status-button">+</button>
+				</div>
+			</div>
+		{{/each}}
 	</script>
 	<!-- Component Render functions -->
 	<script>
@@ -74,24 +103,104 @@
 			const rendered = template({ logs});
 			document.getElementById('gm-log-container').innerHTML = rendered;
 		}
+
+		// for condition and morale bars
+		async function alterStatus(e) {
+			const statusBar = e.statusBar.toLowerCase();
+			const action = e.action;
+			if (!['add', 'subtract'].includes(action)) {
+				return;
+			}
+			const modifer = action === 'add' ? 1 : -1;
+			const update = {};
+			update[statusBar] = this.state[statusBar].value + modifer;
+
+			const response = await fetch('./base', {
+				method: 'PATCH',
+				body: JSON.stringify(update),
+				headers: {
+					'Content-type': 'application/json; charset=UTF-8'
+				}
+			});
+			const updateData = await response.json();
+			updateStatusBars(updateData);
+		}
+
+		function updateStatusBars(updateData) {
+			const {condition, morale} = updateData;
+			this.state.condition = condition;
+			this.state.morale = morale;
+			renderBaseStatusBars();
+		}
+
+		function renderBaseStatusBars() {
+			const backgroundBarColor = '#eee8d5';
+			const baseStatusBars = [
+				{...this.state.condition, label: 'Condition'},
+				{...this.state.morale, label: 'Morale'}
+			].map((statusBar) => {
+				const value = statusBar.value;
+				const maxValue = statusBar.max;
+				const percentage = (value / maxValue) * 100;
+				let barColour = '#dc322f';
+				if (percentage > 25) {
+					barColour = '#b58900';
+				}
+				if (percentage > 65) {
+					barColour = '#268bd2';
+				}
+				const styles = `background: linear-gradient(to right, ${barColour} ${percentage}%, ${backgroundBarColor} ${percentage}%)`;
+
+				return {
+					label: statusBar.label,
+					value,
+					maxValue,
+					styles
+				}
+			});
+			const source = document.getElementById('baseStatusBarsTemplate').innerHTML;
+			const template = Handlebars.compile(source);
+			const rendered = template({statusBars: baseStatusBars});
+			document.getElementById('gm-base-status-bars').innerHTML = rendered;
+		}
 	</script>
 	<!-- App Start Up -->
 	<script>
 		// Global State object
-		this.state = {
-			selectedPilot: '',
-			resources: {
-				materials: {name: 'Materials', quantity: 0},
-				refinedMaterials: {name: 'Refined Materials', quantity: 0},
-				manna: {name: 'Manna', quantity: 0}
-			}
-		};
+		this.state = {};
 
 		async function init() {
-			// Load log data	
 			try {
 				const response = await fetch(`./log`);
 				this.state.logs = await response.json();
+			} catch (err) {
+				console.error(`Error: ${err}`);
+			}
+
+			try {
+				const response = await fetch('./base');
+				const base = await response.json();
+				const {
+					defenses,
+					condition,
+					morale,
+					resources,
+					addons
+				} = base;
+				this.state.defenses = defenses;
+				this.state.condition = condition;
+				this.state.morale = morale;
+				this.state.resources = resources;
+				this.state.addons = addons;
+
+			} catch (err) {
+				console.error(`Error: ${err}`);
+			}
+
+			try {
+				const response = await fetch('./pilots');
+				const pilots = await response.json();
+				this.state.pilots = pilots;
 			} catch (err) {
 				console.error(`Error: ${err}`);
 			}
@@ -101,6 +210,7 @@
 
 		function renderAll() {
 			renderLogs();
+			renderBaseStatusBars();
 		}
 		
 		init();
