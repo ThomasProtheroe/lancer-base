@@ -10,12 +10,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 import path from 'path';
-import { fileURLToPath } from 'url';
 import * as fs from 'node:fs/promises';
 
 // These aren't defined in the ES module scope
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = import.meta.dirname;
 
 // Setup view engine
 import { engine } from 'express-handlebars';
@@ -35,22 +33,6 @@ try {
 	console.error(e);
 }
 
-let baseData;
-try {
-	baseData = JSON.parse(await fs.readFile('./public/data/base.json'));
-} catch (e) {
-	if (e.code === 'ENOENT') {
-		console.log('No Base data was detected, generating default Base data');
-		const defaultBaseData = await fs.readFile('./data/base_default.json');
-		await fs.writeFile('./public/data/base.json', defaultBaseData);
-		baseData = JSON.parse(defaultBaseData);
-	} else {
-		console.log('unexpected error');
-		console.error(e);
-		process.exit(1);
-	}
-}
-
 import { ActivityLog } from './src/ActivityLog.mjs';
 const activityLogger = new ActivityLog('logs/activity_log.json', io);
 await activityLogger.load();
@@ -58,6 +40,10 @@ await activityLogger.load();
 import { PilotGateway } from './src/PilotGateway.mjs';
 const pilots = new PilotGateway('public/data/pilots.json', activityLogger);
 await pilots.load();
+
+import { Base } from './src/Base.mjs';
+const lancerBase = new Base('Blue Haven');
+await lancerBase.load();
 
 // API Routes
 
@@ -94,11 +80,52 @@ app.put('/pilots', function (req, res) {
 
 // Base
 app.get('/base', function (req, res) {
-	res.send(baseData);
+	res.send(lancerBase);
 });
-app.put('/base', function (req, res) {
+app.patch('/base', async(req, res) => {
+	const {
+		defenses,
+		condition,
+		morale,
+		resources,
+		addons
+	} = req.body;
+
+	if (defenses) {
+		lancerBase.updateDefenses(defenses);
+	}
+	if (condition) {
+		lancerBase.updateCondition(condition);
+	}
+	if (morale) {
+		lancerBase.updateMorale(morale);
+	}
+	if (resources) {
+		lancerBase.updateResources(resources);
+	}
+	if (addons) {
+		addons.map((addon) => {
+			// try to add the addon
+			if(!lancerBase.addAddon(addon)) {
+				// if it already exists try updating it instead
+				lancerBase.updateAddon(addon);
+			}
+		});
+	}
+
+	await lancerBase.save();
+
+	res.send(lancerBase); 
+
+});
+// call this if changes are made to the base data file outside the server
+app.post('/base/refresh', async (req, res) => {
+	await lancerBase.load();
+	res.send(lancerBase);
+});
+app.post('/base/:action', function (req, res) {
 	const params = {
-		"action": req.body.action,
+		"action": req.params.action,
 		"resources": req.body.resources,
 		"addon": req.body.addon,
 		"activity": req.body.activity,
@@ -108,7 +135,7 @@ app.put('/base', function (req, res) {
 	updateBase(params);
 
 	res.send({
-		'newBase': baseData,
+		'newBase': lancerBase,
 		'newPilots': pilots.listPilots(),
 		'status': 'success',
 	});
@@ -148,9 +175,8 @@ async function updateBase(params) {
 	const addon = params.addon;
 	switch (params['action']) {
 		case 'buyAddon':
-			baseData.resources = params.resources;
-			updateResources(baseData.resources);
-			baseData[addon.family].push(addon);
+			lancerBase.updateResources(params.resources);
+			lancerBase.addAddon(addon);
 
 			activityLogger.createLog(pilotId, `purchased a new addon ${addon.name}`);
 			break;
@@ -166,7 +192,7 @@ async function updateBase(params) {
 			const timeRemaining = addon.timeRemaining - 1;
 			addon.timeRemaining = timeRemaining;
 
-			updateAddon(addon);
+			lancerBase.updateAddon(addon);
 			pilots.updatePilot(pilotId, pilotData);
 
 			activityLogger.createLog(pilotId, `${timeRemaining ? 'worked on' : 'finished work on'} ${addon.name}`);
@@ -180,31 +206,33 @@ async function updateBase(params) {
 				break;
 			}
 			if (newActivity.cost.materials > 0) {
-				if (baseData.resources.materials.quantity < newActivity.cost.materials) {
+				if (lancerBase.resources.materials.quantity < newActivity.cost.materials) {
 					console.log(pilotId + ' tried to perform an activity, but could not afford materials.');
 					break;
 				}
-				baseData.resources.materials.quantity -= newActivity.cost.materials;
-				updateResources(baseData.resources);
+				const updatedResource = {};
+				updatedResource.materials = lancerBase.resources.materials.quantity - newActivity.cost.materials;
+				lancerBase.updateResources(updatedResource);
 			}
 
 			//Determine resource gain/loss
 			if (activity.effects.resources) {
+				const updatedResource = {};
 				const modifierMax = activity.effects.resources.modifierPercent;
 				for (const [resource, quantity] of Object.entries(activity.effects.resources.quantities)) {
 					const modifier = (Math.floor(Math.random() * (modifierMax + 1))) / 100;
 					const sign = Math.random() < 0.5 ? 1 : -1;
 					const amount = Math.round(quantity * (1 + (sign * modifier)));
 
-					baseData.resources[resource].quantity += amount;
+					updatedResource[resource] = lancerBase.resources[resource].quantity + amount;
 					newActivity.effects.resources.quantities[resource] = amount;
 				}
-				updateResources(baseData.resources);
+				lancerBase.updateResources(updatedResource);
 			}
 
 			//Build mechs
 			if (activity.effects.mech) {
-				const mechPrinter = baseData.facilities.filter((facility) => facility.type == 'printer');
+				const mechPrinter = lancerBase.addons.filter((addon) => addon.type === 'printer');
 				const flaws = [];
 				for (let i = 0; i < mechPrinter[0].flaws; i++) {
 					flaws.push(getRandomTrait('flaws'));
@@ -228,14 +256,10 @@ async function updateBase(params) {
 
 	// Yeah no validation callback right now, get over it
 	try {
-		await fs.writeFile('./public/data/base.json', JSON.stringify(baseData, null, '	'), 'utf8');
+		await lancerBase.save();
 	} catch (err) {
 		console.log(err);
 	}
-}
-
-function updateResources(resources) {
-	io.emit('resources', resources);
 }
 
 function getResourcesString(resources) {
@@ -243,7 +267,7 @@ function getResourcesString(resources) {
 }
 
 function getActivityByName(name) {
-	return baseData.activities.find((activity) => activity.name === name);
+	return lancerBase.addons.find((activity) => activity.category === 'activity' && activity.name === name);
 }
 
 function getActivityEffectsString(params) {
@@ -281,12 +305,4 @@ function getRandomTrait(type) {
 		}
 	}
 	return weightedTraits[Math.floor(Math.random() * weightedTraits.length)];
-}
-
-function updateAddon(newAddon) {
-	const addOnType = newAddon['family'];
-	const addonIndex = baseData[addOnType].findIndex((baseAddon) => baseAddon.name === newAddon.name);
-	if (addonIndex > -1) {
-		baseData[addOnType][addonIndex] = newAddon;
-	}
 }
