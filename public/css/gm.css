@@ -65,6 +65,14 @@ img {
 	border-radius: 5rem;;
 }
 
+.gm-pilot-select {
+	min-width: 150px;
+	font-size: 24px;
+	margin-top: 3px;
+	width: 100%;
+	background-color: #eee8d5;
+}
+
 #gm-log-container {
 	/* Using the color palette from this page: https://en.wikipedia.org/wiki/Solarized */
 	background-color: #073642;
@@ -81,29 +89,6 @@ img {
 	}
 
 	/* very temporary */
-	.Razor_text {
-		color: #268bd2;
-	}
-
-	.Nobody_text {
-		color: #859900;
-	}
-
-	.Barkeep_text {
-		color: #dc322f;
-	}
-
-	.Chirurgeon_text {
-		color: #b58900;
-	}
-
-	.Deputy_text {
-		color: #cb4b16;
-	}
-
-	.Shadow_text {
-		color: #6c71c4;
-	}
 
 	.GM_text {
 		color: #d33682;
@@ -132,4 +117,28 @@ img {
 	>#log-container {
 		max-height: 1000px;
 	}
+}
+
+.Razor_text {
+	color: #268bd2;
+}
+
+.Nobody_text {
+	color: #859900;
+}
+
+.Barkeep_text {
+	color: #dc322f;
+}
+
+.Chirurgeon_text {
+	color: #b58900;
+}
+
+.Deputy_text {
+	color: #cb4b16;
+}
+
+.Shadow_text {
+	color: #6c71c4;
 }

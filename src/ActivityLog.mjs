@@ -26,7 +26,7 @@ export class ActivityLog {
 			this.socket.emit('activity_log', log);
 		}
 		try {
-			await fs.writeFile(this.path, JSON.stringify(this.logs, null, '	'));
+			await fs.writeFile(this.path, JSON.stringify(this.logs, null, '	'), 'utf8');
 		} catch (err) {
 			console.log('error: ', err);
 			console.log('Failed to write logs to file, dumping contents');
@@ -49,7 +49,7 @@ export class ActivityLog {
 		} catch (e) {
 			if (e.code === 'ENOENT') {
 				console.log('No Activity Log detected, generating default Activity Log');
-				await fs.writeFile(this.path, JSON.stringify([], null, '	'));
+				await fs.writeFile(this.path, JSON.stringify([], null, '	'), 'utf8');
 				return this.logs = [];
 			} else {
 				console.log('unexpected error');

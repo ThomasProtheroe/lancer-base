@@ -29,6 +29,8 @@
 		<hr/>
 		<div id="gm-base-status-bars" class="row">Loading...</div>
 		<hr/>
+		<div id="gm-pilots-container" class="row">Loading...</div>
+		<hr/>
 		<div id="gm-log-container" class="row">Loading...</div>
 	</div>
 
@@ -36,7 +38,7 @@
 	<!-- Handlebars templates -->
 	<script id="logTemplate" type="text/x-handlebars-template">
 		<div>
-			<span class="addon-header">Game Log</span>
+			<h2>Game Log</h2>
 		</div>
 		<div id="log-display">
 			{{#each logs}}
@@ -73,6 +75,36 @@
 			</div>
 		{{/each}}
 	</script>
+	<script id="pilotsTemplate" type="text/x-handlebars-template">
+		<div class="row">
+			<div class="col-md-3">
+				<h2>Pilot Data: </h2>
+			</div>
+			<div class="col-md-9">
+				<select onChange="updatePilotSelect(this.options[this.selectedIndex].value)" id="pilot-select" class=" gm-pilot-select">
+					<option value=""></option>
+					{{#each pilotData.pilots}}
+						{{#if selected}}
+							<option value="{{callsign}}" selected>{{callsign}}</option>
+						{{else}}
+							<option value="{{callsign}}">{{callsign}}</option>
+						{{/if}}
+					{{/each}}
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			{{#if pilotData.selectedPilotData}}
+				<div class="col-md-6">
+					<h3>DownTime: {{pilotData.selectedPilotData.downtimeUnits}}</h3>
+				</div>
+				<div class="col-md-6">
+					<button onclick="updateDowntime({pilotId: '{{pilotData.selectedPilotData.callsign}}', action: 'subtract'})" class="col-md-1 base-status-button">-</button>
+					<button onclick="updateDowntime({pilotId: '{{pilotData.selectedPilotData.callsign}}', action: 'add'})" class="col-md-1 base-status-button">+</button>
+				</div>
+			{{/if}}
+		</div>
+	</script>
 	<!-- Component Render functions -->
 	<script>
 		async function sendMessage(text) {
@@ -103,8 +135,8 @@
 			const rendered = template({ logs});
 			document.getElementById('gm-log-container').innerHTML = rendered;
 		}
-
-		// for condition and morale bars
+	</script>
+	<script>
 		async function alterStatus(e) {
 			const statusBar = e.statusBar.toLowerCase();
 			const action = e.action;
@@ -125,14 +157,12 @@
 			const updateData = await response.json();
 			updateStatusBars(updateData);
 		}
-
 		function updateStatusBars(updateData) {
 			const {condition, morale} = updateData;
 			this.state.condition = condition;
 			this.state.morale = morale;
 			renderBaseStatusBars();
 		}
-
 		function renderBaseStatusBars() {
 			const backgroundBarColor = '#eee8d5';
 			const baseStatusBars = [
@@ -164,10 +194,74 @@
 			document.getElementById('gm-base-status-bars').innerHTML = rendered;
 		}
 	</script>
+	<script>
+		async function updateDowntime(e) {
+			const pilotId = e.pilotId;
+			const pilotData = this.state.pilots.find((pilot) => pilot.callsign === pilotId);
+
+			const action = e.action;
+			if (!['add', 'subtract'].includes(action)) {
+				return;
+			}
+			const modifer = action === 'add' ? 1 : -1;
+			const updatedDowntime = pilotData.downtimeUnits + modifer;
+
+			if (updatedDowntime < 0) {
+				return;
+			}
+
+			const pilotUpdate = {
+				...pilotData,
+				downtimeUnits: updatedDowntime
+			};
+
+			const response = await fetch('./pilots', {
+				method: 'PUT',
+				body: JSON.stringify({
+					pilotId,
+					pilot: pilotUpdate
+				}),
+				headers: {
+					'Content-type': 'application/json; charset=UTF-8'
+				}
+			});
+			const updatedPilotData = await response.json();
+			pilotData.downtimeUnits = updatedDowntime;
+			renderPilots();
+		}
+		function updatePilotSelect(pilot) {
+			this.state.selectedPilot = pilot;
+			renderPilots();
+		}
+		function renderPilots(){
+			const selectedPilot = this.state.selectedPilot;
+			const pilotData = this.state.pilots.reduce((acc, pilot) => {
+				const selectPilot = {...pilot};
+				selectPilot.selected = selectPilot.callsign === selectedPilot;
+
+				if (selectPilot.selected) {
+					acc.selectedPilotData = this.state.pilots.find((pilot) => pilot.callsign === selectedPilot);
+				}
+
+				acc.pilots.push(selectPilot);
+				return acc;
+			}, {
+				pilots: [],
+				selectedPilotData: null
+			});
+
+			const source = document.getElementById('pilotsTemplate').innerHTML;
+			const template = Handlebars.compile(source);
+			const rendered = template({pilotData});
+			document.getElementById('gm-pilots-container').innerHTML = rendered;
+		}
+	</script>
 	<!-- App Start Up -->
 	<script>
 		// Global State object
-		this.state = {};
+		this.state = {
+			selectedPilot: ''
+		};
 
 		async function init() {
 			try {
@@ -200,7 +294,13 @@
 			try {
 				const response = await fetch('./pilots');
 				const pilots = await response.json();
-				this.state.pilots = pilots;
+				this.state.pilots = Object.entries(pilots).map((pilot) => {
+					const pilotData = pilot[1];
+					return {
+						callsign: pilotData.callsign,
+						downtimeUnits: pilotData.downtimeUnits
+					}
+				});
 			} catch (err) {
 				console.error(`Error: ${err}`);
 			}
@@ -211,6 +311,7 @@
 		function renderAll() {
 			renderLogs();
 			renderBaseStatusBars();
+			renderPilots();
 		}
 		
 		init();

@@ -235,9 +235,9 @@ export class Base {
 	}
 
 	async save() {
-		const baseData = JSON.stringify(this, null, '	', 'utf8');
+		const baseData = JSON.stringify(this, null, '	');
 		try {
-			await fs.writeFile(this.filePath, baseData);
+			await fs.writeFile(this.filePath, baseData, 'utf8');
 		} catch (err) {
 			console.error(err);
 		}
