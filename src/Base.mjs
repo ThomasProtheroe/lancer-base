@@ -182,13 +182,13 @@ export class Base {
 	 * @returns 
 	 */
 	updateResources({materials, refinedMaterials, manna}) {
-		if(materials) {
+		if(Number.isInteger(materials)) {
 			this.resources.materials.quantity = materials;
 		}
-		if(refinedMaterials) {
+		if(Number.isInteger(refinedMaterials)) {
 			this.resources.refinedMaterials.quantity = refinedMaterials;
 		}
-		if(manna) {
+		if(Number.isInteger(manna)) {
 			this.resources.manna.quantity = manna;
 		}
 		if (this.socket) {

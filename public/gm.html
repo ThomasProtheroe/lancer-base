@@ -31,6 +31,8 @@
 		<hr/>
 		<div id="gm-pilots-container" class="row">Loading...</div>
 		<hr/>
+		<div id="gm-base-resources-container" class="row">Loading...</div>
+		<hr/>
 		<div id="gm-log-container" class="row">Loading...</div>
 	</div>
 
@@ -55,6 +57,49 @@
 			<div class="text-input">
 				<input id="log-text-input" type="text" onkeydown="sendMessage(this.value)"/>
 			</div>
+		</div>
+	</script>
+	<script id="baseResourcesTemplate" type="text/x-handlebars-template">
+		<div class="row">
+			<h2>Base Resources</h2>
+		</div>
+		<div class="row">
+			<form action="Javascript:handleUpdateResources({materials: materials.value, refinedMaterials: refinedMaterials.value, manna: manna.value})">
+				<div class="form-group">
+					<i class="bi bi-boxes"></i>
+					<label for="materials">{{resources.materials.name}}</label>
+					<input
+						type="number"
+						id="materials"
+						min="0"
+						value="{{resources.materials.quantity}}"
+						class="form-control"
+					/>
+				</div>
+				<div class="form-group">
+					<i class="bi bi-device-ssd"></i>
+					<label for="refinedMaterials">{{resources.refinedMaterials.name}}</label>
+					<input
+						type="number"
+						id="refinedMaterials"
+						min="0"
+						value="{{resources.refinedMaterials.quantity}}"
+						class="form-control"
+					/>
+				</div>
+				<div class="form-group">
+					<i class="bi bi-currency-bitcoin"></i>
+					<label for="manna">{{resources.manna.name}}</label>
+					<input
+						type="number"
+						id="manna"
+						min="0"
+						value="{{resources.manna.quantity}}"
+						class="form-control"
+					/>
+				</div>
+				<button type="submit" class="btn btn-primary">Update Resources</button>
+			</form>
 		</div>
 	</script>
 	<script id="baseStatusBarsTemplate" type="text/x-handlebars-template">
@@ -106,6 +151,52 @@
 		</div>
 	</script>
 	<!-- Component Render functions -->
+	<script>
+		async function handleUpdateResources(e) {
+			const startingMaterials = this.state.resources.materials.quantity;
+			const startingRefinedMaterials = this.state.resources.refinedMaterials.quantity;
+			const startingManna= this.state.resources.manna.quantity;
+
+			const updatedResources = {};
+			const updatedMaterials = parseInt(e.materials);
+			const updatedRefinedMaterials = parseInt(e.refinedMaterials);
+			const updatedManna = parseInt(e.manna);
+
+			if (Number.isInteger(updatedMaterials) && updatedMaterials !== startingMaterials) {
+				updatedResources['materials'] = (updatedMaterials > -1) ? updatedMaterials : 0;
+			}
+
+			if (Number.isInteger(updatedRefinedMaterials) && updatedRefinedMaterials !== startingRefinedMaterials) {
+				updatedResources['refinedMaterials'] = (updatedRefinedMaterials > -1) ? updatedRefinedMaterials : 0;
+			}
+
+			if (Number.isInteger(updatedManna) && updatedManna !== startingManna) {
+				updatedResources['manna'] = (updatedManna > -1) ? updatedManna : 0;
+			}
+
+			const response = await fetch('./base', {
+				method: 'PATCH',
+				body: JSON.stringify({resources: updatedResources}),
+				headers: {
+					'Content-type': 'application/json; charset=UTF-8'
+				}
+			});
+			const updatedBaseData = await response.json();
+			updateBaseResources(updatedBaseData);
+		}
+		function updateBaseResources(updatedBaseData) {
+			const {resources} = updatedBaseData;
+			this.state.resources = resources;
+			renderBaseResources();
+		}
+		function renderBaseResources() {
+			const resources = this.state.resources;
+			const source = document.getElementById('baseResourcesTemplate').innerHTML;
+			const template = Handlebars.compile(source);
+			const rendered = template({resources});
+			document.getElementById('gm-base-resources-container').innerHTML = rendered;
+		}
+	</script>
 	<script>
 		async function sendMessage(text) {
 			if(event.keyCode == 13) {
@@ -312,6 +403,7 @@
 			renderLogs();
 			renderBaseStatusBars();
 			renderPilots();
+			renderBaseResources();
 		}
 		
 		init();
