@@ -23,8 +23,11 @@
 
 <body>
 	<div class="container">
-		<div class="row">
+		<div class="row row-cols-2" style="flex-direction: row;">
 			<h1>GM Screen</h1>
+			<div style="display: flex;">
+				<button type="button" onclick="triggerReload()" style="margin-left: auto; align-self: center;">Force Reload</button>
+			</div>
 		</div>
 		<hr/>
 		<div id="gm-base-status-bars" class="row">Loading...</div>
@@ -345,6 +348,15 @@
 			const template = Handlebars.compile(source);
 			const rendered = template({pilotData});
 			document.getElementById('gm-pilots-container').innerHTML = rendered;
+		}
+		async function triggerReload() {
+			await fetch('/base/refresh', {
+				method: 'POST'
+			})
+			await fetch('/reloadPage', {
+				method: 'POST'
+			})
+			location.reload();
 		}
 	</script>
 	<!-- App Start Up -->

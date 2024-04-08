@@ -796,6 +796,9 @@
 		socket.on('resources', (msg) => {
 			updateResources(msg);
 		});
+		socket.on('reloadPage', () => {
+			location.reload();
+		});
 	</script>
 </body>
 

@@ -162,6 +162,11 @@ app.get('/blog', (req, res) => {
 	res.send({ status: 200 });
 })
 
+app.post('/reloadPage', async (req, res) => {
+	io.emit('reloadPage');
+	res.send({ status: 200 });
+});
+
 // Static content
 app.use(express.static(path.join(__dirname, 'public')));
 
