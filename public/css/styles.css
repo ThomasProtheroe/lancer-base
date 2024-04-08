@@ -21,6 +21,12 @@ body, html {
   background-image: url("/images/base_banner.jpg");
   min-height: 50%;
   margin-top: 40px;
+  margin-left: 512px;
+  width: calc(100% - 512px);
+  height: 512px;
+}
+.relative {
+  position: relative;
 }
 
 .bgfullimg {
