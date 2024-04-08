@@ -243,4 +243,16 @@ export class Base {
 		}
 	}
 
+	toJSON() {
+		// this func is mostly to avoid serializing the socket
+		return {
+			name: this.name,
+			defenses: this.defenses,
+			condition: this.condition,
+			morale: this.morale,
+			resources: this.resources,
+			addons: this.addons
+		};
+	}
+
 }

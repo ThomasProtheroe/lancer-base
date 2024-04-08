@@ -42,7 +42,7 @@ const pilots = new PilotGateway('public/data/pilots.json', activityLogger);
 await pilots.load();
 
 import { Base } from './src/Base.mjs';
-const lancerBase = new Base('Blue Haven');
+const lancerBase = new Base('Blue Haven', io);
 await lancerBase.load();
 
 // API Routes
