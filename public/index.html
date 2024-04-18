@@ -86,25 +86,6 @@
 					</div>
 				</div>
 			</div>
-			<!-- <div class="modal modal-xl fade" id="activities-modal" tabindex="-1" aria-labelledby="activities-modal-label" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="activities-modal-label">Pilot Activities</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div id="activities-build-container" class="row">
-              
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" data-bs-dismiss="modal" disabled>Perform</button>
-              </div>
-            </div>
-          </div>
-        </div> -->
 
 			<!-- Facilities -->
 			<div class="row">
@@ -152,7 +133,7 @@
 				<div class="col-md-12 info-container">
 					<div class="row">
 						<div class="col-md-4">
-							<span class="addon-header">Defenses</span>
+							<span class="addon-header">Defences</span>
 						</div>
 						<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
 							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
@@ -663,9 +644,9 @@
 	<!-- Handlebars templates -->
 	<script id="logTemplate" type="text/x-handlebars-template">
 		<div class="row">
-			<div class="row">
-				<span class="addon-header">Logs</span>
-			</div>
+			<span class="addon-header logs-header">Logs</span>
+		</div>
+		<div class="row">
 			<div id="log-display" class="row">
 				{{#each logs}}
 					<div>

@@ -179,8 +179,18 @@ body, html {
   margin-right: 7px;
 }
 
+.addon-header.logs-header{
+  background-color: #073642;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+}
+
 #log-input {
   background-color: #073642;
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0px;
 }
 
 #log-text-input {
@@ -244,7 +254,7 @@ body, html {
   }
 
   .Nobody_text {
-    color: #859900;
+    color: #eb3d94;
   }
 
   .Barkeep_text {
