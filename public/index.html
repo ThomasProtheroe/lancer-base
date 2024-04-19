@@ -280,29 +280,33 @@
 				timeRemaining = addon['timeRemaining'];
 			}
 			$(containerSelector).append(
-				'<div class="col-md-3"><div class="addon-item ' + extraClasses + '">' +
-				'<div class="addon-name">' + addon['name'] + '</div>' +
-				'<div class="addon-description">' + addon['description'] + '</div>' +
-				'<div class="addon-notes">' + addon['notes'] + '</div>' +
-				'<div class="addon-construction-controls">' +
-				'<div class="addon-construction-sign">UNDER CONSTRUCTION' + '</div>' +
-				'<div class="addon-construction-time">Work Remaining: ' + timeRemaining + '</div>' +
-				'<button class="base-btn work-addon-btn downtime-required">Add Work</button>' +
-				'</div>' +
-				'</div></div>'
+				`<div class="col-md-3">
+					<div class="addon-item ${extraClasses}">
+						<div class="addon-name">${addon['name']}</div>
+						<div class="addon-description">${addon['description']}</div>
+						<div class="addon-notes">${addon['notes']}</div>
+						<div class="addon-construction-controls">
+							<div class="addon-construction-sign">UNDER CONSTRUCTION</div>
+							<div class="addon-construction-time">Work Remaining: ${timeRemaining}</div>
+							<button class="base-btn work-addon-btn downtime-required">Add Work</button>
+						</div>
+					</div>
+				</div>`
 			);
 			$(containerSelector).find('.addon-item').last().data('addon', addon);
 		};
 
 		const addActivity = (activity) => {
 			$('#activities-container').append(
-				'<div class="col-md-3"><div class="activity-item">' +
-				'<div class="activity-name">' + activity['name'] + '</div>' +
-				getCostsDisplay(activity['cost']) +
-				'<div class="activity-description">' + activity['description'] + '</div>' +
-				'<div class="activity-notes">' + activity['notes'] + '</div>' +
-				'<button class="base-btn perform-activity-btn downtime-required">Perform</button>' +
-				'</div></div>'
+				`<div class="col-md-4">
+					<div class="activity-item">
+						<div class="activity-name">${activity['name']}</div>
+						${getCostsDisplay(activity['cost'])}
+						<div class="activity-description">${activity['description']}</div>
+						<div class="activity-notes">${activity['notes']}</div>
+						<button class="base-btn perform-activity-btn downtime-required">Perform</button>
+					</div>
+				</div>`
 			);
 			$('#activities-container').find('.activity-item').last().data('activity', activity);
 		}
@@ -490,11 +494,14 @@
 							}
 
 							$('#personnel-recruit-container').append(
-								'<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + recruit['name'] + '</div>' +
-								getCostsDisplay(recruit['cost']) +
-								'<div>' + recruit['description'] +
-								'</div><div>' + recruit['notes'] +
-								'</div></div></div>'
+								`<div class="col-md-${12/recruit['available']}">
+									<div class="addon-item selectable">
+										<div class="addon-name">${recruit['name']}</div>
+										${getCostsDisplay(recruit['cost'])}
+										<div>${recruit['description']}</div>
+										<div>${recruit['notes']}</div>
+									</div>
+								</div>`
 							);
 							//Add resource costs as data attributes
 							$('#personnel-recruit-container').find('.addon-item').last().data('addon', recruit);
@@ -516,11 +523,14 @@
 							}
 
 							$('#defenses-build-container').append(
-								'<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + defense['name'] + '</div>' +
-								getCostsDisplay(defense['cost']) +
-								'<div>' + defense['description'] +
-								'</div><div>' + defense['notes'] +
-								'</div></div></div>'
+								`<div class="col-md-${12/defense['available']}">
+									<div class="addon-item selectable">
+										<div class="addon-name">${defense['name']}</div>
+										${getCostsDisplay(defense['cost'])}
+										<div>${defense['description']}</div>
+										<div> ${defense['notes']}</div>
+									</div>
+								</div>`
 							);
 							//Add resource costs as data attributes
 							$('#defenses-build-container').find('.addon-item').last().data('addon', defense);
@@ -542,11 +552,14 @@
 							}
 
 							$('#facilities-build-container').append(
-								'<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + facility['name'] + '</div>' +
-								getCostsDisplay(facility['cost']) +
-								'<div>' + facility['description'] +
-								'</div><div>' + facility['notes'] +
-								'</div></div></div>'
+								`<div class="col-md-${12/facility['available']}">
+									<div class="addon-item selectable">
+										<div class="addon-name">${facility['name']}</div>
+										${getCostsDisplay(facility['cost'])}
+										<div>${facility['description']}</div>
+										<div>${facility['notes']}</div>
+									</div>
+								</div>`
 							);
 							//Add resource costs as data attributes
 							$('#facilities-build-container').find('.addon-item').last().data('addon', facility);
