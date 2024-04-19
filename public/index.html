@@ -255,6 +255,7 @@
 			let selectedPilot = $('#pilot-select').val();
 			$('#pilot-select').empty();
 
+			$('#pilot-select').append(`<option hidden disabled selected value>Select a pilot</option>`);
 			Object.keys(pilotJson).forEach(key => {
 				$('#pilot-select').append(`<option value="${key}">${key}</option>`);
 				$('#pilot-select').find('option').last().data('downtime', pilotJson[key]['downtimeUnits']);
@@ -449,6 +450,14 @@
 			});
 		}
 
+		function enableControls(pilot) {
+			if (pilot === null) {
+				$('.base-btn').prop('disabled', true);
+			} else {
+				$('.base-btn').prop('disabled', false);
+			}
+		}
+
 		//*************************** Runs on page load *************************//
 		//Populate base data and addons
 		fetch('./base')
@@ -602,6 +611,9 @@
 						$('.btn-close').click(function () {
 							deselectAll();
 						});
+
+						//Disable controls (re-enabled when pilot is loaded)
+						enableControls(null);
 					});
 			});
 
@@ -703,10 +715,13 @@
 	<!-- Component Render functions -->
 	<script>
 		function updateSelectedPilot(pilot) {
+			console.log("update selected pilot");
 			this.state.selectedPilot = pilot;
 			localStorage.selectedPilot = pilot;
 			renderLogs();
+			enableControls(pilot);
 		}
+		
 		async function sendMessage(text) {
 			if(event.keyCode == 13) {
 				const message = {
