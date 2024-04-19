@@ -40,19 +40,19 @@
 	<div class="bgfullimg">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-4">
 					<span class="condition-text">Condition: </span>
 					<div class="status-bar">
 						<div id="condition-fill" class="status-bar-fill"><span id="stats-condition"></span></div>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-4">
 					<span class="condition-text">Morale: </span>
 					<div class="status-bar">
 						<div id="morale-fill" class="status-bar-fill"><span id="stats-morale"></span></div>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-4">
 					<span class="condition-text">Pilot: </span>
 					<select id="pilot-select" class="base-select" onchange="updateSelectedPilot(this.value)">
 
@@ -62,22 +62,22 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-4">
 					<span class="stats-text">Defense: <span id="stats-defense"></span></span>
 				</div>
-				<div class="col-md-4">
+				<div class="col-4">
 					<span class="stats-text">E-Defense: <span id="stats-edefense"></span></span>
 				</div>
-				<div class="col-md-4">
+				<div class="col-4">
 					<span class="stats-text">Sensors: <span id="stats-sensors"></span></span>
 				</div>
 			</div>
 
 			<!-- Activities -->
 			<div class="row">
-				<div class="col-md-12 info-container">
+				<div class="col-12 info-container">
 					<div class="row">
-						<div class="col-md-4">
+						<div class="col-4">
 							<span class="addon-header">Activities</span>
 						</div>
 					</div>
@@ -89,12 +89,12 @@
 
 			<!-- Facilities -->
 			<div class="row">
-				<div class="col-md-12 info-container">
+				<div class="col-12 info-container">
 					<div class="row">
-						<div class="col-md-4">
+						<div class="col-4">
 							<span class="addon-header">Facilities</span>
 						</div>
-						<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
+						<div class="col-2 offset-md-6" style="margin-top: 8px;">
 							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
 								data-bs-target="#facilities-modal">
 								Build
@@ -130,12 +130,12 @@
 
 			<!-- Defenses -->
 			<div class="row">
-				<div class="col-md-12 info-container">
+				<div class="col-12 info-container">
 					<div class="row">
-						<div class="col-md-4">
+						<div class="col-4">
 							<span class="addon-header">Defences</span>
 						</div>
-						<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
+						<div class="col-2 offset-md-6" style="margin-top: 8px;">
 							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
 								data-bs-target="#defenses-modal">
 								Build
@@ -171,12 +171,12 @@
 
 			<!-- Personnel -->
 			<div class="row">
-				<div class="col-md-12 info-container">
+				<div class="col-12 info-container">
 					<div class="row">
-						<div class="col-md-4">
+						<div class="col-4">
 							<span class="addon-header">Personnel</span>
 						</div>
-						<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
+						<div class="col-2 offset-md-6" style="margin-top: 8px;">
 							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
 								data-bs-target="#personnel-modal">
 								Recruit
@@ -212,7 +212,7 @@
 
 			<!-- Logs -->
 			<div class="row">
-				<div id="log-container" class="col-md-12 info-container"></div>
+				<div id="log-container" class="col-12 info-container"></div>
 			</div>
 
 		</div>
@@ -280,7 +280,7 @@
 				timeRemaining = addon['timeRemaining'];
 			}
 			$(containerSelector).append(
-				`<div class="col-md-3">
+				`<div class="col-${12/4}">
 					<div class="addon-item ${extraClasses}">
 						<div class="addon-name">${addon['name']}</div>
 						<div class="addon-description">${addon['description']}</div>
@@ -298,7 +298,7 @@
 
 		const addActivity = (activity) => {
 			$('#activities-container').append(
-				`<div class="col-md-4">
+				`<div class="col-4">
 					<div class="activity-item">
 						<div class="activity-name">${activity['name']}</div>
 						${getCostsDisplay(activity['cost'])}
@@ -323,11 +323,22 @@
 			addAddon(defense, '#defenses-container');
 		}
 
+		const addAvailableAddOn = (addOnData) => {
+			return `<div class="col-${12/addOnData.count}">
+						<div class="addon-item selectable">
+							<div class="addon-name">${addOnData.name}</div>
+							${getCostsDisplay(addOnData.cost)}
+							<div>${addOnData.description}</div>
+							<div> ${addOnData.notes}</div>
+						</div>
+					</div>`
+		}
+
 		const getCostsDisplay = (jsonObject) => {
 			let displayString = '<div class="item-costs">';
 
 			Object.keys(jsonObject).forEach(key => {
-				displayString += '<span class="item-cost-item"><i class="bi bi-' + icons[key] + '"></i>' + jsonObject[key] + '</span>';
+				displayString += `<span class="item-cost-item"><i class="bi bi-${icons[key]}""></i> ${jsonObject[key]}</span>`;
 			});
 			displayString += '</div>';
 			return displayString;
@@ -478,6 +489,7 @@
 				fetch('./data/upgrades.json')
 					.then((response) => response.json())
 					.then((addonJson) => {
+						var availabilityCount =  addonJson['personnel'].where(r => r.available).length;
 						addonJson['personnel'].forEach((recruit) => {
 							if (recruit['available'] === 0) {
 								return;
@@ -494,19 +506,19 @@
 							}
 
 							$('#personnel-recruit-container').append(
-								`<div class="col-md-${12/recruit['available']}">
-									<div class="addon-item selectable">
-										<div class="addon-name">${recruit['name']}</div>
-										${getCostsDisplay(recruit['cost'])}
-										<div>${recruit['description']}</div>
-										<div>${recruit['notes']}</div>
-									</div>
-								</div>`
+								addAvailableAddOn({
+									count: availabilityCount,
+									name: recruit['name'],
+									cost: recruit['cost'],
+									description: recruit['description'],
+									notes: recruit['notes']
+								})
 							);
 							//Add resource costs as data attributes
 							$('#personnel-recruit-container').find('.addon-item').last().data('addon', recruit);
 						});
 
+						availabilityCount = addonJson['defenses'].where(r => r.available).length;
 						addonJson['defenses'].forEach((defense) => {
 							if (defense['available'] === 0) {
 								return;
@@ -523,19 +535,19 @@
 							}
 
 							$('#defenses-build-container').append(
-								`<div class="col-md-${12/defense['available']}">
-									<div class="addon-item selectable">
-										<div class="addon-name">${defense['name']}</div>
-										${getCostsDisplay(defense['cost'])}
-										<div>${defense['description']}</div>
-										<div> ${defense['notes']}</div>
-									</div>
-								</div>`
+								addAvailableAddOn({
+									count: availabilityCount,
+									name: defense['name'],
+									cost: defense['cost'],
+									description: defense['description'],
+									notes: defense['notes']
+								})
 							);
 							//Add resource costs as data attributes
 							$('#defenses-build-container').find('.addon-item').last().data('addon', defense);
 						});
 
+						availabilityCount = addonJson['facilities'].where(r => r.available).length;
 						addonJson['facilities'].forEach((facility) => {
 							if (facility['available'] === 0) {
 								return;
@@ -552,14 +564,13 @@
 							}
 
 							$('#facilities-build-container').append(
-								`<div class="col-md-${12/facility['available']}">
-									<div class="addon-item selectable">
-										<div class="addon-name">${facility['name']}</div>
-										${getCostsDisplay(facility['cost'])}
-										<div>${facility['description']}</div>
-										<div>${facility['notes']}</div>
-									</div>
-								</div>`
+								addAvailableAddOn({
+									count: availabilityCount,
+									name: facility['name'],
+									cost: facility['cost'],
+									description: facility['description'],
+									notes: facility['notes']
+								})
 							);
 							//Add resource costs as data attributes
 							$('#facilities-build-container').find('.addon-item').last().data('addon', facility);
@@ -680,15 +691,15 @@
 	</script>
 	<script id="resourcesTemplate" type="text/x-handlebars-template">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-4">
 				<i class="bi bi-boxes"></i>
 				<span>Materials: {{resources.materials.quantity}}</span>
 			</div>
-			<div class="col-md-4">
+			<div class="col-4">
 				<i class="bi bi-device-ssd"></i>
 				<span>Refined Materials: {{resources.refinedMaterials.quantity}}</span>
 			</div>
-			<div class="col-md-4">
+			<div class="col-4">
 				<i class="bi bi-currency-bitcoin"></i>
 				<span>Manna: {{resources.manna.quantity}}</span>
 			</div>
