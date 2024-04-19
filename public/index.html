@@ -74,37 +74,28 @@
 			</div>
 
 			<!-- Activities -->
-			<div class="row">
-				<div class="col-12 info-container">
-					<div class="row">
-						<div class="col">
-							<span class="addon-header">Activities</span>
-						</div>
-					</div>
-					<div id="activities-container" class="row">
-
+			<div class="row info-container my-1">
+				<div class="row align-items-center py-2">
+					<div class="col">
+						<span class="addon-header">Activities</span>
 					</div>
 				</div>
+				<div id="activities-container" class="row"></div>
 			</div>
 
 			<!-- Facilities -->
-			<div class="row">
-				<div class="col-12 info-container">
-					<div class="row">
-						<div class="col-4">
-							<span class="addon-header">Facilities</span>
-						</div>
-						<div class="col-2 offset-6" style="margin-top: 8px;">
-							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
-								data-bs-target="#facilities-modal">
-								Build
-							</button>
-						</div>
+			<div class="row info-container my-1">
+				<div class="row align-items-center py-2">
+					<div class="col">
+						<span class="addon-header">Facilities</span>
 					</div>
-					<div id="facilities-container" class="row">
-
+					<div class="col">
+						<button type="button" class="addon-header-button base-btn float-end" data-bs-toggle="modal" data-bs-target="#facilities-modal">
+							Build
+						</button>
 					</div>
 				</div>
+				<div id="facilities-container" class="row"></div>
 			</div>
 			<div class="modal modal-xl fade" id="facilities-modal" tabindex="-1"
 				aria-labelledby="facilities-modal-label" aria-hidden="true">
@@ -115,9 +106,7 @@
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-							<div id="facilities-build-container" class="row">
-
-							</div>
+							<div id="facilities-build-container" class="row"></div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
@@ -129,23 +118,19 @@
 			</div>
 
 			<!-- Defenses -->
-			<div class="row">
-				<div class="col-12 info-container">
-					<div class="row">
-						<div class="col-4">
-							<span class="addon-header">Defences</span>
-						</div>
-						<div class="col-2 offset-6" style="margin-top: 8px;">
-							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
-								data-bs-target="#defenses-modal">
-								Build
-							</button>
-						</div>
-						<div id="defenses-container" class="row">
-
-						</div>
+			<div class="row info-container my-1">
+				<div class="row align-items-center py-2">
+					<div class="col">
+						<span class="addon-header">Defences</span>
+					</div>
+					<div class="col">
+						<button type="button" class="addon-header-button base-btn float-end mx-auto" data-bs-toggle="modal"
+							data-bs-target="#defenses-modal">
+							Build
+						</button>
 					</div>
 				</div>
+				<div id="defenses-container" class="row"></div>
 			</div>
 			<div class="modal modal-xl fade" id="defenses-modal" tabindex="-1" aria-labelledby="defenses-modal-label"
 				aria-hidden="true">
@@ -170,23 +155,19 @@
 			</div>
 
 			<!-- Personnel -->
-			<div class="row">
-				<div class="col-12 info-container">
-					<div class="row">
-						<div class="col-4">
-							<span class="addon-header">Personnel</span>
-						</div>
-						<div class="col-2 offset-6" style="margin-top: 8px;">
-							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
-								data-bs-target="#personnel-modal">
-								Recruit
-							</button>
-						</div>
-						<div id="personnel-container" class="row">
-
-						</div>
+			<div class="row info-container my-1">
+				<div class="row align-items-center py-2">
+					<div class="col">
+						<span class="addon-header">Personnel</span>
+					</div>
+					<div class="col">
+						<button type="button" class="addon-header-button base-btn float-end mx-auto" data-bs-toggle="modal"
+							data-bs-target="#personnel-modal">
+							Recruit
+						</button>
 					</div>
 				</div>
+				<div id="personnel-container" class="row"></div>
 			</div>
 			<div class="modal modal-xl fade" id="personnel-modal" tabindex="-1" aria-labelledby="personnel-modal-label"
 				aria-hidden="true">
@@ -661,8 +642,8 @@
 	</script>
 	<!-- Handlebars templates -->
 	<script id="logTemplate" type="text/x-handlebars-template">
-		<div class="row">
-			<span class="addon-header logs-header">Logs</span>
+		<div class="row logs-header">
+			<span class="addon-header">Logs</span>
 		</div>
 		<div class="row">
 			<div id="log-display" class="row">

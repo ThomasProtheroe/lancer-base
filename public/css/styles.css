@@ -45,7 +45,6 @@ body, html {
   color: #000;
   background-color: #f1f1f1;
   border: 6px solid #ccc;
-  margin-top: 20px;
 }
 .info-readout {
   color: black;
@@ -179,7 +178,7 @@ body, html {
   margin-right: 7px;
 }
 
-.addon-header.logs-header{
+.logs-header{
   background-color: #073642;
   position: -webkit-sticky;
   position: sticky;
