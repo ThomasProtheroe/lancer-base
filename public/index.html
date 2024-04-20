@@ -729,6 +729,7 @@
 			const template = Handlebars.compile(source);
 			const rendered = template({ logs, selectedPilot});
 			document.getElementById('log-container').innerHTML = rendered;
+			document.getElementById('log-container').scrollTop = 999999;
 		}
 		function updateResources(resources) {
 			this.state.resources = resources;

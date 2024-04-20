@@ -228,6 +228,7 @@
 			const template = Handlebars.compile(source);
 			const rendered = template({ logs});
 			document.getElementById('gm-log-container').innerHTML = rendered;
+			document.getElementById('gm-log-container').scrollTop = 999999;
 		}
 	</script>
 	<script>
