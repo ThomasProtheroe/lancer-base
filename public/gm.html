@@ -227,8 +227,9 @@
 			const source = document.getElementById('logTemplate').innerHTML;
 			const template = Handlebars.compile(source);
 			const rendered = template({ logs});
-			document.getElementById('gm-log-container').innerHTML = rendered;
-			document.getElementById('gm-log-container').scrollTop = 999999;
+			var logContainer = document.getElementById('log-container');
+			logContainer.innerHTML = rendered;
+			logContainer.scrollTop = logContainer.scrollHeight;
 		}
 	</script>
 	<script>

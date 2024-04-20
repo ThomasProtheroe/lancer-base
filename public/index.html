@@ -728,8 +728,9 @@
 			const source = document.getElementById('logTemplate').innerHTML;
 			const template = Handlebars.compile(source);
 			const rendered = template({ logs, selectedPilot});
-			document.getElementById('log-container').innerHTML = rendered;
-			document.getElementById('log-container').scrollTop = 999999;
+			var logContainer = document.getElementById('log-container');
+			logContainer.innerHTML = rendered;
+			logContainer.scrollTop = logContainer.scrollHeight;
 		}
 		function updateResources(resources) {
 			this.state.resources = resources;
