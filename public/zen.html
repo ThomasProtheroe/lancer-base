@@ -74,6 +74,11 @@
 		const socket = io();
 		socket.on('activity_log', (msg) => {
 			addLog(msg);
+			
+		});
+		socket.on('gm_sound', (msg) => {
+			const sound = new Audio(msg);
+			sound.play();
 		});
 	</script>
 </body>
