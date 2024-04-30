@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="/css/gm.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/Javascript" src="logTemplate.js"></script>
 </head>
 
 <body>
@@ -36,32 +37,11 @@
 		<hr/>
 		<div id="gm-base-resources-container" class="row">Loading...</div>
 		<hr/>
-		<div id="gm-log-container" class="row">Loading...</div>
+		<div id="log-container" class="row">Loading...</div>
 	</div>
 
 	
 	<!-- Handlebars templates -->
-	<script id="logTemplate" type="text/x-handlebars-template">
-		<div>
-			<h2>Game Log</h2>
-		</div>
-		<div id="log-display">
-			{{#each logs}}
-				<div>
-					<span class="{{user}}_text">[{{ user }}]</span> - {{ message }}
-				</div>
-			{{/each}}
-		</div>
-		<div id="log-input">
-			<div class="cursor">
-				<span>
-					<span class="GM_text">GM</span>:~$</span>
-			</div>
-			<div class="text-input">
-				<input id="log-text-input" type="text" onkeydown="sendMessage(this.value)"/>
-			</div>
-		</div>
-	</script>
 	<script id="baseResourcesTemplate" type="text/x-handlebars-template">
 		<div class="row">
 			<h2>Base Resources</h2>
@@ -201,38 +181,6 @@
 		}
 	</script>
 	<script>
-		async function sendMessage(text) {
-			if(event.keyCode == 13) {
-				const message = {
-					user: 'GM',
-					time: Date.now(),
-					message: text
-				};
-				await fetch('/log', {
-					method: 'POST',
-					body: JSON.stringify(message),
-					headers: {
-						"Content-type": "application/json; charset=UTF-8"
-					}
-				});
-			}
-		}
-		function addLog(log) {
-			this.state.logs.push(log);
-			fetch
-			renderLogs();
-		}
-		function renderLogs() {
-			const logs = this.state.logs;
-			const source = document.getElementById('logTemplate').innerHTML;
-			const template = Handlebars.compile(source);
-			const rendered = template({ logs});
-			var logContainer = document.getElementById('log-container');
-			logContainer.innerHTML = rendered;
-			logContainer.scrollTop = logContainer.scrollHeight;
-		}
-	</script>
-	<script>
 		async function alterStatus(e) {
 			const statusBar = e.statusBar.toLowerCase();
 			const action = e.action;
@@ -365,7 +313,9 @@
 	<script>
 		// Global State object
 		this.state = {
-			selectedPilot: ''
+			selectedPilot: '',
+			isGM: true,
+			isZen: false
 		};
 
 		async function init() {
