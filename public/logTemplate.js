@@ -29,9 +29,8 @@ function createLogTemplate(selectedPilot) {
 
 async function sendMessage(e) {
 	if (e.code == "Enter" || e.code == "NumpadEnter"){
-		var user = parent.state.selectedPilot;
 		const message = {
-			user: user,
+			user: parent.state.selectedPilot,
 			time: Date.now(),
 			message: this.value
 		};
@@ -56,10 +55,10 @@ function renderLogs() {
 	const source = createLogTemplate(selectedPilot);
 	const template = Handlebars.compile(source);
 	const rendered = template({ logs, selectedPilot});
-	var logContainer = document.getElementById('log-container');
+	const logContainer = document.getElementById('log-container');
 	logContainer.innerHTML = rendered;
 	logContainer.scrollTop = logContainer.scrollHeight;
 	document.getElementById('log-container').innerHTML = rendered;
-	var logInput = document.getElementById("log-text-input");
+	const logInput = document.getElementById("log-text-input");
 	logInput.onkeydown = sendMessage;
 }
