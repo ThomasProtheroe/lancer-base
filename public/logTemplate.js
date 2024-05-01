@@ -1,17 +1,5 @@
-function createLogTemplate(selectedPilot = null, isGM = false, isZen = false) {
-	if (!selectedPilot && !isGM && !isZen) return;
-
-	var userText = () => {
-		if (selectedPilot != ''){
-			return `<span class="${selectedPilot}_text">${selectedPilot}</span>`
-		}
-		else if (isGM){
-			return `<span class="GM_text">GM</span>`;
-		}
-		else if (isZen){
-			return `<span class="Zen_text">Zen</span>`;
-		}
-	}
+function createLogTemplate(selectedPilot) {
+	if (!selectedPilot) return;
 
 	var logTemplate = `
 	<div id="logTemplate" class="row logs-header">
@@ -28,7 +16,7 @@ function createLogTemplate(selectedPilot = null, isGM = false, isZen = false) {
 	</div>
 	<div id="log-input" class="row">
 		<div>
-			${userText()}
+			<span class="${selectedPilot}_text">${selectedPilot}</span>
 			<span>:~$ </span>
 		</div>
 		<div>
@@ -41,8 +29,7 @@ function createLogTemplate(selectedPilot = null, isGM = false, isZen = false) {
 
 async function sendMessage(e) {
 	if (e.code == "Enter" || e.code == "NumpadEnter"){
-		var user = parent.state.selectedPilot != '' ? parent.state.selectedPilot
-					: parent.state.isGM ? "GM" : "Zen";
+		var user = parent.state.selectedPilot;
 		const message = {
 			user: user,
 			time: Date.now(),
@@ -66,9 +53,7 @@ function addLog(log) {
 function renderLogs() {
 	const logs = this.state.logs;
 	const selectedPilot = this.state.selectedPilot;
-	var isGM = this.state.isGM;
-	var isZen = this.state.isZen;
-	const source = createLogTemplate(selectedPilot, isGM, isZen);
+	const source = createLogTemplate(selectedPilot);
 	const template = Handlebars.compile(source);
 	const rendered = template({ logs, selectedPilot});
 	var logContainer = document.getElementById('log-container');
