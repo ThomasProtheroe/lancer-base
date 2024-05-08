@@ -18,6 +18,7 @@
 	<link rel="stylesheet" href="/css/styles.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/Javascript" src="logTemplate.js"></script>
 </head>
 
 <body>
@@ -80,7 +81,7 @@
 						<span class="addon-header">Activities</span>
 					</div>
 				</div>
-				<div id="activities-container" class="row"></div>
+				<div id="activities-container" class="row row-cols-4"></div>
 			</div>
 
 			<!-- Facilities -->
@@ -95,7 +96,7 @@
 						</button>
 					</div>
 				</div>
-				<div id="facilities-container" class="row"></div>
+				<div id="facilities-container" class="row row-cols-4"></div>
 			</div>
 			<div class="modal modal-xl fade" id="facilities-modal" tabindex="-1"
 				aria-labelledby="facilities-modal-label" aria-hidden="true">
@@ -106,7 +107,7 @@
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-							<div id="facilities-build-container" class="row"></div>
+							<div id="facilities-build-container" class="row row-cols-4"></div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
@@ -130,7 +131,7 @@
 						</button>
 					</div>
 				</div>
-				<div id="defenses-container" class="row"></div>
+				<div id="defenses-container" class="row row-cols-4"></div>
 			</div>
 			<div class="modal modal-xl fade" id="defenses-modal" tabindex="-1" aria-labelledby="defenses-modal-label"
 				aria-hidden="true">
@@ -141,9 +142,7 @@
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-							<div id="defenses-build-container" class="row">
-
-							</div>
+							<div id="defenses-build-container" class="row row-cols-4"></div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
@@ -167,7 +166,7 @@
 						</button>
 					</div>
 				</div>
-				<div id="personnel-container" class="row"></div>
+				<div id="personnel-container" class="row row-cols-4"></div>
 			</div>
 			<div class="modal modal-xl fade" id="personnel-modal" tabindex="-1" aria-labelledby="personnel-modal-label"
 				aria-hidden="true">
@@ -178,7 +177,7 @@
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-							<div id="personnel-recruit-container" class="row">
+							<div id="personnel-recruit-container" class="row row-cols-4">
 
 							</div>
 						</div>
@@ -653,29 +652,6 @@
 		})
 	</script>
 	<!-- Handlebars templates -->
-	<script id="logTemplate" type="text/x-handlebars-template">
-		<div class="row logs-header">
-			<span class="addon-header">Logs</span>
-		</div>
-		<div class="row">
-			<div id="log-display" class="row">
-				{{#each logs}}
-					<div>
-						<span class="{{user}}_text">[{{ user }}]</span> - {{ message }}
-					</div>
-				{{/each}}
-			</div>
-		</div>
-		<div id="log-input" class="row">
-			<div>
-				<span class="{{selectedPilot}}_text">{{ selectedPilot }}</span>
-				<span>:~$ </span>
-			</div>
-			<div>
-				<input id="log-text-input" type="text" onkeydown="sendMessage(this.value)"/>
-			</div>
-		</div>
-	</script>
 	<script id="resourcesTemplate" type="text/x-handlebars-template">
 		<div class="row">
 			<div class="col">
@@ -701,40 +677,11 @@
 			renderLogs();
 			enableControls(pilot);
 		}
-		
-		async function sendMessage(text) {
-			if(event.keyCode == 13) {
-				const message = {
-					user: this.state.selectedPilot,
-					time: Date.now(),
-					message: text
-				};
-				await fetch('./log', {
-					method: 'POST',
-					body: JSON.stringify(message),
-					headers: {
-						"Content-type": "application/json; charset=UTF-8"
-					}
-				});
-			}
-		}
-		function addLog(log) {
-			this.state.logs.push(log);
-			renderLogs();
-		}
-		function renderLogs() {
-			const logs = this.state.logs;
-			const selectedPilot = this.state.selectedPilot;
-			const source = document.getElementById('logTemplate').innerHTML;
-			const template = Handlebars.compile(source);
-			const rendered = template({ logs, selectedPilot});
-			document.getElementById('log-container').innerHTML = rendered;
-			document.getElementById('log-container').scrollTop = 999999;
-		}
 		function updateResources(resources) {
 			this.state.resources = resources;
 			renderResources();
 		}
+
 		function renderResources() {
 			resources = this.state.resources;
 			const source = document.getElementById('resourcesTemplate').innerHTML;
