@@ -230,6 +230,9 @@ export class Base {
 			this.addons = baseData.addons;
 			return baseData;
 		} catch(err) {
+			if (err.code === 'ENOENT') {
+				return;
+			}
 			console.error(err);
 		}
 	}
