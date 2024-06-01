@@ -2,12 +2,16 @@ import express from 'express';
 const app = express();
 import http from 'http';
 const server = http.createServer(app);
+import proxy from 'express-http-proxy';
 
 import { Server } from 'socket.io';
 const io = new Server(server);
 
+const TTS_SERVER_URL = 'http://localhost:9600';
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/tts', proxy(TTS_SERVER_URL));
 
 import path from 'path';
 import * as fs from 'node:fs/promises';
@@ -164,6 +168,13 @@ app.get('/blog', (req, res) => {
 
 app.post('/reloadPage', async (req, res) => {
 	io.emit('reloadPage');
+	res.send({ status: 200 });
+});
+
+// ZEN
+app.post('/gm/broadcastSound', (req, res) => {
+	const filePath = req.body.filePath;
+	io.emit('gm_sound', filePath);
 	res.send({ status: 200 });
 });
 

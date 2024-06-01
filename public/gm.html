@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="/css/gm.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/Javascript" src="logTemplate.js"></script>
 </head>
 
 <body>
@@ -36,32 +37,11 @@
 		<hr/>
 		<div id="gm-base-resources-container" class="row">Loading...</div>
 		<hr/>
-		<div id="gm-log-container" class="row">Loading...</div>
+		<div id="log-container" class="row">Loading...</div>
 	</div>
 
 	
 	<!-- Handlebars templates -->
-	<script id="logTemplate" type="text/x-handlebars-template">
-		<div>
-			<h2>Game Log</h2>
-		</div>
-		<div id="log-display">
-			{{#each logs}}
-				<div>
-					<span class="{{user}}_text">[{{ user }}]</span> - {{ message }}
-				</div>
-			{{/each}}
-		</div>
-		<div id="log-input">
-			<div class="cursor">
-				<span>
-					<span class="GM_text">GM</span>:~$</span>
-			</div>
-			<div class="text-input">
-				<input id="log-text-input" type="text" onkeydown="sendMessage(this.value)"/>
-			</div>
-		</div>
-	</script>
 	<script id="baseResourcesTemplate" type="text/x-handlebars-template">
 		<div class="row">
 			<h2>Base Resources</h2>
@@ -107,28 +87,28 @@
 	</script>
 	<script id="baseStatusBarsTemplate" type="text/x-handlebars-template">
 		{{#each statusBars}}
-			<div class="col-md-6 base-status">
+			<div class="col-6 base-status">
 				<div class="row">
 					<span class="base-status-bar-label">{{label}}: </span>
 				</div>
 				<div class="row">
-					<div class="col-md-10">
+					<div class="col-10">
 						<div class="base-status-bar" style="{{styles}}">
 							<div class="base-status-bar-fill">{{value}}/{{maxValue}}</div>
 						</div>
 					</div>
-					<button onclick="alterStatus({statusBar: '{{label}}', action: 'subtract'})" class="col-md-1 base-status-button">-</button>
-					<button onclick="alterStatus({statusBar: '{{label}}', action: 'add'})" class="col-md-1 base-status-button">+</button>
+					<button onclick="alterStatus({statusBar: '{{label}}', action: 'subtract'})" class="col-1 base-status-button">-</button>
+					<button onclick="alterStatus({statusBar: '{{label}}', action: 'add'})" class="col-1 base-status-button">+</button>
 				</div>
 			</div>
 		{{/each}}
 	</script>
 	<script id="pilotsTemplate" type="text/x-handlebars-template">
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-3">
 				<h2>Pilot Data: </h2>
 			</div>
-			<div class="col-md-9">
+			<div class="col-9">
 				<select onChange="updatePilotSelect(this.options[this.selectedIndex].value)" id="pilot-select" class=" gm-pilot-select">
 					<option value=""></option>
 					{{#each pilotData.pilots}}
@@ -143,12 +123,12 @@
 		</div>
 		<div class="row">
 			{{#if pilotData.selectedPilotData}}
-				<div class="col-md-6">
+				<div class="col-6">
 					<h3>DownTime: {{pilotData.selectedPilotData.downtimeUnits}}</h3>
 				</div>
-				<div class="col-md-6">
-					<button onclick="updateDowntime({pilotId: '{{pilotData.selectedPilotData.callsign}}', action: 'subtract'})" class="col-md-1 base-status-button">-</button>
-					<button onclick="updateDowntime({pilotId: '{{pilotData.selectedPilotData.callsign}}', action: 'add'})" class="col-md-1 base-status-button">+</button>
+				<div class="col-6">
+					<button onclick="updateDowntime({pilotId: '{{pilotData.selectedPilotData.callsign}}', action: 'subtract'})" class="col-1 base-status-button">-</button>
+					<button onclick="updateDowntime({pilotId: '{{pilotData.selectedPilotData.callsign}}', action: 'add'})" class="col-1 base-status-button">+</button>
 				</div>
 			{{/if}}
 		</div>
@@ -198,36 +178,6 @@
 			const template = Handlebars.compile(source);
 			const rendered = template({resources});
 			document.getElementById('gm-base-resources-container').innerHTML = rendered;
-		}
-	</script>
-	<script>
-		async function sendMessage(text) {
-			if(event.keyCode == 13) {
-				const message = {
-					user: 'GM',
-					time: Date.now(),
-					message: text
-				};
-				await fetch('/log', {
-					method: 'POST',
-					body: JSON.stringify(message),
-					headers: {
-						"Content-type": "application/json; charset=UTF-8"
-					}
-				});
-			}
-		}
-		function addLog(log) {
-			this.state.logs.push(log);
-			fetch
-			renderLogs();
-		}
-		function renderLogs() {
-			const logs = this.state.logs;
-			const source = document.getElementById('logTemplate').innerHTML;
-			const template = Handlebars.compile(source);
-			const rendered = template({ logs});
-			document.getElementById('gm-log-container').innerHTML = rendered;
 		}
 	</script>
 	<script>
@@ -363,7 +313,7 @@
 	<script>
 		// Global State object
 		this.state = {
-			selectedPilot: ''
+			selectedPilot: "GM"
 		};
 
 		async function init() {

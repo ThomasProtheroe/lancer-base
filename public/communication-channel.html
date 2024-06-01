@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/gm.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mouth of Zen</title>
+    <link rel="stylesheet" href="/css/communication-channel.css">
+</head>
+<body>
+    <img
+        src="/images/zen.webp"
+        alt="Zen the help AI of the Blue Haven Union bunker"
+        width=256
+        height=256
+    />
+    <div id="log-input" class="row">
+		<div>
+			<input id="zen-input" type="text" onkeydown="sendMessage(this.value)"/>
+		</div>
+	</div>
+    <script>
+        async function sendMessage(e) {
+            console.log('ekeyCode: ', event.keyCode, ', e: ', e);
+            if (event.keyCode == 13) {
+                const message = {
+                    prompt: e
+                }
+                const response = await fetch('/tts/audio', {
+                    method: 'POST',
+                    body: JSON.stringify(message),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                const data = await response.json();
+                const broadcastMessage = {
+                    filePath: `https://lancer.nebtown.info/audio-files/${data.id}.wav`
+                };
+                await fetch('./gm/broadcastSound', {
+                    method: 'POST',
+                    body: JSON.stringify(broadcastMessage),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                });
+            }
+        }
+
+        const socket = io();
+        socket.on('gm_sound', (msg) => {
+            console.log('Play sound: ', msg);
+			const sound = new Audio(msg);
+			sound.play();
+		});
+    </script>
+</body>
+</html>

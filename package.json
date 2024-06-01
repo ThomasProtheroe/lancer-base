@@ -10,8 +10,9 @@
   "author": "Thomas Protheroe",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.3",
+    "express": "^4.19.2",
     "express-handlebars": "^7.1.2",
+    "express-http-proxy": "^2.0.0",
     "gray-matter": "^4.0.3",
     "markdown-it": "^14.1.0",
     "socket.io": "^4.7.5"

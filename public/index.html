@@ -18,6 +18,7 @@
 	<link rel="stylesheet" href="/css/styles.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/Javascript" src="logTemplate.js"></script>
 </head>
 
 <body>
@@ -40,19 +41,19 @@
 	<div class="bgfullimg">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col">
 					<span class="condition-text">Condition: </span>
 					<div class="status-bar">
 						<div id="condition-fill" class="status-bar-fill"><span id="stats-condition"></span></div>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col">
 					<span class="condition-text">Morale: </span>
 					<div class="status-bar">
 						<div id="morale-fill" class="status-bar-fill"><span id="stats-morale"></span></div>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col">
 					<span class="condition-text">Pilot: </span>
 					<select id="pilot-select" class="base-select" onchange="updateSelectedPilot(this.value)">
 
@@ -62,68 +63,40 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col">
 					<span class="stats-text">Defense: <span id="stats-defense"></span></span>
 				</div>
-				<div class="col-md-4">
+				<div class="col">
 					<span class="stats-text">E-Defense: <span id="stats-edefense"></span></span>
 				</div>
-				<div class="col-md-4">
+				<div class="col">
 					<span class="stats-text">Sensors: <span id="stats-sensors"></span></span>
 				</div>
 			</div>
 
 			<!-- Activities -->
-			<div class="row">
-				<div class="col-md-12 info-container">
-					<div class="row">
-						<div class="col-md-4">
-							<span class="addon-header">Activities</span>
-						</div>
-					</div>
-					<div id="activities-container" class="row">
-
+			<div class="row info-container my-1">
+				<div class="row align-items-center py-2">
+					<div class="col">
+						<span class="addon-header">Activities</span>
 					</div>
 				</div>
+				<div id="activities-container" class="row row-cols-4"></div>
 			</div>
-			<!-- <div class="modal modal-xl fade" id="activities-modal" tabindex="-1" aria-labelledby="activities-modal-label" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="activities-modal-label">Pilot Activities</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div id="activities-build-container" class="row">
-              
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn-modal-confirm base-btn buy-addon-btn" data-bs-dismiss="modal" disabled>Perform</button>
-              </div>
-            </div>
-          </div>
-        </div> -->
 
 			<!-- Facilities -->
-			<div class="row">
-				<div class="col-md-12 info-container">
-					<div class="row">
-						<div class="col-md-4">
-							<span class="addon-header">Facilities</span>
-						</div>
-						<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
-							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
-								data-bs-target="#facilities-modal">
-								Build
-							</button>
-						</div>
+			<div class="row info-container my-1">
+				<div class="row align-items-center py-2">
+					<div class="col">
+						<span class="addon-header">Facilities</span>
 					</div>
-					<div id="facilities-container" class="row">
-
+					<div class="col">
+						<button type="button" class="addon-header-button base-btn float-end" data-bs-toggle="modal" data-bs-target="#facilities-modal">
+							Build
+						</button>
 					</div>
 				</div>
+				<div id="facilities-container" class="row row-cols-4"></div>
 			</div>
 			<div class="modal modal-xl fade" id="facilities-modal" tabindex="-1"
 				aria-labelledby="facilities-modal-label" aria-hidden="true">
@@ -134,9 +107,7 @@
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-							<div id="facilities-build-container" class="row">
-
-							</div>
+							<div id="facilities-build-container" class="row row-cols-4"></div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
@@ -148,23 +119,19 @@
 			</div>
 
 			<!-- Defenses -->
-			<div class="row">
-				<div class="col-md-12 info-container">
-					<div class="row">
-						<div class="col-md-4">
-							<span class="addon-header">Defenses</span>
-						</div>
-						<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
-							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
-								data-bs-target="#defenses-modal">
-								Build
-							</button>
-						</div>
-						<div id="defenses-container" class="row">
-
-						</div>
+			<div class="row info-container my-1">
+				<div class="row align-items-center py-2">
+					<div class="col">
+						<span class="addon-header">Defences</span>
+					</div>
+					<div class="col">
+						<button type="button" class="addon-header-button base-btn float-end mx-auto" data-bs-toggle="modal"
+							data-bs-target="#defenses-modal">
+							Build
+						</button>
 					</div>
 				</div>
+				<div id="defenses-container" class="row row-cols-4"></div>
 			</div>
 			<div class="modal modal-xl fade" id="defenses-modal" tabindex="-1" aria-labelledby="defenses-modal-label"
 				aria-hidden="true">
@@ -175,9 +142,7 @@
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-							<div id="defenses-build-container" class="row">
-
-							</div>
+							<div id="defenses-build-container" class="row row-cols-4"></div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="base-btn" data-bs-dismiss="modal">Close</button>
@@ -189,23 +154,19 @@
 			</div>
 
 			<!-- Personnel -->
-			<div class="row">
-				<div class="col-md-12 info-container">
-					<div class="row">
-						<div class="col-md-4">
-							<span class="addon-header">Personnel</span>
-						</div>
-						<div class="col-md-2 offset-md-6" style="margin-top: 8px;">
-							<button type="button" class="addon-header-button base-btn" data-bs-toggle="modal"
-								data-bs-target="#personnel-modal">
-								Recruit
-							</button>
-						</div>
-						<div id="personnel-container" class="row">
-
-						</div>
+			<div class="row info-container my-1">
+				<div class="row align-items-center py-2">
+					<div class="col">
+						<span class="addon-header">Personnel</span>
+					</div>
+					<div class="col">
+						<button type="button" class="addon-header-button base-btn float-end mx-auto" data-bs-toggle="modal"
+							data-bs-target="#personnel-modal">
+							Recruit
+						</button>
 					</div>
 				</div>
+				<div id="personnel-container" class="row row-cols-4"></div>
 			</div>
 			<div class="modal modal-xl fade" id="personnel-modal" tabindex="-1" aria-labelledby="personnel-modal-label"
 				aria-hidden="true">
@@ -216,7 +177,7 @@
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body">
-							<div id="personnel-recruit-container" class="row">
+							<div id="personnel-recruit-container" class="row row-cols-4">
 
 							</div>
 						</div>
@@ -231,7 +192,7 @@
 
 			<!-- Logs -->
 			<div class="row">
-				<div id="log-container" class="col-md-12 info-container"></div>
+				<div id="log-container" class="col-12 info-container"></div>
 			</div>
 
 		</div>
@@ -300,29 +261,33 @@
 				timeRemaining = addon['timeRemaining'];
 			}
 			$(containerSelector).append(
-				'<div class="col-md-3"><div class="addon-item ' + extraClasses + '">' +
-				'<div class="addon-name">' + addon['name'] + '</div>' +
-				'<div class="addon-description">' + addon['description'] + '</div>' +
-				'<div class="addon-notes">' + addon['notes'] + '</div>' +
-				'<div class="addon-construction-controls">' +
-				'<div class="addon-construction-sign">UNDER CONSTRUCTION' + '</div>' +
-				'<div class="addon-construction-time">Work Remaining: ' + timeRemaining + '</div>' +
-				'<button class="base-btn work-addon-btn downtime-required">Add Work</button>' +
-				'</div>' +
-				'</div></div>'
+				`<div class="col">
+					<div class="addon-item ${extraClasses}">
+						<div class="addon-name">${addon['name']}</div>
+						<div class="addon-description">${addon['description']}</div>
+						<div class="addon-notes">${addon['notes']}</div>
+						<div class="addon-construction-controls">
+							<div class="addon-construction-sign">UNDER CONSTRUCTION</div>
+							<div class="addon-construction-time">Work Remaining: ${timeRemaining}</div>
+							<button class="base-btn work-addon-btn downtime-required">Add Work</button>
+						</div>
+					</div>
+				</div>`
 			);
 			$(containerSelector).find('.addon-item').last().data('addon', addon);
 		};
 
 		const addActivity = (activity) => {
 			$('#activities-container').append(
-				'<div class="col-md-3"><div class="activity-item">' +
-				'<div class="activity-name">' + activity['name'] + '</div>' +
-				getCostsDisplay(activity['cost']) +
-				'<div class="activity-description">' + activity['description'] + '</div>' +
-				'<div class="activity-notes">' + activity['notes'] + '</div>' +
-				'<button class="base-btn perform-activity-btn downtime-required">Perform</button>' +
-				'</div></div>'
+				`<div class="col">
+					<div class="activity-item">
+						<div class="activity-name">${activity['name']}</div>
+						${getCostsDisplay(activity['cost'])}
+						<div class="activity-description">${activity['description']}</div>
+						<div class="activity-notes">${activity['notes']}</div>
+						<button class="base-btn perform-activity-btn downtime-required">Perform</button>
+					</div>
+				</div>`
 			);
 			$('#activities-container').find('.activity-item').last().data('activity', activity);
 		}
@@ -339,11 +304,22 @@
 			addAddon(defense, '#defenses-container');
 		}
 
+		const addAvailableAddOn = (addOnData) => {
+			return `<div class="col">
+						<div class="addon-item selectable">
+							<div class="addon-name">${addOnData.name}</div>
+							${getCostsDisplay(addOnData.cost)}
+							<div>${addOnData.description}</div>
+							<div> ${addOnData.notes}</div>
+						</div>
+					</div>`
+		}
+
 		const getCostsDisplay = (jsonObject) => {
 			let displayString = '<div class="item-costs">';
 
 			Object.keys(jsonObject).forEach(key => {
-				displayString += '<span class="item-cost-item"><i class="bi bi-' + icons[key] + '"></i>' + jsonObject[key] + '</span>';
+				displayString += `<span class="item-cost-item"><i class="bi bi-${icons[key]}""></i> ${jsonObject[key]}</span>`;
 			});
 			displayString += '</div>';
 			return displayString;
@@ -518,11 +494,12 @@
 							}
 
 							$('#personnel-recruit-container').append(
-								'<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + recruit['name'] + '</div>' +
-								getCostsDisplay(recruit['cost']) +
-								'<div>' + recruit['description'] +
-								'</div><div>' + recruit['notes'] +
-								'</div></div></div>'
+								addAvailableAddOn({
+									name: recruit['name'],
+									cost: recruit['cost'],
+									description: recruit['description'],
+									notes: recruit['notes']
+								})
 							);
 							//Add resource costs as data attributes
 							$('#personnel-recruit-container').find('.addon-item').last().data('addon', recruit);
@@ -544,11 +521,12 @@
 							}
 
 							$('#defenses-build-container').append(
-								'<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + defense['name'] + '</div>' +
-								getCostsDisplay(defense['cost']) +
-								'<div>' + defense['description'] +
-								'</div><div>' + defense['notes'] +
-								'</div></div></div>'
+								addAvailableAddOn({
+									name: defense['name'],
+									cost: defense['cost'],
+									description: defense['description'],
+									notes: defense['notes']
+								})
 							);
 							//Add resource costs as data attributes
 							$('#defenses-build-container').find('.addon-item').last().data('addon', defense);
@@ -570,11 +548,12 @@
 							}
 
 							$('#facilities-build-container').append(
-								'<div class="col-md-3"><div class="addon-item selectable"><div class="addon-name">' + facility['name'] + '</div>' +
-								getCostsDisplay(facility['cost']) +
-								'<div>' + facility['description'] +
-								'</div><div>' + facility['notes'] +
-								'</div></div></div>'
+								addAvailableAddOn({
+									name: facility['name'],
+									cost: facility['cost'],
+									description: facility['description'],
+									notes: facility['notes']
+								})
 							);
 							//Add resource costs as data attributes
 							$('#facilities-build-container').find('.addon-item').last().data('addon', facility);
@@ -673,40 +652,17 @@
 		})
 	</script>
 	<!-- Handlebars templates -->
-	<script id="logTemplate" type="text/x-handlebars-template">
-		<div class="row">
-			<div class="row">
-				<span class="addon-header">Logs</span>
-			</div>
-			<div id="log-display" class="row">
-				{{#each logs}}
-					<div>
-						<span class="{{user}}_text">[{{ user }}]</span> - {{ message }}
-					</div>
-				{{/each}}
-			</div>
-		</div>
-		<div id="log-input" class="row">
-			<div>
-				<span class="{{selectedPilot}}_text">{{ selectedPilot }}</span>
-				<span>:~$ </span>
-			</div>
-			<div>
-				<input id="log-text-input" type="text" onkeydown="sendMessage(this.value)"/>
-			</div>
-		</div>
-	</script>
 	<script id="resourcesTemplate" type="text/x-handlebars-template">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col">
 				<i class="bi bi-boxes"></i>
 				<span>Materials: {{resources.materials.quantity}}</span>
 			</div>
-			<div class="col-md-4">
+			<div class="col">
 				<i class="bi bi-device-ssd"></i>
 				<span>Refined Materials: {{resources.refinedMaterials.quantity}}</span>
 			</div>
-			<div class="col-md-4">
+			<div class="col">
 				<i class="bi bi-currency-bitcoin"></i>
 				<span>Manna: {{resources.manna.quantity}}</span>
 			</div>
@@ -721,39 +677,11 @@
 			renderLogs();
 			enableControls(pilot);
 		}
-		
-		async function sendMessage(text) {
-			if(event.keyCode == 13) {
-				const message = {
-					user: this.state.selectedPilot,
-					time: Date.now(),
-					message: text
-				};
-				await fetch('./log', {
-					method: 'POST',
-					body: JSON.stringify(message),
-					headers: {
-						"Content-type": "application/json; charset=UTF-8"
-					}
-				});
-			}
-		}
-		function addLog(log) {
-			this.state.logs.push(log);
-			renderLogs();
-		}
-		function renderLogs() {
-			const logs = this.state.logs;
-			const selectedPilot = this.state.selectedPilot;
-			const source = document.getElementById('logTemplate').innerHTML;
-			const template = Handlebars.compile(source);
-			const rendered = template({ logs, selectedPilot});
-			document.getElementById('log-container').innerHTML = rendered;
-		}
 		function updateResources(resources) {
 			this.state.resources = resources;
 			renderResources();
 		}
+
 		function renderResources() {
 			resources = this.state.resources;
 			const source = document.getElementById('resourcesTemplate').innerHTML;
