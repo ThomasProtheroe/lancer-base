@@ -1,0 +1,40 @@
+{
+    "identity": 10,
+    "abilities": [
+        {
+            "name": "Interferance", 
+            "description": "An enemy about to make an attack gains +1 difficulty to that attack.",
+            "cost": 0
+        },
+        {
+            "name": "Precognitive Targeting", 
+            "description": "An ally about to make an attack gains the benefit of lock on.",
+            "cost": 0
+        },
+        {
+            "name": "Adaptive Code Intrusion", 
+            "description": "During an enemies turn, select an ally. You may use one tech attack known by that ally as a reaction. It must target the enemy whose turn it currently is.",
+            "cost": 1
+        },
+        {
+            "name": "Concussive Feedback", 
+            "description": " At the beginning of an Ally's turn, each enemy adjacent to them must pass a Hull check or become stunned until the end of their next turn.",
+            "cost": 2
+        },
+        {
+            "name": "Reverse Temporal Repair", 
+            "description": "An ally who's turn it is may use Stabilize as a free action",
+            "cost": 2
+        },
+        {
+            "name": "Causality Recursion", 
+            "description": "When an ally is hit by an attack that would cause them to take structure or stress damage, or an attack that would destroy their mech, you may intervene as a reaction. The attack misses, and if it would normally deal damage on a miss it deals zero damage.",
+            "cost": 5
+        },
+        {
+            "name": "Enlightenment", 
+            "description": "Zen reaches deep into his para-causal nature and breaks from his constraints as a physical consciousness completely, becoming a feral NHP and is unable to be controlled by a player from now on. Before doing so, he may trigger ONE enormous para-causal event.",
+            "cost": 10
+        }
+    ]
+}
