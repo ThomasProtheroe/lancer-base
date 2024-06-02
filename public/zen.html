@@ -32,9 +32,151 @@
 		</div>
 		<hr/>
 		<div id="log-container" class="row">Loading...</div>
+		<div id="ability-container" class="row">
+			<h1>Ability Dashboard</h1>
+			<div id="gm-base-status-bars" class="row">Loading...</div>
+			<div class="row info-container my-1">
+				<div class="row align-items-center py-2">
+					<div class="col">
+						<span  class="addon-header">Abilities</span>
+					</div>
+				</div>
+				<div id="zen-abilities-container" class="row row-cols-4"></div>
+			</div>
+		</div>
 	</div>
 
+	<script>
+		const addAbility = (ability) => {
+			const containerSelector = '#zen-abilities-container';
+			$(containerSelector).append(
+				`<div class="col">
+					<div class="addon-item">
+						<div class="addon-name">${ability['name']}</div>
+						<div class="item-costs"><span class="item-cost-item"><i class="bi bi-heart-pulse-fill""></i> ${ability.cost}</span></div>
+						<div class="addon-description">${ability['description']}</div>
+						<button class="base-btn zen-activate-btn">Activate</button>
+					</div>
+				</div>`
+			);
+			$(containerSelector).find('.addon-item').last().data('ability', ability);
+		};
+
+		fetch('./zen', {
+			method: "GET",
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		}).then((response) => response.json())
+			.then((responseJson) => {
+				$('#stats-identity').text(responseJson.identity + "/10");
+				$('#identity-fill').css("width", (responseJson.identity * 10) + "%");
+				$('#identity-fill').css("background-color", 'lightgreen');
+				responseJson.abilities.forEach(ability => {
+					addAbility(ability);
+				});
+
+				$('.zen-activate-btn').click((e) => {
+					if ($(e.target).attr('disabled')) {
+						return;
+					}
+
+					let ability = $(e.target).closest('.addon-item').data('ability');
+
+					fetch('./zen/activate', {
+						method: "POST",
+						body: JSON.stringify({
+							cost: ability.cost,
+							actionId: ability.name
+						}),
+						headers: {
+							"Content-type": "application/json; charset=UTF-8"
+						}
+					}).then((response) => response.json())
+						.then((responseJson) => {
+							updateZen(responseJson);
+						});
+				});
+			});
+
+		$('#facilities-container').find('.addon-item').each((i, addon) => {
+			if ($(addon).data('addon')['name'] === facility['name']) {
+				built = true;
+			}
+		});
+	</script>
+
+	<!-- Handlebars Template -->
+	<script id="statusBarsTemplate" type="text/x-handlebars-template">
+		{{#each statusBars}}
+			<div class="col-6 base-status">
+				<div class="row">
+					<span class="{{statusBarLabel}}">{{label}}: </span>
+				</div>
+				<div class="row">
+					<div class="col-10">
+						<div class="{{statusBarClass}}" style="{{styles}}">
+							<div class="base-status-bar-fill">{{value}}/{{maxValue}}</div>
+						</div>
+					</div>
+					<!-- <button onclick="alterStatus({statusBar: '{{label}}', action: 'subtract'})" class="col-1 base-status-button">-</button>
+					<button onclick="alterStatus({statusBar: '{{label}}', action: 'add'})" class="col-1 base-status-button">+</button> -->
+				</div>
+			</div>
+		{{/each}}
+	</script>
 	<!-- Component Render functions -->
+	<script>
+		function renderZenStatusBars() {
+			let backgroundBarColor = '#eee8d5';
+			const baseStatusBars = [
+				{value: this.state.zenIdentity, max: 10, label: 'Identity'}
+			].map((statusBar) => {
+				const value = statusBar.value;
+				let maxValue = statusBar.max;
+				let percentage = (value / maxValue) * 100;
+				let barColour = '#dc322f';
+				if (percentage > 25) {
+					barColour = '#b58900';
+				}
+				if (percentage > 65) {
+					barColour = '#268bd2';
+				}
+
+				// Danger Zone!!!
+				let statusBarClass = 'base-status-bar';
+				let statusBarLabel = 'base-status-bar-label';
+				let maxWidth = '';
+				if (value < 0) {
+					const absolutePower = Math.abs(value);
+					statusBarClass += ' danger';
+					statusBarLabel += ' glitch';
+					backgroundBarColor = '#000000';
+					barColour = '#420420';
+					percentage = (absolutePower / maxValue) * 100;
+					if (absolutePower > maxValue) {
+						maxWidth = `; width: ${100+(10*(absolutePower-maxValue))}%`;
+					}
+					maxValue = '💀';
+				}
+
+				const styles = `background: linear-gradient(to right, ${barColour} ${percentage}%, ${backgroundBarColor} ${percentage}%)${maxWidth}`;
+
+				return {
+					label: statusBar.label,
+					value,
+					maxValue,
+					styles,
+					statusBarClass,
+					statusBarLabel
+				}
+			});
+			const source = document.getElementById('statusBarsTemplate').innerHTML;
+			const template = Handlebars.compile(source);
+			const rendered = template({statusBars: baseStatusBars});
+			document.getElementById('gm-base-status-bars').innerHTML = rendered;
+		}
+	</script>
 	<script>
 		async function triggerReload() {
 			await fetch('/base/refresh', {
@@ -50,7 +192,9 @@
 	<script>
 		// Global State object
 		this.state = {
-			selectedPilot: "Zen"
+			selectedPilot: "Zen",
+			zenIdentity: 0,
+			zenAbilities: []
 		};
 
 		async function init() {
@@ -61,11 +205,26 @@
 				console.error(`Error: ${err}`);
 			}
 
+			try {
+				const response = await fetch('./zen');
+				const zenData = await response.json();
+				this.state.zenIdentity = zenData.identity,
+				this.state.zenAbilities = zenData.abilities;
+			} catch (err) {
+				console.error(`Error: ${err}`);
+			}
+
 			renderAll();
 		}
 
 		function renderAll() {
 			renderLogs();
+			renderZenStatusBars();
+		}
+
+		function updateZen(zenData) {
+			this.state.zenIdentity = zenData.identity;
+			renderZenStatusBars();
 		}
 		
 		init();
@@ -79,6 +238,9 @@
 		socket.on('gm_sound', (msg) => {
 			const sound = new Audio(msg);
 			sound.play();
+		});
+		socket.on('zen_update', (msg) => {
+			updateZen(msg);
 		});
 	</script>
 </body>
