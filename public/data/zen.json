@@ -1,5 +1,5 @@
 {
-    "identity": 10,
+    "identity": 8,
     "abilities": [
         {
             "name": "Interferance", 
@@ -10,6 +10,11 @@
             "name": "Precognitive Targeting", 
             "description": "An ally about to make an attack gains the benefit of lock on.",
             "cost": 0
+        },
+        {
+            "name": "Overclock", 
+            "description": "You may perform one additional reaction this round.",
+            "cost": 1
         },
         {
             "name": "Adaptive Code Intrusion", 
