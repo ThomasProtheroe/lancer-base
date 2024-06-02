@@ -32,7 +32,58 @@
 		</div>
 		<hr/>
 		<div id="log-container" class="row">Loading...</div>
+		<div id="ability-container" class="row">
+			<h1>Ability Dashboard</h1>
+			<div class="row">
+				<div class="col">
+					<span class="condition-text">Identity: </span>
+					<div class="status-bar">
+						<div id="condition-fill" class="status-bar-fill"><span id="stats-identity"></span></div>
+					</div>
+				</div>
+			</div>
+			<div class="row info-container my-1">
+				<div class="row align-items-center py-2">
+					<div class="col">
+						<span  class="addon-header">Abilities</span>
+					</div>
+				</div>
+				<div id="zen-abilities-container" class="row row-cols-4"></div>
+			</div>
+		</div>
 	</div>
+
+	<script>
+		const addAbility = (ability) => {
+			$('#zen-abilities-container').append(
+				`<div class="col">
+					<div class="addon-item">
+						<div class="addon-name">${ability['name']}</div>
+						<div class="addon-description">${ability['description']}</div>
+						<button class="base-btn">Activate</button>
+					</div>
+				</div>`
+			);
+		};
+
+		fetch('./zen', {
+			method: "GET",
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		}).then((response) => response.json())
+			.then((responseJson) => {
+				responseJson.abilities.forEach(ability => {
+					addAbility(ability);
+				});
+			});
+
+		$('#facilities-container').find('.addon-item').each((i, addon) => {
+			if ($(addon).data('addon')['name'] === facility['name']) {
+				built = true;
+			}
+		});
+	</script>
 
 	<!-- Component Render functions -->
 	<script>

@@ -37,6 +37,14 @@ try {
 	console.error(e);
 }
 
+// Load zen dashboard data
+let zenData;
+try {
+	zenData = JSON.parse(await fs.readFile('./public/data/zen.json'));
+} catch (e) {
+	console.error(e);
+}
+
 import { ActivityLog } from './src/ActivityLog.mjs';
 const activityLogger = new ActivityLog('logs/activity_log.json', io);
 await activityLogger.load();
@@ -60,6 +68,11 @@ app.post('/log', (req, res) => {
 app.get('/log', (req, res) => {
 	const activityLogs = activityLogger.listLogs();
 	res.send(activityLogs);
+});
+
+// Zen
+app.get('/zen', function (req, res) {
+	res.send(zenData);
 });
 
 // Pilots
