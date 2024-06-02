@@ -34,14 +34,7 @@
 		<div id="log-container" class="row">Loading...</div>
 		<div id="ability-container" class="row">
 			<h1>Ability Dashboard</h1>
-			<div class="row">
-				<div class="col">
-					<span class="identity-text">Identity: </span>
-					<div class="status-bar">
-						<div id="identity-fill" class="status-bar-fill"><span id="stats-identity"></span></div>
-					</div>
-				</div>
-			</div>
+			<div id="gm-base-status-bars" class="row">Loading...</div>
 			<div class="row info-container my-1">
 				<div class="row align-items-center py-2">
 					<div class="col">
@@ -113,7 +106,57 @@
 		});
 	</script>
 
+	<!-- Handlebars Template -->
+	<script id="statusBarsTemplate" type="text/x-handlebars-template">
+		{{#each statusBars}}
+			<div class="col-6 base-status">
+				<div class="row">
+					<span class="base-status-bar-label">{{label}}: </span>
+				</div>
+				<div class="row">
+					<div class="col-10">
+						<div class="base-status-bar" style="{{styles}}">
+							<div class="base-status-bar-fill">{{value}}/{{maxValue}}</div>
+						</div>
+					</div>
+					<!-- <button onclick="alterStatus({statusBar: '{{label}}', action: 'subtract'})" class="col-1 base-status-button">-</button>
+					<button onclick="alterStatus({statusBar: '{{label}}', action: 'add'})" class="col-1 base-status-button">+</button> -->
+				</div>
+			</div>
+		{{/each}}
+	</script>
 	<!-- Component Render functions -->
+	<script>
+		function renderZenStatusBars() {
+			const backgroundBarColor = '#eee8d5';
+			const baseStatusBars = [
+				{value: this.state.zenIdentity, max: 10, label: 'Identity'}
+			].map((statusBar) => {
+				const value = statusBar.value;
+				const maxValue = statusBar.max;
+				const percentage = (value / maxValue) * 100;
+				let barColour = '#dc322f';
+				if (percentage > 25) {
+					barColour = '#b58900';
+				}
+				if (percentage > 65) {
+					barColour = '#268bd2';
+				}
+				const styles = `background: linear-gradient(to right, ${barColour} ${percentage}%, ${backgroundBarColor} ${percentage}%)`;
+
+				return {
+					label: statusBar.label,
+					value,
+					maxValue,
+					styles
+				}
+			});
+			const source = document.getElementById('statusBarsTemplate').innerHTML;
+			const template = Handlebars.compile(source);
+			const rendered = template({statusBars: baseStatusBars});
+			document.getElementById('gm-base-status-bars').innerHTML = rendered;
+		}
+	</script>
 	<script>
 		async function triggerReload() {
 			await fetch('/base/refresh', {
@@ -129,7 +172,9 @@
 	<script>
 		// Global State object
 		this.state = {
-			selectedPilot: "Zen"
+			selectedPilot: "Zen",
+			zenIdentity: 0,
+			zenAbilities: []
 		};
 
 		async function init() {
@@ -140,17 +185,26 @@
 				console.error(`Error: ${err}`);
 			}
 
+			try {
+				const response = await fetch('./zen');
+				const zenData = await response.json();
+				this.state.zenIdentity = zenData.identity,
+				this.state.zenAbilities = zenData.abilities;
+			} catch (err) {
+				console.error(`Error: ${err}`);
+			}
+
 			renderAll();
 		}
 
 		function renderAll() {
 			renderLogs();
+			renderZenStatusBars();
 		}
 
 		function updateZen(zenData) {
-			$('#stats-identity').text(zenData.identity + "/10");
-			$('#identity-fill').css("width", (zenData.identity * 10) + "%");
-			$('#identity-fill').css("background-color", 'lightgreen');
+			this.state.zenIdentity = zenData.identity;
+			renderZenStatusBars();
 		}
 		
 		init();

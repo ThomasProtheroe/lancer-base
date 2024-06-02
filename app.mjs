@@ -86,7 +86,7 @@ app.post('/zen/activate', async function (req, res) {
 	zenData.identity = updatedIdentity;
 
 	try{
-		await fs.writeFile('', JSON.stringify(zenData, null, '	'), 'utf8');
+		await fs.writeFile('public/data/zen.json', JSON.stringify(zenData, null, '	'), 'utf8');
 		io.emit('zen_update', zenData);
 		res.send(zenData);
 	} catch(err) {
