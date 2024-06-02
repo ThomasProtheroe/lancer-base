@@ -74,6 +74,28 @@ app.get('/log', (req, res) => {
 app.get('/zen', function (req, res) {
 	res.send(zenData);
 });
+app.post('/zen/activate', async function (req, res) {
+	const abilityCost = req.body.cost;
+	const updatedIdentity = zenData.identity - abilityCost;
+
+	if (updatedIdentity < 0) {
+		res.status(400);
+		res.send(new Error('Zen doesn\'t have enough identity'));
+	}
+
+	zenData.identity = updatedIdentity;
+
+	try{
+		await fs.writeFile('', JSON.stringify(zenData, null, '	'), 'utf8');
+		io.emit('zen_update', zenData);
+		res.send(zenData);
+	} catch(err) {
+		console.error(err);
+		res.status(500);
+		res.send(new Error('Failed to save Zen Data'));
+	}
+
+});
 
 // Pilots
 app.get('/pilots', function (req, res) {

@@ -119,6 +119,11 @@
 		function renderAll() {
 			renderLogs();
 		}
+
+		function updateZen(zenData) {
+			// TODO use this to update Zen
+			console.log(zenData.identity);
+		}
 		
 		init();
 	</script>
@@ -131,6 +136,9 @@
 		socket.on('gm_sound', (msg) => {
 			const sound = new Audio(msg);
 			sound.play();
+		});
+		socket.on('zen_update', (msg) => {
+			updateZen(msg);
 		});
 	</script>
 </body>
