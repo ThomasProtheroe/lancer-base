@@ -155,7 +155,9 @@
 					barColour = '#420420';
 					percentage = (absolutePower / maxValue) * 100;
 					if (absolutePower > maxValue) {
-						maxWidth = `; width: ${100+(10*(absolutePower-maxValue))}%`;
+						maxPercentage = 100+(10*(absolutePower-maxValue));
+						maxWidth = `; width: ${maxPercentage}%`;
+						percentage = (100/maxPercentage)*100;
 					}
 					maxValue = '💀';
 				}
