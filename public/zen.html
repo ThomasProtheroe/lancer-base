@@ -111,11 +111,11 @@
 		{{#each statusBars}}
 			<div class="col-6 base-status">
 				<div class="row">
-					<span class="base-status-bar-label">{{label}}: </span>
+					<span class="{{statusBarLabel}}">{{label}}: </span>
 				</div>
 				<div class="row">
 					<div class="col-10">
-						<div class="base-status-bar" style="{{styles}}">
+						<div class="{{statusBarClass}}" style="{{styles}}">
 							<div class="base-status-bar-fill">{{value}}/{{maxValue}}</div>
 						</div>
 					</div>
@@ -128,13 +128,13 @@
 	<!-- Component Render functions -->
 	<script>
 		function renderZenStatusBars() {
-			const backgroundBarColor = '#eee8d5';
+			let backgroundBarColor = '#eee8d5';
 			const baseStatusBars = [
 				{value: this.state.zenIdentity, max: 10, label: 'Identity'}
 			].map((statusBar) => {
 				const value = statusBar.value;
-				const maxValue = statusBar.max;
-				const percentage = (value / maxValue) * 100;
+				let maxValue = statusBar.max;
+				let percentage = (value / maxValue) * 100;
 				let barColour = '#dc322f';
 				if (percentage > 25) {
 					barColour = '#b58900';
@@ -142,13 +142,33 @@
 				if (percentage > 65) {
 					barColour = '#268bd2';
 				}
-				const styles = `background: linear-gradient(to right, ${barColour} ${percentage}%, ${backgroundBarColor} ${percentage}%)`;
+
+				// Danger Zone!!!
+				let statusBarClass = 'base-status-bar';
+				let statusBarLabel = 'base-status-bar-label';
+				let maxWidth = '';
+				if (value < 0) {
+					const absolutePower = Math.abs(value);
+					statusBarClass += ' danger';
+					statusBarLabel += ' glitch';
+					backgroundBarColor = '#000000';
+					barColour = '#420420';
+					percentage = (absolutePower / maxValue) * 100;
+					if (absolutePower > maxValue) {
+						maxWidth = `; width: ${100+(10*(absolutePower-maxValue))}%`;
+					}
+					maxValue = '💀';
+				}
+
+				const styles = `background: linear-gradient(to right, ${barColour} ${percentage}%, ${backgroundBarColor} ${percentage}%)${maxWidth}`;
 
 				return {
 					label: statusBar.label,
 					value,
 					maxValue,
-					styles
+					styles,
+					statusBarClass,
+					statusBarLabel
 				}
 			});
 			const source = document.getElementById('statusBarsTemplate').innerHTML;

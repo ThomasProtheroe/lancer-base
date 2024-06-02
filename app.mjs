@@ -78,11 +78,6 @@ app.post('/zen/activate', async function (req, res) {
 	const abilityCost = req.body.cost;
 	const updatedIdentity = zenData.identity - abilityCost;
 
-	if (updatedIdentity < 0) {
-		res.status(400);
-		res.send(new Error('Zen doesn\'t have enough identity'));
-	}
-
 	zenData.identity = updatedIdentity;
 
 	try{
