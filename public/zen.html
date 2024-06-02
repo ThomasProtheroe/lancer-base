@@ -36,9 +36,9 @@
 			<h1>Ability Dashboard</h1>
 			<div class="row">
 				<div class="col">
-					<span class="condition-text">Identity: </span>
+					<span class="identity-text">Identity: </span>
 					<div class="status-bar">
-						<div id="condition-fill" class="status-bar-fill"><span id="stats-identity"></span></div>
+						<div id="identity-fill" class="status-bar-fill"><span id="stats-identity"></span></div>
 					</div>
 				</div>
 			</div>
@@ -55,16 +55,18 @@
 
 	<script>
 		const addAbility = (ability) => {
-			$('#zen-abilities-container').append(
+			const containerSelector = '#zen-abilities-container';
+			$(containerSelector).append(
 				`<div class="col">
 					<div class="addon-item">
 						<div class="addon-name">${ability['name']}</div>
 						<div class="item-costs"><span class="item-cost-item"><i class="bi bi-heart-pulse-fill""></i> ${ability.cost}</span></div>
 						<div class="addon-description">${ability['description']}</div>
-						<button class="base-btn">Activate</button>
+						<button class="base-btn zen-activate-btn">Activate</button>
 					</div>
 				</div>`
 			);
+			$(containerSelector).find('.addon-item').last().data('ability', ability);
 		};
 
 		fetch('./zen', {
@@ -74,8 +76,33 @@
 			}
 		}).then((response) => response.json())
 			.then((responseJson) => {
+				$('#stats-identity').text(responseJson.identity + "/10");
+				$('#identity-fill').css("width", (responseJson.identity * 10) + "%");
+				$('#identity-fill').css("background-color", 'lightgreen');
 				responseJson.abilities.forEach(ability => {
 					addAbility(ability);
+				});
+
+				$('.zen-activate-btn').click((e) => {
+					if ($(e.target).attr('disabled')) {
+						return;
+					}
+
+					let ability = $(e.target).closest('.addon-item').data('ability');
+
+					fetch('./zen/activate', {
+						method: "POST",
+						body: JSON.stringify({
+							cost: ability.cost,
+							actionId: ability.name
+						}),
+						headers: {
+							"Content-type": "application/json; charset=UTF-8"
+						}
+					}).then((response) => response.json())
+						.then((responseJson) => {
+							updateZen(responseJson);
+						});
 				});
 			});
 
@@ -121,8 +148,9 @@
 		}
 
 		function updateZen(zenData) {
-			// TODO use this to update Zen
-			console.log(zenData.identity);
+			$('#stats-identity').text(zenData.identity + "/10");
+			$('#identity-fill').css("width", (zenData.identity * 10) + "%");
+			$('#identity-fill').css("background-color", 'lightgreen');
 		}
 		
 		init();
