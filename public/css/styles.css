@@ -148,6 +148,19 @@ body, html {
 {
   display: none;
 }
+
+.addon-item .addon-requirements-info {
+  display: none;
+}
+.addon-item.requirements-not-met .addon-requirements-info {
+  display: block;
+  font-weight: bold;
+}
+.addon-item.requirements-not-met {
+  background: #9b03009d;
+}
+
+
 .addon-name,
 .activity-name {
   font-size: 22px;

@@ -44,7 +44,7 @@
             "name": "Munitions Fabricator",
             "description": "A specialized printer used to produce mech-sized ammunition.",
             "notes": "Allows the printing of special ammunition.",
-            "available": 0,
+            "available": 1,
             "time": 4,
             "timeRemaining": 4,
             "cost": {
@@ -101,7 +101,7 @@
             "name": "Stationary Cannons",
             "description": "A variety of mech scale weapons that have been mounted onto stationary emplacements at the edge of Corntown.",
             "notes": "Provides +2 defense. Provides covering fire when fighting near the settlement. Must be manned.",
-            "available": 0,
+            "available": 1,
             "time": 6,
             "timeRemaining": 6,
             "cost": {
@@ -123,7 +123,7 @@
             "name": "Automated Cannons",
             "description": "A variety of mech scale weapons that have been fitted with simple FoF and target acquisition systems.",
             "notes": "Provides +3 defense. Provides covering fire with +1 Accurracy when fighting near the settlement.",
-            "available": 0,
+            "available": 1,
             "time": 8,
             "timeRemaining": 8,
             "cost": {
@@ -145,7 +145,7 @@
             "name": "Minefields",
             "description": "A series of anti-infantry and anti-vehicle mines buried in the fields outside of town. Cheap and effective defense, but risks civilian casualties and accidents.",
             "notes": "Provides +2 defense. Risks damage to settlement morale.",
-            "available": 0,
+            "available": 1,
             "time": 3,
             "timeRemaining": 3,
             "cost": {
@@ -204,7 +204,7 @@
             "name": "Trained Militia",
             "description": "These soldiers are well trained but lightly armed. They are capable of engaging with opposing light infantry.",
             "notes": "Provides +1 defense. Can be utilized when fighting near the settlement.",
-            "available": 0,
+            "available": 1,
             "time": 5,
             "timeRemaining": 5,
             "cost": {
@@ -225,7 +225,7 @@
             "name": "Armed Militia",
             "description": "These soldiers are well trained and armed with military grade weapons capable of combating enemy infantry and light vehicles.",
             "notes": "Provides +2 defense. Can be utilized when fighting near the settlement.",
-            "available": 0,
+            "available": 1,
             "time": 5,
             "timeRemaining": 5,
             "cost": {
@@ -247,7 +247,7 @@
             "name": "Anti-Mech Militia",
             "description": "These soldiers are well trained and armed with specialized anti-mech weaponry.",
             "notes": "Provides +3 defense. Can be utilized when fighting near the settlement.",
-            "available": 0,
+            "available": 1,
             "time": 6,
             "timeRemaining": 6,
             "cost": {
@@ -270,7 +270,7 @@
             "name": "Laura Stahl",
             "description": "A talented mechanical engineer who grew up on New Samona. She has a particular hatred for house Harken.",
             "notes": "Provides the settlement with 2 blocks of construction or production time each downtime.",
-            "available": 0,
+            "available": 1,
             "time": 0,
             "timeRemaining": 0,
             "cost": {

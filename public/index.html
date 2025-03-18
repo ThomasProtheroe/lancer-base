@@ -304,13 +304,28 @@
 			addAddon(defense, '#defenses-container');
 		}
 
-		const addAvailableAddOn = (addOnData) => {
+		const areRequirementsMet = (addOnData) => {
+			if (!addOnData['requirements'] || Object.keys(addOnData['requirements']).length === 0) {
+				return true;
+			}
+			return false;
+		}
+
+		const getAvailableAddOnHtml = (addOnData) => {
+			let requirementsMet = areRequirementsMet(addOnData);
+			let extraClasses = '';
+			if (!requirementsMet) {
+				extraClasses = 'requirements-not-met';
+			} else {
+				extraClasses = 'selectable';
+			}
 			return `<div class="col">
-						<div class="addon-item selectable">
+						<div class="addon-item ${extraClasses}">
 							<div class="addon-name">${addOnData.name}</div>
 							${getCostsDisplay(addOnData.cost)}
+							<div class="addon-requirements-info">Requirements:</div>
 							<div>${addOnData.description}</div>
-							<div> ${addOnData.notes}</div>
+							<div>${addOnData.notes}</div>
 						</div>
 					</div>`
 		}
@@ -494,11 +509,13 @@
 							}
 
 							$('#personnel-recruit-container').append(
-								addAvailableAddOn({
+								getAvailableAddOnHtml({
 									name: recruit['name'],
 									cost: recruit['cost'],
 									description: recruit['description'],
-									notes: recruit['notes']
+									notes: recruit['notes'],
+									requirements: recruit['requirements'],
+									replaces: recruit['replaces']
 								})
 							);
 							//Add resource costs as data attributes
@@ -521,11 +538,13 @@
 							}
 
 							$('#defenses-build-container').append(
-								addAvailableAddOn({
+								getAvailableAddOnHtml({
 									name: defense['name'],
 									cost: defense['cost'],
 									description: defense['description'],
-									notes: defense['notes']
+									notes: defense['notes'],
+									requirements: defense['requirements'],
+									replaces: defense['replaces']
 								})
 							);
 							//Add resource costs as data attributes
@@ -548,11 +567,13 @@
 							}
 
 							$('#facilities-build-container').append(
-								addAvailableAddOn({
+								getAvailableAddOnHtml({
 									name: facility['name'],
 									cost: facility['cost'],
 									description: facility['description'],
-									notes: facility['notes']
+									notes: facility['notes'],
+									requirements: facility['requirements'],
+									replaces: facility['replaces']
 								})
 							);
 							//Add resource costs as data attributes
@@ -639,11 +660,11 @@
 				});
 
 			//Update page data. Yes I should probably be storing a main data object and refreshing the page from that. 
-			if (addon['family'] == 'facilities') {
+			if (addon['category'] == 'facilities') {
 				addFacility(addon);
-			} else if (addon['family'] == 'defenses') {
+			} else if (addon['category'] == 'defenses') {
 				addDefense(addon);
-			} else if (addon['family'] == 'personnel') {
+			} else if (addon['category'] == 'personnel') {
 				addPersonnel(addon);
 			}
 
