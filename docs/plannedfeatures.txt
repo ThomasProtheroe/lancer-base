@@ -2,14 +2,17 @@ Done
 -Downtime "units" usable by pilots for construction/production etc.
 -Display log file contents on a sidebar so pilots can see who did what
 -Ability to print mechs. Subtract resource costs and randomly generate any flaws/qualities.
+-GM interface to hand out downtime units
+-Requirements for addons to be purchasable. ie tier 2 printer needed for tier 3 printer to be buildable.
 
 In Progress
 
 
 Planned
--GM interface to hand out downtime units and create new addons
--Requirements for addons to be purchasable. ie tier 2 printer needed for tier 3 printer to be visible.
+-GM interface to create new addons
+-Downtime units provided by personnel
 
 Would be Cool
 -Login system of some kind for pilots
 -Mech hanger. List of all printed mechs by the team, tagged with an owner
+-Compcon integration

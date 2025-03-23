@@ -304,13 +304,60 @@
 			addAddon(defense, '#defenses-container');
 		}
 
-		const addAvailableAddOn = (addOnData) => {
+		const getAllCurrentAddonsOfType = (type) => {
+			let addonNames = [];
+			let addonItems = $(`#${type}-container`).find('div.addon-item');
+			addonItems.each((index) => {
+				addonNames.push($(addonItems[index]).data('addon')['type']);
+			});
+
+			return addonNames;
+		}
+
+		const areRequirementsMet = (addOnData) => {
+			if (!addOnData['requirements'] || Object.keys(addOnData['requirements']).length === 0) {
+				return true;
+			}
+
+			let existingAddons = {};
+			existingAddons['facilities'] = getAllCurrentAddonsOfType('facilities');
+			existingAddons['defenses']= getAllCurrentAddonsOfType('defenses');
+			existingAddons['personnel'] = getAllCurrentAddonsOfType('personnel');
+
+			for (var family in addOnData['requirements']) {
+				// skip loop if the property is from prototype
+				if (!addOnData['requirements'].hasOwnProperty(family)) {
+					continue;
+				}
+				
+				for (var requirement in addOnData['requirements'][family]) {
+					if (!existingAddons[family].includes(addOnData['requirements'][family][requirement]["type"])) {
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		const getAvailableAddOnHtml = (addOnData) => {
+			let requirementsMet = areRequirementsMet(addOnData);
+			let extraClasses = '';
+			if (!requirementsMet) {
+				extraClasses = 'requirements-not-met';
+			} else {
+				extraClasses = 'selectable';
+			}
 			return `<div class="col">
-						<div class="addon-item selectable">
+						<div class="addon-item ${extraClasses}">
 							<div class="addon-name">${addOnData.name}</div>
 							${getCostsDisplay(addOnData.cost)}
+							<div class="addon-requirements-info">
+								Requires:
+								${getRequirementsDisplay(addOnData.requirements)}
+							</div>
 							<div>${addOnData.description}</div>
-							<div> ${addOnData.notes}</div>
+							<div>${addOnData.notes}</div>
 						</div>
 					</div>`
 		}
@@ -323,6 +370,24 @@
 			});
 			displayString += '</div>';
 			return displayString;
+		}
+
+		const getRequirementsDisplay = (requirements) => {
+			let listHtml = "";
+			for (var family in requirements) {
+				// skip loop if the property is from prototype
+				if (!requirements.hasOwnProperty(family)) {
+					continue;
+				}
+				
+				for (var requirement in requirements[family]) {
+					listHtml += "<li>" + requirements[family][requirement]["name"] + "</li>";
+				}
+			}
+
+			return `<ul>
+						${listHtml}
+					</ul>`;
 		}
 
 		const getDowntimeRemaining = () => {
@@ -494,11 +559,13 @@
 							}
 
 							$('#personnel-recruit-container').append(
-								addAvailableAddOn({
+								getAvailableAddOnHtml({
 									name: recruit['name'],
 									cost: recruit['cost'],
 									description: recruit['description'],
-									notes: recruit['notes']
+									notes: recruit['notes'],
+									requirements: recruit['requirements'],
+									replaces: recruit['replaces']
 								})
 							);
 							//Add resource costs as data attributes
@@ -521,11 +588,13 @@
 							}
 
 							$('#defenses-build-container').append(
-								addAvailableAddOn({
+								getAvailableAddOnHtml({
 									name: defense['name'],
 									cost: defense['cost'],
 									description: defense['description'],
-									notes: defense['notes']
+									notes: defense['notes'],
+									requirements: defense['requirements'],
+									replaces: defense['replaces']
 								})
 							);
 							//Add resource costs as data attributes
@@ -548,11 +617,13 @@
 							}
 
 							$('#facilities-build-container').append(
-								addAvailableAddOn({
+								getAvailableAddOnHtml({
 									name: facility['name'],
 									cost: facility['cost'],
 									description: facility['description'],
-									notes: facility['notes']
+									notes: facility['notes'],
+									requirements: facility['requirements'],
+									replaces: facility['replaces']
 								})
 							);
 							//Add resource costs as data attributes
@@ -575,6 +646,7 @@
 
 							$(this).addClass('selected');
 							var affordable = true;
+							debugger;
 							for (const [name, value] of Object.entries(resources)) {
 								if (value < costs[name]) {
 									affordable = false;
@@ -609,6 +681,7 @@
 			//Update addon
 			let addon = $('.addon-item.selected').data('addon');
 
+			debugger;
 			// Update resources
 			let addonCosts = addon['cost'];
 			const newResources = JSON.parse(JSON.stringify(this.state.resources));
@@ -639,11 +712,11 @@
 				});
 
 			//Update page data. Yes I should probably be storing a main data object and refreshing the page from that. 
-			if (addon['family'] == 'facilities') {
+			if (addon['category'] == 'facilities') {
 				addFacility(addon);
-			} else if (addon['family'] == 'defenses') {
+			} else if (addon['category'] == 'defenses') {
 				addDefense(addon);
-			} else if (addon['family'] == 'personnel') {
+			} else if (addon['category'] == 'personnel') {
 				addPersonnel(addon);
 			}
 
