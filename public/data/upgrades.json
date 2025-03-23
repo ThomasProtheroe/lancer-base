@@ -23,6 +23,50 @@
         {
             "category": "facilities",
             "family": "facilities",
+            "type": "upgraded_printer",
+            "flaws": 0,
+            "qualities": 1,
+            "printCost": 300,
+            "name": "Mech Printer (upgraded)",
+            "description": "A very old printer that has been refitted with scavenged tech from the bunker. Seems to occasionally produce prints of higher quality than even military grade printers.",
+            "notes": "Printed mechs recieve one random trait.",
+            "available": 1,
+            "time": 8,
+            "timeRemaining": 6,
+            "cost": {
+                "materials": 2000,
+                "refinedMaterials": 250,
+                "manna": 1000
+            },
+            "requirements": {
+                "facilities": [{"type":"printer", "name":"Mech Printer (repaired)"}]
+            }
+        },
+        {
+            "category": "facilities",
+            "family": "facilities",
+            "type": "fully_upgraded_printer",
+            "flaws": 0,
+            "qualities": 2,
+            "printCost": 200,
+            "name": "Mech Printer (fully upgraded)",
+            "description": "A very old printer that has been refitted with a number of not-fully-understood pieces of tech from the bunkers underground lab. Prints mechs and weapons of exceptional quality using little materials, with unusual characteristics.",
+            "notes": "Printed mechs recieve either two random traits, or one selected trait. Random traits may be... unusual.",
+            "available": 1,
+            "time": 10,
+            "timeRemaining": 6,
+            "cost": {
+                "materials": 3000,
+                "refinedMaterials": 500,
+                "manna": 2500
+            },
+            "requirements": {
+                "facilities": [{"type":"printer", "name":"Mech Printer (repaired)"}]
+            }
+        },
+        {
+            "category": "facilities",
+            "family": "facilities",
             "type": "reclaimer",
             "name": "Materials Reclaimer",
             "description": "An array of machinery used to deconstruct waste materials into component parts for reuse.",
@@ -31,7 +75,7 @@
             "time": 4,
             "timeRemaining": 4,
             "cost": {
-                "materials": 1500,
+                "materials": 1000,
                 "refinedMaterials": 50,
                 "manna": 1000
             },
@@ -53,7 +97,7 @@
                 "manna": 2500
             },
             "requirements": {
-                "facilities": ["printer"]
+                "facilities": [{"type":"printer", "name":"Mech Printer"}]
             }
         }, 
         {
@@ -110,8 +154,8 @@
                 "manna": 0
             },
             "requirements": {
-                "facilities": ["munitionsfab"],
-                "defenses": ["machine_guns", "trained_militia"]
+                "facilities": [{"type":"munitionsfab", "name":"Munitions Fabricator"}],
+                "defenses": [{"type":"machine_guns", "name":"Machine Gun Nests"}, {"type":"trained_militia", "name":"Trained Militia"}]
             },
             "replaces": "machine_guns"
         },
@@ -132,8 +176,8 @@
                 "manna": 0
             },
             "requirements": {
-                "facilities": ["munitionsfab"],
-                "defenses": ["gun_emplacements"]
+                "facilities": [{"type":"upgraded_printer", "name":"Mech Printer (upgraded)"}, {"type":"munitionsfab", "name":"Munitions Fabricator"}],
+                "defenses": [{"type":"gun_emplacements", "name":"Stationary Cannons"}]
             },
             "replaces": "gun_emplacements"
         },
@@ -154,7 +198,47 @@
                 "manna": 0
             },
             "requirements": {
-                "facilities": ["munitionsfab"]
+                "facilities": [{"type":"munitionsfab", "name":"Munitions Fabricator"}]
+            }
+        },
+        {
+            "category": "defenses",
+            "family": "defenses",
+            "type": "upgraded_radar",
+            "sensors": 2,
+            "name": "Radar (upgraded)",
+            "description": "An aging radar system that has been upgraded using newly printed parts. Is more effective at picking up large targets, inlcluding aircraft.",
+            "notes": "Provides +2 sensors.",
+            "available": 1,
+            "time": 4,
+            "timeRemaining": 4,
+            "cost": {
+                "materials": 500,
+                "refinedMaterials": 150,
+                "manna": 0
+            },
+            "requirements": {
+                "facilities": [{"type":"sensors", "name":"Simple Radar"}]
+            }
+        },
+        {
+            "category": "defenses",
+            "family": "defenses",
+            "type": "radar_relays",
+            "sensors": 2,
+            "name": "Radar Relays",
+            "description": "A series of smaller radar systems built out in the surrounding terrain which relay additional readings back to the towns Radar system. Greatly increases accurracy and range.",
+            "notes": "Provides +2 sensors.",
+            "available": 1,
+            "time": 6,
+            "timeRemaining": 6,
+            "cost": {
+                "materials": 2000,
+                "refinedMaterials": 200,
+                "manna": 1000
+            },
+            "requirements": {
+                "facilities": [{"type":"upgraded_radar", "name":"Radar (upgraded)"}]
             }
         },
         {
@@ -189,10 +273,10 @@
             "cost": {
                 "materials": 1000,
                 "refinedMaterials": 100,
-                "manna": 0
+                "manna": 500
             },
             "requirements": {
-                "defenses": ["radar"]
+                "defenses": [{"type":"sensors", "name":"Radar"}]
             },
             "replaces": "motionsensors"
         },
@@ -213,7 +297,7 @@
                 "manna": 100
             },
             "requirements": {
-                "personnel": ["borisstelov"]
+                "personnel": [{"type":"borisstelov", "name":"Boris Stelov"}]
             },
             "replaces": "defenders"
         },
@@ -234,10 +318,33 @@
                 "manna": 250
             },
             "requirements": {
-                "personnel": ["borisstelov"],
-                "defenses": ["trained_militia"]
+                "facilities": [{"type":"printer", "name":"Mech Printer"}],
+                "personnel": [{"type":"borisstelov", "name":"Boris Stelov"}],
+                "defenses": [{"type":"trained_militia", "name":"Trained Militia"}]
             },
             "replaces": "trained_militia"
+        },
+        {
+            "category": "defenses",
+            "family": "defenses",
+            "type": "sniper_teams",
+            "defense": 1,
+            "name": "Sniper Teams",
+            "description": "A hand-selected group of the best marksmen in town, trained in guerilla warfare and delaying tactics.",
+            "notes": "Provides +1 defense. Will inflict damage upon any incoming forces before they reach the town.",
+            "available": 1,
+            "time": 4,
+            "timeRemaining": 4,
+            "cost": {
+                "materials": 700,
+                "refinedMaterials": 25,
+                "manna": 1500
+            },
+            "requirements": {
+                "personnel": [{"type":"borisstelov", "name":"Boris Stelov"}],
+                "defenses": [{"type":"armed_militia", "name":"Armed Militia"}, {"type":"patrol_drones", "name":"Patrol Drones"}]
+            },
+            "replaces": ""
         },
         {
             "category": "defenses",
@@ -253,11 +360,12 @@
             "cost": {
                 "materials": 2500,
                 "refinedMaterials": 150,
-                "manna": 500
+                "manna": 750
             },
             "requirements": {
-                "personnel": ["borisstelov"],
-                "defenses": ["armed_militia"]
+                "facilities": [{"type":"upgraded_printer", "name":"Mech Printer (upgraded)"}, {"type":"munitionsfab", "name":"Munitions Fabricator"}],
+                "personnel": [{"type":"borisstelov", "name":"Boris Stelov"}],
+                "defenses": [{"type":"armed_militia", "name":"Armed Militia"}]
             },
             "replaces": "armed_militia"
         }
@@ -277,23 +385,6 @@
                 "materials": 0,
                 "refinedMaterials": 0,
                 "manna": 3000
-            },
-            "requirements": {}
-        },
-        {
-            "category": "personnel",
-            "family": "personnel",
-            "type": "andrasharken",
-            "name": "Andras Harken",
-            "description": "The ex-head of house Harken's intelligence division. Practical and ruthless. Looking to reclaim a position in the Harken inner circle.",
-            "notes": "",
-            "available": 0,
-            "time": 0,
-            "timeRemaining": 0,
-            "cost": {
-                "materials": 0,
-                "refinedMaterials": 0,
-                "manna": 4000
             },
             "requirements": {}
         },

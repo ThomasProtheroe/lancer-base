@@ -304,11 +304,40 @@
 			addAddon(defense, '#defenses-container');
 		}
 
+		const getAllCurrentAddonsOfType = (type) => {
+			let addonNames = [];
+			let addonItems = $(`#${type}-container`).find('div.addon-item');
+			addonItems.each((index) => {
+				addonNames.push($(addonItems[index]).data('addon')['type']);
+			});
+
+			return addonNames;
+		}
+
 		const areRequirementsMet = (addOnData) => {
 			if (!addOnData['requirements'] || Object.keys(addOnData['requirements']).length === 0) {
 				return true;
 			}
-			return false;
+
+			let existingAddons = {};
+			existingAddons['facilities'] = getAllCurrentAddonsOfType('facilities');
+			existingAddons['defenses']= getAllCurrentAddonsOfType('defenses');
+			existingAddons['personnel'] = getAllCurrentAddonsOfType('personnel');
+
+			for (var family in addOnData['requirements']) {
+				// skip loop if the property is from prototype
+				if (!addOnData['requirements'].hasOwnProperty(family)) {
+					continue;
+				}
+				
+				for (var requirement in addOnData['requirements'][family]) {
+					if (!existingAddons[family].includes(addOnData['requirements'][family][requirement]["type"])) {
+						return false;
+					}
+				}
+			}
+
+			return true;
 		}
 
 		const getAvailableAddOnHtml = (addOnData) => {
@@ -323,7 +352,10 @@
 						<div class="addon-item ${extraClasses}">
 							<div class="addon-name">${addOnData.name}</div>
 							${getCostsDisplay(addOnData.cost)}
-							<div class="addon-requirements-info">Requirements:</div>
+							<div class="addon-requirements-info">
+								Requires:
+								${getRequirementsDisplay(addOnData.requirements)}
+							</div>
 							<div>${addOnData.description}</div>
 							<div>${addOnData.notes}</div>
 						</div>
@@ -338,6 +370,24 @@
 			});
 			displayString += '</div>';
 			return displayString;
+		}
+
+		const getRequirementsDisplay = (requirements) => {
+			let listHtml = "";
+			for (var family in requirements) {
+				// skip loop if the property is from prototype
+				if (!requirements.hasOwnProperty(family)) {
+					continue;
+				}
+				
+				for (var requirement in requirements[family]) {
+					listHtml += "<li>" + requirements[family][requirement]["name"] + "</li>";
+				}
+			}
+
+			return `<ul>
+						${listHtml}
+					</ul>`;
 		}
 
 		const getDowntimeRemaining = () => {
@@ -596,6 +646,7 @@
 
 							$(this).addClass('selected');
 							var affordable = true;
+							debugger;
 							for (const [name, value] of Object.entries(resources)) {
 								if (value < costs[name]) {
 									affordable = false;
@@ -630,6 +681,7 @@
 			//Update addon
 			let addon = $('.addon-item.selected').data('addon');
 
+			debugger;
 			// Update resources
 			let addonCosts = addon['cost'];
 			const newResources = JSON.parse(JSON.stringify(this.state.resources));
